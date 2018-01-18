@@ -2,14 +2,14 @@ package no.nav.syfo.rest.ressurser;
 
 
 import io.swagger.annotations.Api;
+import no.nav.metrics.aspects.Count;
+import no.nav.metrics.aspects.Timed;
+import no.nav.syfo.domain.Tilgang;
 import no.nav.syfo.services.TilgangService;
 import org.springframework.stereotype.Controller;
 
 import javax.inject.Inject;
-import javax.ws.rs.Consumes;
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
+import javax.ws.rs.*;
 
 import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
 
@@ -24,7 +24,19 @@ public class TilgangRessurs {
     private TilgangService tilgangService;
 
     @GET
-    public boolean harTilgang() {
+    @Timed(name = "tilgangTilTjenesten")
+    @Count(name = "tilgangTilTjenesten")
+    @Path("/tilgangtiltjenesten")
+    public boolean tilgangTilTjenesten() {
         return tilgangService.harTilgangTilTjenesten();
     }
+
+    @GET
+    @Timed(name = "tilgangTilBruker")
+    @Count(name = "tilgangTilBruker")
+    @Path("/tilgangtilbruker")
+    public Tilgang tilgangTilBruker(@QueryParam("fnr") String fnr) {
+        return tilgangService.sjekkTilgang(fnr);
+    }
+
 }
