@@ -45,7 +45,7 @@ public class TilgangRessurs {
     @Count(name = "tilgangTilBruker")
     @Path("/tilgangtilbruker")
     public Response tilgangTilBruker(@QueryParam("fnr") String fnr) {
-        if (StringUtils.isNotEmpty(fnr)) {
+        if (StringUtils.isEmpty(fnr)) {
             return Response.status(BAD_REQUEST)
                     .entity("fnr parameter is mandatory")
                     .build();
