@@ -4,9 +4,9 @@ package no.nav.syfo.rest.ressurser;
 import io.swagger.annotations.Api;
 import no.nav.metrics.aspects.Count;
 import no.nav.metrics.aspects.Timed;
-import no.nav.sbl.util.StringUtils;
 import no.nav.syfo.domain.Tilgang;
 import no.nav.syfo.services.TilgangService;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Controller;
 
 import javax.inject.Inject;
@@ -45,7 +45,7 @@ public class TilgangRessurs {
     @Count(name = "tilgangTilBruker")
     @Path("/tilgangtilbruker")
     public Response tilgangTilBruker(@QueryParam("fnr") String fnr) {
-        if (StringUtils.nullOrEmpty(fnr)) {
+        if (StringUtils.isNotEmpty(fnr)) {
             return Response.status(BAD_REQUEST)
                     .entity("fnr parameter is mandatory")
                     .build();
