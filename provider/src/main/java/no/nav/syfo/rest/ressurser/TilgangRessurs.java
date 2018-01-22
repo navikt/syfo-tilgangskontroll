@@ -35,7 +35,7 @@ public class TilgangRessurs {
         if(tilgangService.harTilgangTilTjenesten()){
             return Response.ok().build();
         } else {
-            return Response.status(BAD_REQUEST)
+            return Response.status(FORBIDDEN)
                     .build();
         }
     }
