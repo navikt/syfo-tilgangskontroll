@@ -29,7 +29,7 @@ http://appconfig.aura.nav.no ">
     </resources>
 
     <exposed-services>
-        <exposedRest path="/syfo-tilgangskontroll/api/tilgangskontroll" name="tilgangskontrollapi"
+        <exposedRest path="/syfo-tilgangskontroll/api/tilgang" name="tilgangskontrollapi"
                      description="Felles tilgangskontroll i FSS for DigiSyfo"/>
     </exposed-services>
 
