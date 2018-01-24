@@ -36,4 +36,9 @@ http://appconfig.aura.nav.no ">
     <security serviceUserResourceAlias="***REMOVED***"/>
 
     <loadBalancer isAlive="syfo-tilgangskontroll/internal/isAlive"/>
+
+    <serverOptions>
+        <memoryParameters resourceAlias="syfo-tilgangskontroll-memparam"/>
+    </serverOptions>
+
 </application>
