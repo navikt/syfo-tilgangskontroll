@@ -1,7 +1,6 @@
 package no.nav.syfo.services;
 
 import no.nav.brukerdialog.security.context.CustomizableSubjectHandler;
-import no.nav.brukerdialog.security.context.ThreadLocalSubjectHandler;
 import no.nav.syfo.domain.AdRoller;
 import org.junit.Before;
 import org.junit.Test;
@@ -10,12 +9,10 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
-import java.util.Arrays;
-
 import static java.lang.System.setProperty;
 import static java.util.Arrays.asList;
-import static no.nav.brukerdialog.security.context.CustomizableSubjectHandler.*;
-import static no.nav.sbl.dialogarena.test.SystemProperties.setFrom;
+import static java.util.Collections.singletonList;
+import static no.nav.brukerdialog.security.context.CustomizableSubjectHandler.setUid;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
@@ -41,7 +38,8 @@ public class GeografiskTilgangServiceTest {
         setUid("Z999999");
 
         when(ldapService.harTilgang(anyString(), any())).thenReturn(false);
-        when(personService.hentGeografiskTilknytning(anyString())).thenReturn("brukersEnhet");
+        when(personService.hentGeografiskTilknytning(anyString())).thenReturn("brukersPostnummer");
+        when(organisasjonEnhetService.finnNAVKontorForGT("brukersPostnummer")).thenReturn(asList("brukersEnhet", "enAnnenEnhet"));
     }
 
     @Test
@@ -58,28 +56,27 @@ public class GeografiskTilgangServiceTest {
 
     @Test
     public void harTilgangHvisVeilederHarTilgangTilSammeEnhetSomBruker() {
-        when( organisasjonRessursEnhetService.hentVeiledersEnheter()).thenReturn(asList("brukersEnhet", "enannenenhet"));
+        when(organisasjonRessursEnhetService.hentVeiledersEnheter()).thenReturn(asList("brukersEnhet", "enHeltAnnenEnhet"));
         assertThat(geografiskTilgangService.harGeografiskTilgang("fnr")).isTrue();
     }
 
     @Test
     public void harIkkeTilgangHvisVeilederIkkeHarTilgangTilSammeEnhetSomBruker() {
-        when( organisasjonRessursEnhetService.hentVeiledersEnheter()).thenReturn(asList("enannenenhet"));
+        when( organisasjonRessursEnhetService.hentVeiledersEnheter()).thenReturn(singletonList("enHeltAnnenEnhet"));
         assertThat(geografiskTilgangService.harGeografiskTilgang("fnr")).isFalse();
     }
 
     @Test
     public void harTilgangHvisRegionalTilgangOgTilgangTilEnhetensFylkeskontor() {
         when(ldapService.harTilgang("Z999999", AdRoller.REGIONAL.rolle)).thenReturn(true);
-        when(organisasjonRessursEnhetService.hentVeiledersEnheter()).thenReturn(asList("fylkeskontor"));
-        when(organisasjonEnhetService.hentOverordnetEnhetForNAVKontor("brukersEnhet")).thenReturn(asList("fylkeskontor"));
+        when(organisasjonRessursEnhetService.hentVeiledersEnheter()).thenReturn(singletonList("fylkeskontor"));
+        when(organisasjonEnhetService.hentOverordnetEnhetForNAVKontor("brukersEnhet")).thenReturn(singletonList("fylkeskontor"));
         assertThat(geografiskTilgangService.harGeografiskTilgang("fnr")).isTrue();
     }
 
     @Test
     public void harIkkeTilgangHvisTilgangTilEnhetensFylkeskontorMenIkkeRegionalTilgang() {
-        when(organisasjonRessursEnhetService.hentVeiledersEnheter()).thenReturn(asList("fylkeskontor"));
-        when(organisasjonEnhetService.hentOverordnetEnhetForNAVKontor("brukersEnhet")).thenReturn(asList("fylkeskontor"));
+        when(organisasjonRessursEnhetService.hentVeiledersEnheter()).thenReturn(singletonList("fylkeskontor"));
         assertThat(geografiskTilgangService.harGeografiskTilgang("fnr")).isFalse();
     }
 }

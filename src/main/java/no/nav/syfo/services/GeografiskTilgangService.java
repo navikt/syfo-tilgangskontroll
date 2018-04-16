@@ -3,7 +3,7 @@ package no.nav.syfo.services;
 import no.nav.syfo.domain.AdRoller;
 
 import javax.inject.Inject;
-
+import java.util.Collection;
 import java.util.List;
 
 import static no.nav.brukerdialog.security.context.SubjectHandler.getSubjectHandler;
@@ -23,18 +23,12 @@ public class GeografiskTilgangService {
         if (harNasjonalTilgang()) {
             return true;
         }
-        String geografiskTilknytning = personService.hentGeografiskTilknytning(fnr);
-        List<String> veiledersEnheter = organisasjonRessursEnhetService.hentVeiledersEnheter();
+        final String geografiskTilknytning = personService.hentGeografiskTilknytning(fnr);
+        final List<String> navKontorerForGT = organisasjonEnhetService.finnNAVKontorForGT(geografiskTilknytning);
+        final List<String> veiledersEnheter = organisasjonRessursEnhetService.hentVeiledersEnheter();
 
-        if (harLokalTilgangTilBrukersEnhet(geografiskTilknytning, veiledersEnheter)) {
-            return true;
-        }
-
-        if (harRegionalTilgangTilBrukersEnhet(geografiskTilknytning, veiledersEnheter)) {
-            return true;
-        }
-
-        return false;
+        return harLokalTilgangTilBrukersEnhet(navKontorerForGT, veiledersEnheter)
+                || harRegionalTilgangTilBrukersEnhet(navKontorerForGT, veiledersEnheter);
     }
 
     private boolean harNasjonalTilgang() {
@@ -42,8 +36,8 @@ public class GeografiskTilgangService {
                 || ldapService.harTilgang(getSubjectHandler().getUid(), AdRoller.UTVIDBAR_TIL_NASJONAL.rolle);
     }
 
-    private boolean harLokalTilgangTilBrukersEnhet(String geografiskTilknytning, List<String> veiledersEnheter) {
-        return veiledersEnheter.stream().anyMatch(veiledersEnhet -> veiledersEnhet.equals(geografiskTilknytning));
+    private boolean harLokalTilgangTilBrukersEnhet(List<String> navKontorerForGT, List<String> veiledersEnheter) {
+        return navKontorerForGT.stream().anyMatch(veiledersEnheter::contains);
     }
 
     private boolean harRegionalTilgang() {
@@ -51,9 +45,10 @@ public class GeografiskTilgangService {
                 || ldapService.harTilgang(getSubjectHandler().getUid(), AdRoller.UTVIDBAR_TIL_REGIONAL.rolle);
     }
 
-    private boolean harRegionalTilgangTilBrukersEnhet(String geografiskTilknytning, List<String> veiledersEnheter) {
-        List<String> overordneteEnheter = organisasjonEnhetService.hentOverordnetEnhetForNAVKontor(geografiskTilknytning);
-        return harRegionalTilgang() && veiledersEnheter.stream()
-                .anyMatch(overordneteEnheter::contains);
+    private boolean harRegionalTilgangTilBrukersEnhet(List<String> navKontorerForGT, List<String> veiledersEnheter) {
+        return harRegionalTilgang() && navKontorerForGT.stream()
+                .map(organisasjonEnhetService::hentOverordnetEnhetForNAVKontor)
+                .flatMap(Collection::stream)
+                .anyMatch(veiledersEnheter::contains);
     }
 }
