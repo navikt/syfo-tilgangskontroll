@@ -4,10 +4,8 @@ package no.nav.syfo.rest.ressurser;
 import io.swagger.annotations.Api;
 import no.nav.metrics.aspects.Count;
 import no.nav.metrics.aspects.Timed;
-import no.nav.syfo.domain.AdRoller;
 import no.nav.syfo.domain.Tilgang;
 import no.nav.syfo.services.TilgangService;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Controller;
 
 import javax.inject.Inject;
@@ -15,10 +13,11 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.Response;
 
 import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
-import static javax.ws.rs.core.Response.*;
 import static javax.ws.rs.core.Response.Status.BAD_REQUEST;
 import static javax.ws.rs.core.Response.Status.FORBIDDEN;
-import static org.apache.commons.lang3.StringUtils.*;
+import static javax.ws.rs.core.Response.ok;
+import static javax.ws.rs.core.Response.status;
+import static org.apache.commons.lang3.StringUtils.isEmpty;
 
 @Path("/tilgang")
 @Consumes(APPLICATION_JSON)

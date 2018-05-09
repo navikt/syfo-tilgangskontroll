@@ -1,9 +1,7 @@
 package no.nav.syfo.services;
 
-import no.nav.brukerdialog.security.context.SubjectHandler;
 import no.nav.tjeneste.virksomhet.organisasjon.ressurs.enhet.v1.*;
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import javax.inject.Inject;
 import java.util.List;
@@ -11,7 +9,7 @@ import java.util.List;
 import static java.util.Collections.emptyList;
 import static java.util.stream.Collectors.toList;
 import static no.nav.brukerdialog.security.context.SubjectHandler.getSubjectHandler;
-import static org.slf4j.LoggerFactory.*;
+import static org.slf4j.LoggerFactory.getLogger;
 
 public class OrganisasjonRessursEnhetService {
     private static final Logger LOG = getLogger(OrganisasjonRessursEnhetService.class);
