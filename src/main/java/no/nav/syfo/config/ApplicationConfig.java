@@ -33,10 +33,10 @@ public class ApplicationConfig implements ApiApplication.NaisApiApplication {
         return new CountAspect();
     }
 
-    @Bean
-    public HystrixCommandAspect hystrixAspect() {
-        return new HystrixCommandAspect();
-    }
+//    @Bean //TODO Vi knakk T6....
+//    public HystrixCommandAspect hystrixAspect() {
+//        return new HystrixCommandAspect();
+//    }
 
     @Override
     public void configure(ApiAppConfigurator apiAppConfigurator) {
