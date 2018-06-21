@@ -15,7 +15,7 @@ public class EgenAnsattService {
     @HystrixCommand(
             commandKey = "erEgenAnsatt",
             commandProperties = {
-                    @HystrixProperty(name = "execution.isolation.thread.timeoutInMilliseconds", value = "5000"), //TODO Adjust timeout
+                    @HystrixProperty(name = "execution.isolation.thread.timeoutInMilliseconds", value = "20000"), //TODO Adjust timeout
                     @HystrixProperty(name = "fallback.enabled", value = "false")
             })
     public boolean erEgenAnsatt(String fnr) {
