@@ -19,6 +19,9 @@
         <organisasjonenhet-v2-tjenestespesifikasjon.version>1.0.6</organisasjonenhet-v2-tjenestespesifikasjon.version>
         <organisasjonRessursEnhet-v1-tjenestespesifikasjon.version>1.0.2</organisasjonRessursEnhet-v1-tjenestespesifikasjon.version>
         <person-v3-tjenestespesifikasjon.version>3.0.2</person-v3-tjenestespesifikasjon.version>
+        <hystrix.version>1.5.12</hystrix.version>
+        <prometheus-hystrix.version>4.0.0</prometheus-hystrix.version>
+        <simpleclient.version>0.4.0</simpleclient.version>
     </properties>
 
     <dependencyManagement>
@@ -54,6 +57,21 @@
                 <groupId>no.nav.sbl.dialogarena</groupId>
                 <artifactId>person-v3-tjenestespesifikasjon</artifactId>
                 <version>${person-v3-tjenestespesifikasjon.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.netflix.hystrix</groupId>
+                <artifactId>hystrix-javanica</artifactId>
+                <version>${hystrix.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>de.ahus1.prometheus.hystrix</groupId>
+                <artifactId>prometheus-hystrix</artifactId>
+                <version>${prometheus-hystrix.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.prometheus</groupId>
+                <artifactId>simpleclient</artifactId>
+                <version>${simpleclient.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
@@ -114,6 +132,24 @@
         <dependency>
             <groupId>no.nav.sbl.dialogarena</groupId>
             <artifactId>person-v3-tjenestespesifikasjon</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.netflix.hystrix</groupId>
+            <artifactId>hystrix-javanica</artifactId>
+            <exclusions>
+                <exclusion>
+                    <artifactId>commons-logging</artifactId>
+                    <groupId>commons-logging</groupId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>de.ahus1.prometheus.hystrix</groupId>
+            <artifactId>prometheus-hystrix</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.prometheus</groupId>
+            <artifactId>simpleclient</artifactId>
         </dependency>
         <dependency>
             <groupId>org.projectlombok</groupId>
