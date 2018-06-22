@@ -10,7 +10,6 @@ import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.Assert.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
@@ -42,6 +41,6 @@ public class EgenAnsattServiceTest {
     @Test(expected = RuntimeException.class)
     public void ikkeTilgangTilTjenesteGirRuntimeException(){
         when(egenAnsattV1.hentErEgenAnsattEllerIFamilieMedEgenAnsatt(any())).thenThrow(new RuntimeException("Noe gikk galt"));
-        boolean ikkeKontakt = egenAnsattService.erEgenAnsatt("fnr");
+        egenAnsattService.erEgenAnsatt("fnr");
     }
 }

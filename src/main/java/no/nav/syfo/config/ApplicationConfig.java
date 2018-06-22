@@ -1,6 +1,5 @@
 package no.nav.syfo.config;
 
-import com.netflix.hystrix.contrib.javanica.aop.aspectj.HystrixCommandAspect;
 import no.nav.apiapp.ApiApplication;
 import no.nav.apiapp.config.ApiAppConfigurator;
 import no.nav.metrics.aspects.CountAspect;
@@ -32,11 +31,6 @@ public class ApplicationConfig implements ApiApplication.NaisApiApplication {
     public CountAspect countAspect() {
         return new CountAspect();
     }
-
-//    @Bean //TODO Vi knakk T6....
-//    public HystrixCommandAspect hystrixAspect() {
-//        return new HystrixCommandAspect();
-//    }
 
     @Override
     public void configure(ApiAppConfigurator apiAppConfigurator) {

@@ -1,9 +1,7 @@
-import com.soundcloud.prometheus.hystrix.HystrixPrometheusMetricsPublisher;
 import localhost.ApplicationConfigTest;
 import no.nav.brukerdialog.security.context.CustomizableSubjectHandler;
 import no.nav.brukerdialog.security.domain.IdentType;
 
-import static io.prometheus.client.CollectorRegistry.defaultRegistry;
 import static java.lang.System.getProperty;
 import static java.lang.System.setProperty;
 import static no.nav.apiapp.ApiApp.startApp;
@@ -21,9 +19,6 @@ public class MainTest {
         setUid(getProperty("veileder.username"));
         setInternSsoToken(getIDToken(getProperty("veileder.username"), getProperty("veileder.password")));
         setIdentType(IdentType.InternBruker);
-
-        HystrixPrometheusMetricsPublisher.builder().withRegistry(defaultRegistry).buildAndRegister();
-
 
         String[] _args = {"8586"};
         startApp(ApplicationConfigTest.class, _args);

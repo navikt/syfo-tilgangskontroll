@@ -1,10 +1,8 @@
-import com.soundcloud.prometheus.hystrix.HystrixPrometheusMetricsPublisher;
 import no.nav.syfo.config.ApplicationConfig;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 
-import static io.prometheus.client.CollectorRegistry.defaultRegistry;
 import static java.lang.System.*;
 import static no.nav.apiapp.ApiApp.startApp;
 
@@ -22,7 +20,5 @@ public class Main {
         setProperty("applicationName", "syfo-tilgangskontroll");
         setProperty("node.hostname", InetAddress.getLocalHost().getHostName());
         setProperty("environment.name", getProperty("FASIT_ENVIRONMENT_NAME"));
-
-        HystrixPrometheusMetricsPublisher.builder().withRegistry(defaultRegistry).buildAndRegister();
     }
 }
