@@ -27,7 +27,7 @@ fasitResources:
   used:
   - alias: ***REMOVED***
     resourceType: credential
-   - alias: appdynamics
+  - alias: appdynamics
     resourceType: applicationproperties
   - alias: loadbalancer:syfo-tilgangskontroll
     resourceType: loadbalancerconfig
