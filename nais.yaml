@@ -1,5 +1,6 @@
 # ref https://raw.githubusercontent.com/nais/naisd/master/nais_example.yaml
 image: docker.adeo.no:5000/digisyfo/syfo-tilgangskontroll
+team: sykefravaer-veden
 replicas:
   min: 2
   max: 4
@@ -8,21 +9,26 @@ port: 8080
 healthcheck:
   liveness:
     path: syfo-tilgangskontroll/internal/isAlive
-    initialDelay: 20
+    initialDelay: 120
   readiness:
     path: syfo-tilgangskontroll/internal/isAlive
-    initialDelay: 20
+    initialDelay: 120
 prometheus:
   enabled: true
   path: syfo-tilgangskontroll/internal/metrics
 resources:
+  limits:
+    cpu: 3000m
+    memory: 1024Mi
   requests:
-    cpu: 200m
-    memory: 256Mi
+    cpu: 500m
+    memory: 512Mi
 fasitResources:
   used:
   - alias: ***REMOVED***
     resourceType: credential
+   - alias: appdynamics
+    resourceType: applicationproperties
   - alias: loadbalancer:syfo-tilgangskontroll
     resourceType: loadbalancerconfig
   - alias: securityTokenService
