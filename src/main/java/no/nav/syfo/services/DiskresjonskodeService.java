@@ -4,9 +4,11 @@ import no.nav.tjeneste.pip.diskresjonskode.DiskresjonskodePortType;
 import no.nav.tjeneste.pip.diskresjonskode.meldinger.WSHentDiskresjonskodeRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
 
+@Service
 public class DiskresjonskodeService {
     private static final Logger LOG = LoggerFactory.getLogger(DiskresjonskodeService.class);
 

@@ -1,7 +1,8 @@
-FROM docker.adeo.no:5000/pus/maven as builder
-ADD / /source
-WORKDIR /source
-RUN mvn package -DskipTests
+FROM navikt/java:8
+COPY target/app.jar /app/
 
-FROM docker.adeo.no:5000/bekkci/nais-java-app
-COPY --from=builder /source/target/syfo-tilgangskontroll /app
+ENV JAVA_OPTS="-Djava.security.egd=file:/dev/./urandom \
+               -Dspring.profiles.active=remote \
+               -Dhttps.proxyHost=webproxy-nais.nav.no \
+               -Dhttps.proxyPort=8088 \
+               -Dhttp.nonProxyHosts=*.adeo.no|*.preprod.local"

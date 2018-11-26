@@ -1,5 +1,6 @@
 # ref https://raw.githubusercontent.com/nais/naisd/master/nais_example.yaml
-image: docker.adeo.no:5000/digisyfo/syfo-tilgangskontroll
+name: syfo-tilgangskontroll
+image: image: "repo.adeo.no:5443/syfo-tilgangskontroll"
 team: sykefravaer-veden
 replicas:
   min: 2

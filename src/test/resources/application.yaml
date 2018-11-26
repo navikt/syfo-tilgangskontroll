@@ -1,0 +1,23 @@
+spring:
+  main.banner-mode: 'off'
+  profiles:
+    active: local
+
+securitytokenservice.url: sts.url
+
+no.nav.security.oidc:
+  issuers: intern
+  issuer:
+    intern:
+      discoveryurl: http://metadata
+      accepted_audience: aud-localhost
+      cookie_name: localhost-idtoken
+
+fasit.environment.name: local
+
+ldap:
+  url: ldaps\://ldapgw.test.local
+  password: CHANGEME
+  domain: TEST.LOCAL
+  username: srvSSOLinux
+  basedn: dc\=test,dc\=local
