@@ -15,10 +15,8 @@ at den er god nok.
 *Lokalt*
 
 - Bygges med `mvn clean install`
-- Startes ved å kjøre `MainTest`  
+- Startes ved å kjøre `LocalApplication`  
 
-*Test-miljø*
+*Preprod*
 
-Bygges og deployes her enn så lenge:
-
-http://bekkci.devillo.no/job/digisyfo/job/syfo-tilgangskontroll/
+//TODO
