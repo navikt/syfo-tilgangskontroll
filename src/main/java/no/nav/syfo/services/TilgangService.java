@@ -14,6 +14,7 @@ public class TilgangService {
     public static final String GEOGRAFISK = "GEOGRAFISK";
     public static final String TILGANGTILBRUKER = "tilgangtilbruker";
     public static final String TILGANGTILTJENESTEN = "tilgangtiltjenesten";
+    public static final String TILGANGTILENHET = "tilgangtilenhet";
 
     @Autowired
     private LdapService ldapService;
@@ -23,6 +24,10 @@ public class TilgangService {
     private EgenAnsattService egenAnsattService;
     @Autowired
     private GeografiskTilgangService geografiskTilgangService;
+    @Autowired
+    private OrganisasjonRessursEnhetService organisasjonRessursEnhetService;
+
+    private final static String ENHET = "ENHET";
 
     @Cacheable(cacheNames = TILGANGTILBRUKER, key = "#veilederId.concat(#brukerFnr)", condition = "#brukerFnr != null && #veilederId != null")
     public Tilgang sjekkTilgang(String brukerFnr, String veilederId) {
@@ -53,6 +58,15 @@ public class TilgangService {
     @Cacheable(cacheNames = TILGANGTILTJENESTEN, key = "#veilederId", condition = "#veilederId != null")
     public boolean harTilgangTilTjenesten(String veilederId) {
         return harTilgangTilSykefravaersoppfoelging(veilederId);
+    }
+
+    @Cacheable(cacheNames = TILGANGTILENHET, key = "#veilederId.concat(#enhet)", condition = "#enhet != null && #veilederId != null")
+    public Tilgang sjekkTilgangTilEnhet(String veilederId, String enhet) {
+        if (!harTilgangTilSykefravaersoppfoelging(veilederId))
+            return new Tilgang().withHarTilgang(false).withBegrunnelse(SYFO.name());
+        if (!organisasjonRessursEnhetService.harTilgangTilEnhet(veilederId, enhet))
+            return new Tilgang().withHarTilgang(false).withBegrunnelse(ENHET);
+        return new Tilgang().withHarTilgang(true);
     }
 
     private boolean harTilgangTilSykefravaersoppfoelging(String veilederId) {
