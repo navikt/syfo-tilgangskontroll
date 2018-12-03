@@ -1,6 +1,6 @@
 package no.nav.syfo;
 
-import no.nav.security.spring.oidc.test.TokenGeneratorConfiguration;
+import no.nav.security.oidc.test.support.spring.TokenGeneratorConfiguration;
 import no.nav.syfo.mocks.*;
 import no.nav.tjeneste.pip.diskresjonskode.DiskresjonskodePortType;
 import no.nav.tjeneste.pip.egen.ansatt.v1.EgenAnsattV1;

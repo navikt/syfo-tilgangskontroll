@@ -28,7 +28,7 @@
         <micrometer-registry-prometheus.version>1.0.6</micrometer-registry-prometheus.version>
         <lombok.version>1.16.22</lombok.version>
         <cxf.version>3.2.0</cxf.version>
-        <oidc-spring-support.version>0.2.4</oidc-spring-support.version>
+        <oidc-spring-support.version>0.2.12</oidc-spring-support.version>
 
         <diskresjonskodev1-tjenestespesifikasjon.version>1.0</diskresjonskodev1-tjenestespesifikasjon.version>
         <egenAnsatt-v1-tjenestespesifikasjon.version>1.0.2</egenAnsatt-v1-tjenestespesifikasjon.version>
@@ -78,7 +78,7 @@
         </dependency>
         <dependency>
             <groupId>no.nav.security</groupId>
-            <artifactId>oidc-spring-test</artifactId>
+            <artifactId>oidc-test-support</artifactId>
             <version>${oidc-spring-support.version}</version>
             <scope>test</scope>
         </dependency>
