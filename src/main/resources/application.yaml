@@ -11,6 +11,8 @@ no.nav.security.oidc:
       accepted_audience: modiabrukerdialog-p,modiabrukerdialog-q1,veilarblogin-p,veilarblogin-q1
       cookie_name: ID_token
 
+logging.config: classpath:logback-spring.xml
+
 management:
   endpoint.prometheus.enabled: true
   endpoints.web:
