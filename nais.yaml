@@ -16,7 +16,7 @@ healthcheck:
     initialDelay: 120
 prometheus:
   enabled: true
-  path: syfo-tilgangskontroll/internal/metrics
+  path: syfo-tilgangskontroll/internal/prometheus
 resources:
   limits:
     cpu: 3000m
