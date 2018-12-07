@@ -25,7 +25,7 @@ import static org.apache.commons.lang3.StringUtils.isEmpty;
 
 @Slf4j
 @RestController
-@ProtectedWithClaims(issuer = INTERN, claimMap = {"acr=Level4"})
+@ProtectedWithClaims(issuer = INTERN)
 @RequestMapping(value = "/api/tilgang")
 public class TilgangRessurs {
 
