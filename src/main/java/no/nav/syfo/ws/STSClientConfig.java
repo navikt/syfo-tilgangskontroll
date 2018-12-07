@@ -19,8 +19,8 @@ import java.util.HashMap;
 
 class STSClientConfig {
     public static final String STS_URL_KEY = "SECURITYTOKENSERVICE_URL";
-    public static final String SERVICEUSER_USERNAME = "SERVICEUSER_USERNAME";
-    public static final String SERVICEUSER_PASSWORD = "SERVICEUSER_PASSWORD";
+    public static final String SERVICEUSER_USERNAME = "SRVSYFO_TILGANGSKONTROLL_USERNAME";
+    public static final String SERVICEUSER_PASSWORD = "SRVSYFO_TILGANGSKONTROLL_PASSWORD";
 
     // Only use no transportbinding on localhost, should use the requestSamlPolicy.xml with transport binding https
     // when in production.
