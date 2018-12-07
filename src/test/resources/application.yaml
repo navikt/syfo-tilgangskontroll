@@ -3,6 +3,10 @@ spring:
   profiles:
     active: local
 
+server:
+  servlet:
+    context-path: /syfo-tilgangskontroll
+
 securitytokenservice.url: sts.url
 
 no.nav.security.oidc:

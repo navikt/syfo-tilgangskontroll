@@ -3,6 +3,10 @@ spring:
   profiles:
     active: remote
 
+server:
+  servlet:
+    context-path: /syfo-tilgangskontroll
+
 no.nav.security.oidc:
   issuers: intern
   issuer:
