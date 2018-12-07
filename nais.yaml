@@ -11,9 +11,13 @@ healthcheck:
   liveness:
     path: syfo-tilgangskontroll/internal/isAlive
     initialDelay: 120
+    timeout: 1
+    periodSeconds: 10
+    failureThreshold: 3
   readiness:
-    path: syfo-tilgangskontroll/internal/isAlive
+    path: syfo-tilgangskontroll/internal/isReady
     initialDelay: 120
+    timeout: 1
 prometheus:
   enabled: true
   path: syfo-tilgangskontroll/internal/prometheus
