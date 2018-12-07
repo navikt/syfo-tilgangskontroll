@@ -28,6 +28,9 @@ fasitResources:
   used:
   - alias: srvsyfo-tilgangskontroll
     resourceType: credential
+    propertyMap:
+      username: SERVICE_USER_USERNAME
+      password: SERVICE_USER_PASSWORD
   - alias: appdynamics
     resourceType: applicationproperties
   - alias: loadbalancer:syfo-tilgangskontroll
