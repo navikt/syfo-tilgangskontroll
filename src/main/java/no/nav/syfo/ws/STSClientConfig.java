@@ -18,9 +18,9 @@ import org.apache.neethi.Policy;
 import java.util.HashMap;
 
 class STSClientConfig {
-    public static final String STS_URL_KEY = "securitytokenservice.url";
-    public static final String SERVICEUSER_USERNAME = "srvsyfo-tilgangskontroll.username";
-    public static final String SERVICEUSER_PASSWORD = "srvsyfo-tilgangskontroll.password";
+    public static final String STS_URL_KEY = "SECURITYTOKENSERVICE_URL";
+    public static final String SERVICEUSER_USERNAME = "SRVSYFO-TILGANGSKONTROLL_USERNAME";
+    public static final String SERVICEUSER_PASSWORD = "SRVSYFO-TILGANGSKONTROLL_PASSWORD";
 
     // Only use no transportbinding on localhost, should use the requestSamlPolicy.xml with transport binding https
     // when in production.
