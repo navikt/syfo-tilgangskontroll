@@ -14,9 +14,10 @@ at den er god nok.
 
 *Lokalt*
 
-- Bygges med `mvn clean install`
-- Startes ved å kjøre `LocalApplication`  
+- Bygg med `mvn clean install`
+- Start ved å kjøre `LocalApplication`  
 
-*Preprod*
+*Preprod og prod*
 
-//TODO
+Bygges og deployes av Jenkins:
+https://jenkins-digisyfo.adeo.no/job/digisyfo/job/syfo-tilgangskontroll/
