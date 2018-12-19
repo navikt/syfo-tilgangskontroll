@@ -2,7 +2,6 @@ package no.nav.syfo;
 
 import no.nav.syfo.ws.LogErrorHandler;
 import no.nav.syfo.ws.WsOIDCClient;
-import no.nav.tjeneste.pip.diskresjonskode.DiskresjonskodePortType;
 import no.nav.tjeneste.pip.egen.ansatt.v1.EgenAnsattV1;
 import no.nav.tjeneste.virksomhet.organisasjon.ressurs.enhet.v1.OrganisasjonRessursEnhetV1;
 import no.nav.tjeneste.virksomhet.organisasjonenhet.v2.OrganisasjonEnhetV2;
@@ -32,12 +31,6 @@ public class ApplicationConfig {
     @Primary
     public EgenAnsattV1 egenAnsattV1(@Value("${virksomhet.egenansatt.v1.endpointurl}") String serviceUrl) {
         return new WsOIDCClient<EgenAnsattV1>().createPort(serviceUrl, EgenAnsattV1.class, singletonList(new LogErrorHandler()));
-    }
-
-    @Bean
-    @Primary
-    public DiskresjonskodePortType diskresjonskodeV1(@Value("${virksomhet.diskresjonskode.v1.endpointurl}") String serviceUrl) {
-        return new WsOIDCClient<DiskresjonskodePortType>().createPort(serviceUrl, DiskresjonskodePortType.class, singletonList(new LogErrorHandler()));
     }
 
     @Bean

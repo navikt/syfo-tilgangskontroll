@@ -16,7 +16,7 @@ no.nav.security.oidc:
 fasit.environment.name: local
 
 ldap:
-  url: ldaps\://ldapgw.test.local
+  url: ldaps://ldapgw.test.local
   password: CHANGEME
   domain: TEST.LOCAL
   username: srvSSOLinux

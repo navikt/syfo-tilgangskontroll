@@ -1,8 +1,10 @@
 package no.nav.syfo;
 
 import no.nav.security.oidc.test.support.spring.TokenGeneratorConfiguration;
-import no.nav.syfo.mocks.*;
-import no.nav.tjeneste.pip.diskresjonskode.DiskresjonskodePortType;
+import no.nav.syfo.mocks.EgenansattMock;
+import no.nav.syfo.mocks.OrganisasjonEnhetMock;
+import no.nav.syfo.mocks.OrganisasjonRessursEnhetMock;
+import no.nav.syfo.mocks.PersonMock;
 import no.nav.tjeneste.pip.egen.ansatt.v1.EgenAnsattV1;
 import no.nav.tjeneste.virksomhet.organisasjon.ressurs.enhet.v1.OrganisasjonRessursEnhetV1;
 import no.nav.tjeneste.virksomhet.organisasjonenhet.v2.OrganisasjonEnhetV2;
@@ -17,7 +19,7 @@ import org.springframework.web.client.RestTemplate;
 import static java.util.Arrays.asList;
 
 @Configuration
-@Profile("local")
+@Profile({"local", "test"})
 @Import(TokenGeneratorConfiguration.class)
 public class LocalApplicationConfig {
 
@@ -36,11 +38,6 @@ public class LocalApplicationConfig {
     @Bean
     public EgenAnsattV1 egenAnsattV1Mock() {
         return new EgenansattMock();
-    }
-
-    @Bean
-    public DiskresjonskodePortType diskresjonskodeV1Mock() {
-        return new DiskresjonskodeMock();
     }
 
     @Bean

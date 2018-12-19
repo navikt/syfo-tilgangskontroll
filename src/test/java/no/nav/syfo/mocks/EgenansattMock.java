@@ -5,13 +5,17 @@ import no.nav.tjeneste.pip.egen.ansatt.v1.WSHentErEgenAnsattEllerIFamilieMedEgen
 import no.nav.tjeneste.pip.egen.ansatt.v1.WSHentErEgenAnsattEllerIFamilieMedEgenAnsattResponse;
 
 public class EgenansattMock implements EgenAnsattV1 {
-    @Override
-    public void ping() {
 
-    }
+
 
     @Override
     public WSHentErEgenAnsattEllerIFamilieMedEgenAnsattResponse hentErEgenAnsattEllerIFamilieMedEgenAnsatt(WSHentErEgenAnsattEllerIFamilieMedEgenAnsattRequest wsHentErEgenAnsattEllerIFamilieMedEgenAnsattRequest) {
-        return new WSHentErEgenAnsattEllerIFamilieMedEgenAnsattResponse().withEgenAnsatt(false);
+        String ident = wsHentErEgenAnsattEllerIFamilieMedEgenAnsattRequest.getIdent();
+        return new WSHentErEgenAnsattEllerIFamilieMedEgenAnsattResponse().withEgenAnsatt(PersonMock.ERIK_EGENANSATT_BRUKER.equals(ident));
+    }
+
+    @Override
+    public void ping() {
+
     }
 }

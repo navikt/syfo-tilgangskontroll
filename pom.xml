@@ -30,7 +30,6 @@
         <cxf.version>3.2.0</cxf.version>
         <oidc-spring-support.version>0.2.12</oidc-spring-support.version>
 
-        <diskresjonskodev1-tjenestespesifikasjon.version>1.0</diskresjonskodev1-tjenestespesifikasjon.version>
         <egenAnsatt-v1-tjenestespesifikasjon.version>1.0.2</egenAnsatt-v1-tjenestespesifikasjon.version>
         <organisasjonenhet-v2-tjenestespesifikasjon.version>2.1.0</organisasjonenhet-v2-tjenestespesifikasjon.version>
         <organisasjonRessursEnhet-v1-tjenestespesifikasjon.version>1.0.3</organisasjonRessursEnhet-v1-tjenestespesifikasjon.version>
@@ -125,11 +124,6 @@
             <version>${cxf.version}</version>
         </dependency>
 
-        <dependency>
-            <groupId>no.nav.syfo</groupId>
-            <artifactId>diskresjonskodev1-tjenestespesifikasjon</artifactId>
-            <version>${diskresjonskodev1-tjenestespesifikasjon.version}</version>
-        </dependency>
         <dependency>
             <groupId>no.nav.syfo.tjenester</groupId>
             <artifactId>egenAnsatt-v1-tjenestespesifikasjon</artifactId>

@@ -38,8 +38,6 @@ fasitResources:
     resourceType: loadbalancerconfig
   - alias: securityTokenService
     resourceType: baseUrl
-  - alias: virksomhet:Diskresjonskode_v1
-    resourceType: webserviceendpoint
   - alias: virksomhet:EgenAnsatt_v1
     resourceType: webserviceendpoint
   - alias: virksomhet:OrganisasjonRessursEnhet_v1
