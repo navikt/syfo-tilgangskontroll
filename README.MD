@@ -14,11 +14,10 @@ at den er god nok.
 
 *Lokalt*
 
-- Bygges med `mvn clean install`
-- Startes ved å kjøre `MainTest`  
+- Bygg med `mvn clean install`
+- Start ved å kjøre `LocalApplication`  
 
-*Test-miljø*
+*Preprod og prod*
 
-Bygges og deployes her enn så lenge:
-
-http://bekkci.devillo.no/job/digisyfo/job/syfo-tilgangskontroll/
+Bygges og deployes av Jenkins:
+https://jenkins-digisyfo.adeo.no/job/digisyfo/job/syfo-tilgangskontroll/

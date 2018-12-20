@@ -1,5 +1,6 @@
 # ref https://raw.githubusercontent.com/nais/naisd/master/nais_example.yaml
-image: docker.adeo.no:5000/digisyfo/syfo-tilgangskontroll
+name: syfo-tilgangskontroll
+image: "repo.adeo.no:5443/syfo-tilgangskontroll"
 team: sykefravaer-veden
 replicas:
   min: 2
@@ -8,14 +9,18 @@ replicas:
 port: 8080
 healthcheck:
   liveness:
-    path: syfo-tilgangskontroll/internal/isAlive
+    path: /syfo-tilgangskontroll/internal/isAlive
     initialDelay: 120
+    timeout: 1
+    periodSeconds: 10
+    failureThreshold: 3
   readiness:
-    path: syfo-tilgangskontroll/internal/isAlive
+    path: /syfo-tilgangskontroll/internal/isReady
     initialDelay: 120
+    timeout: 1
 prometheus:
   enabled: true
-  path: syfo-tilgangskontroll/internal/metrics
+  path: /syfo-tilgangskontroll/internal/prometheus
 resources:
   limits:
     cpu: 3000m
@@ -33,8 +38,6 @@ fasitResources:
     resourceType: loadbalancerconfig
   - alias: securityTokenService
     resourceType: baseUrl
-  - alias: virksomhet:Diskresjonskode_v1
-    resourceType: webserviceendpoint
   - alias: virksomhet:EgenAnsatt_v1
     resourceType: webserviceendpoint
   - alias: virksomhet:OrganisasjonRessursEnhet_v1
@@ -57,6 +60,10 @@ fasitResources:
     resourceType: restservice
   - alias: ldap
     resourceType: ldap
+  - alias: opam_oidc_discovery
+    resourceType: baseurl
+    propertyMap:
+      url: NO_NAV_SECURITY_OIDC_ISSUER_INTERN_DISCOVERYURL
   exposed:
   - alias: tilgangskontrollapi
     resourceType: restservice

@@ -11,6 +11,7 @@ import no.nav.tjeneste.virksomhet.organisasjonenhet.v2.meldinger.WSFinnNAVKontor
 import no.nav.tjeneste.virksomhet.organisasjonenhet.v2.meldinger.WSFinnNAVKontorResponse;
 import no.nav.tjeneste.virksomhet.organisasjonenhet.v2.meldinger.WSHentOverordnetEnhetListeRequest;
 import org.slf4j.Logger;
+import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
 import java.util.List;
@@ -20,6 +21,7 @@ import static java.util.stream.Collectors.toList;
 import static java.util.stream.Stream.of;
 import static org.slf4j.LoggerFactory.getLogger;
 
+@Service
 public class OrganisasjonEnhetService {
     private static final Logger LOG = getLogger(OrganisasjonEnhetService.class);
 

@@ -1,63 +1,68 @@
 package no.nav.syfo.services;
 
+import no.nav.syfo.domain.PersonInfo;
 import no.nav.syfo.domain.Tilgang;
-import org.springframework.cache.annotation.Cacheable;
+import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
 
-import static no.nav.brukerdialog.security.context.SubjectHandler.getSubjectHandler;
 import static no.nav.syfo.domain.AdRoller.*;
 
+@Service
 public class TilgangService {
+
+    public static final String GEOGRAFISK = "GEOGRAFISK";
 
     @Inject
     private LdapService ldapService;
     @Inject
-    private DiskresjonskodeService diskresjonskodeService;
+    private PersonService personService;
     @Inject
     private EgenAnsattService egenAnsattService;
     @Inject
     private GeografiskTilgangService geografiskTilgangService;
 
-    @Cacheable(value = "tilgang", keyGenerator = "userkeygenerator")
-    public Tilgang sjekkTilgang(String fnr) {
-        if (!harTilgangTilSykefravaersoppfoelging()) {
-            return new Tilgang().harTilgang(false).begrunnelse("SYFO");
+    // TODO fix @Cacheable(value = "tilgang", keyGenerator = "userkeygenerator")
+    public Tilgang sjekkTilgang(String brukerFnr, String veilederId) {
+        if (!harTilgangTilSykefravaersoppfoelging(veilederId)) {
+            return new Tilgang().harTilgang(false).begrunnelse(SYFO.name());
         }
 
-        String diskresjonskode = diskresjonskodeService.diskresjonskode(fnr);
+        PersonInfo personInfo = personService.hentPersonInfo(brukerFnr);
+
+        if (!geografiskTilgangService.harGeografiskTilgang(veilederId, personInfo)) {
+            return new Tilgang().harTilgang(false).begrunnelse(GEOGRAFISK);
+        }
+
+        String diskresjonskode = personInfo.diskresjonskode();
         if ("6".equals(diskresjonskode)) {
-            return new Tilgang().harTilgang(false).begrunnelse("KODE6");
-        } else if ("7".equals(diskresjonskode) && !harTilgangTilKode7()) {
-            return new Tilgang().harTilgang(false).begrunnelse("KODE7");
+            return new Tilgang().harTilgang(false).begrunnelse(KODE6.name());
+        } else if ("7".equals(diskresjonskode) && !harTilgangTilKode7(veilederId)) {
+            return new Tilgang().harTilgang(false).begrunnelse(KODE7.name());
         }
 
-        if (egenAnsattService.erEgenAnsatt(fnr) && !harTilgangTilEgenAnsatt()) {
-            return new Tilgang().harTilgang(false).begrunnelse("EGEN_ANSATT");
-        }
-
-        if (!geografiskTilgangService.harGeografiskTilgang(fnr)) {
-            return new Tilgang().harTilgang(false).begrunnelse("GEOGRAFISK");
+        if (egenAnsattService.erEgenAnsatt(brukerFnr) && !harTilgangTilEgenAnsatt(veilederId)) {
+            return new Tilgang().harTilgang(false).begrunnelse(EGEN_ANSATT.name());
         }
 
         return new Tilgang().harTilgang(true);
     }
 
-    @Cacheable(value = "tilgang", keyGenerator = "userkeygenerator")
-    public boolean harTilgangTilTjenesten() {
-        return harTilgangTilSykefravaersoppfoelging();
+    // TODO fix @Cacheable(value = "tilgang", keyGenerator = "userkeygenerator")
+    public boolean harTilgangTilTjenesten(String veilederId) {
+        return harTilgangTilSykefravaersoppfoelging(veilederId);
     }
 
 
-    private boolean harTilgangTilSykefravaersoppfoelging() {
-        return ldapService.harTilgang(getSubjectHandler().getUid(), SYFO.rolle);
+    private boolean harTilgangTilSykefravaersoppfoelging(String veilederId) {
+        return ldapService.harTilgang(veilederId, SYFO.rolle);
     }
 
-    private boolean harTilgangTilKode7() {
-        return ldapService.harTilgang(getSubjectHandler().getUid(), KODE7.rolle);
+    private boolean harTilgangTilKode7(String veilederId) {
+        return ldapService.harTilgang(veilederId, KODE7.rolle);
     }
 
-    private boolean harTilgangTilEgenAnsatt() {
-        return ldapService.harTilgang(getSubjectHandler().getUid(), EGEN_ANSATT.rolle);
+    private boolean harTilgangTilEgenAnsatt(String veilederId) {
+        return ldapService.harTilgang(veilederId, EGEN_ANSATT.rolle);
     }
 }

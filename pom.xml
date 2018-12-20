@@ -3,214 +3,238 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
-    <packaging>war</packaging>
 
-    <parent>
-        <groupId>no.nav.sbl</groupId>
-        <artifactId>mor-pom</artifactId>
-        <version>2018.02.28.19.39</version>
-    </parent>
     <groupId>no.nav.syfo</groupId>
     <artifactId>syfo-tilgangskontroll</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <version>2.0-SNAPSHOT</version>
+    <packaging>jar</packaging>
+
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>2.0.4.RELEASE</version>
+    </parent>
+
     <properties>
-        <diskresjonskodev1-tjenestespesifikasjon.version>1.0.0</diskresjonskodev1-tjenestespesifikasjon.version>
-        <egenAnsatt-v1-tjenestespesifikasjon.version>1.0.1</egenAnsatt-v1-tjenestespesifikasjon.version>
-        <organisasjonenhet-v2-tjenestespesifikasjon.version>1.0.6</organisasjonenhet-v2-tjenestespesifikasjon.version>
-        <organisasjonRessursEnhet-v1-tjenestespesifikasjon.version>1.0.2</organisasjonRessursEnhet-v1-tjenestespesifikasjon.version>
+        <start-class>no.nav.syfo.Application</start-class>
+        <java.version>1.8</java.version>
+        <javax.inject.version>1</javax.inject.version>
+        <javax.ws.rs.version>2.0.1</javax.ws.rs.version>
+        <spring-boot.version>2.0.4.RELEASE</spring-boot.version>
+        <spring.version>5.0.7.RELEASE</spring.version>
+        <jose4j.version>0.5.0</jose4j.version>
+        <logstash-logback-encoder.version>4.10</logstash-logback-encoder.version>
+        <prometheus.version>0.3.0</prometheus.version>
+        <micrometer-registry-prometheus.version>1.0.6</micrometer-registry-prometheus.version>
+        <lombok.version>1.16.22</lombok.version>
+        <cxf.version>3.2.0</cxf.version>
+        <oidc-spring-support.version>0.2.12</oidc-spring-support.version>
+
+        <egenAnsatt-v1-tjenestespesifikasjon.version>1.0.2</egenAnsatt-v1-tjenestespesifikasjon.version>
+        <organisasjonenhet-v2-tjenestespesifikasjon.version>2.1.0</organisasjonenhet-v2-tjenestespesifikasjon.version>
+        <organisasjonRessursEnhet-v1-tjenestespesifikasjon.version>1.0.3</organisasjonRessursEnhet-v1-tjenestespesifikasjon.version>
         <person-v3-tjenestespesifikasjon.version>3.0.2</person-v3-tjenestespesifikasjon.version>
     </properties>
 
-    <dependencyManagement>
-        <dependencies>
-            <dependency>
-                <groupId>no.nav.sbl</groupId>
-                <artifactId>bom</artifactId>
-                <version>2018.02.28.19.39</version>
-                <type>pom</type>
-                <scope>import</scope>
-            </dependency>
-            <dependency>
-                <artifactId>diskresjonskodev1-tjenestespesifikasjon</artifactId>
-                <groupId>no.nav.sbl.dialogarena</groupId>
-                <version>${diskresjonskodev1-tjenestespesifikasjon.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>no.nav.syfo.tjenester</groupId>
-                <artifactId>egenAnsatt-v1-tjenestespesifikasjon</artifactId>
-                <version>${egenAnsatt-v1-tjenestespesifikasjon.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>no.nav.syfo.tjenester</groupId>
-                <artifactId>organisasjonRessursEnhet-v1-tjenestespesifikasjon</artifactId>
-                <version>${organisasjonRessursEnhet-v1-tjenestespesifikasjon.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>no.nav.sbl.dialogarena</groupId>
-                <artifactId>organisasjonenhet-v2-tjenestespesifikasjon</artifactId>
-                <version>${organisasjonenhet-v2-tjenestespesifikasjon.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>no.nav.sbl.dialogarena</groupId>
-                <artifactId>person-v3-tjenestespesifikasjon</artifactId>
-                <version>${person-v3-tjenestespesifikasjon.version}</version>
-            </dependency>
-        </dependencies>
-    </dependencyManagement>
-
     <dependencies>
+
         <dependency>
-            <groupId>no.nav.sbl</groupId>
-            <artifactId>api-app</artifactId>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+            <version>${spring-boot.version}</version>
         </dependency>
+
+        <!-- Cache -->
         <dependency>
-            <groupId>no.nav.sbl.dialogarena</groupId>
-            <artifactId>test-config</artifactId>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-cache</artifactId>
+            <version>${spring-boot.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <version>${spring-boot.version}</version>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>javax.inject</groupId>
+            <artifactId>javax.inject</artifactId>
+            <version>${javax.inject.version}</version>
         </dependency>
         <dependency>
             <groupId>javax.ws.rs</groupId>
             <artifactId>javax.ws.rs-api</artifactId>
+            <version>${javax.ws.rs.version}</version>
         </dependency>
-        <dependency>
-            <groupId>javax.inject</groupId>
-            <artifactId>javax.inject</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.glassfish.hk2.external</groupId>
-            <artifactId>javax.inject</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>no.nav</groupId>
-            <artifactId>metrics</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>no.nav.sbl.dialogarena</groupId>
-            <artifactId>common-cxf</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.glassfish.jersey.media</groupId>
-            <artifactId>jersey-media-json-jackson</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.glassfish.jersey.ext</groupId>
-            <artifactId>jersey-spring3</artifactId>
-        </dependency>
-        <dependency>
-            <artifactId>diskresjonskodev1-tjenestespesifikasjon</artifactId>
-            <groupId>no.nav.sbl.dialogarena</groupId>
-        </dependency>
-        <dependency>
-            <groupId>no.nav.syfo.tjenester</groupId>
-            <artifactId>egenAnsatt-v1-tjenestespesifikasjon</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>no.nav.syfo.tjenester</groupId>
-            <artifactId>organisasjonRessursEnhet-v1-tjenestespesifikasjon</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>no.nav.sbl.dialogarena</groupId>
-            <artifactId>organisasjonenhet-v2-tjenestespesifikasjon</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>no.nav.sbl.dialogarena</groupId>
-            <artifactId>person-v3-tjenestespesifikasjon</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.projectlombok</groupId>
-            <artifactId>lombok</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.commons</groupId>
-            <artifactId>commons-lang3</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-context</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-context-support</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-aop</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>javax.servlet</groupId>
-            <artifactId>javax.servlet-api</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>javax.annotation</groupId>
-            <artifactId>javax.annotation-api</artifactId>
-            <version>1.2</version>
-        </dependency>
-        <dependency>
-            <groupId>no.nav.sbl.dialogarena</groupId>
-            <artifactId>common-types</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>ch.qos.logback</groupId>
-            <artifactId>logback-classic</artifactId>
-            <scope>runtime</scope>
-        </dependency>
+
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>
         </dependency>
         <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-logging</artifactId>
+            <exclusions>
+                <exclusion>
+                    <groupId>commons-logging</groupId>
+                    <artifactId>commons-logging</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
-            <groupId>no.nav.sbl.dialogarena</groupId>
-            <artifactId>common-test</artifactId>
+            <groupId>net.logstash.logback</groupId>
+            <artifactId>logstash-logback-encoder</artifactId>
+            <version>${logstash-logback-encoder.version}</version>
+        </dependency>
+
+        <!-- Sikkerhet -->
+        <dependency>
+            <groupId>no.nav.security</groupId>
+            <artifactId>oidc-spring-support</artifactId>
+            <version>${oidc-spring-support.version}</version>
         </dependency>
         <dependency>
-            <groupId>org.assertj</groupId>
-            <artifactId>assertj-core</artifactId>
+            <groupId>no.nav.security</groupId>
+            <artifactId>oidc-test-support</artifactId>
+            <version>${oidc-spring-support.version}</version>
+            <scope>test</scope>
         </dependency>
+
+        <!-- CXF -->
         <dependency>
-            <groupId>net.sf.ehcache</groupId>
-            <artifactId>ehcache</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>no.nav.dialogarena</groupId>
-            <artifactId>oidc-security</artifactId>
-            <type>test-jar</type>
-        </dependency>
-        <dependency>
-            <groupId>no.nav.dialogarena</groupId>
-            <artifactId>oidc-security</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>io.swagger</groupId>
-            <artifactId>swagger-annotations</artifactId>
+            <groupId>org.apache.cxf</groupId>
+            <artifactId>cxf-spring-boot-starter-jaxws</artifactId>
+            <version>${cxf.version}</version>
         </dependency>
         <dependency>
             <groupId>org.apache.cxf</groupId>
-            <artifactId>cxf-rt-transports-http</artifactId>
-            <scope>runtime</scope>
+            <artifactId>cxf-rt-features-logging</artifactId>
+            <version>${cxf.version}</version>
         </dependency>
         <dependency>
-            <groupId>org.mockito</groupId>
-            <artifactId>mockito-core</artifactId>
+            <groupId>org.apache.cxf</groupId>
+            <artifactId>cxf-rt-ws-security</artifactId>
+            <version>${cxf.version}</version>
         </dependency>
         <dependency>
-            <groupId>org.mockito</groupId>
-            <artifactId>mockito-all</artifactId>
+            <groupId>org.apache.cxf</groupId>
+            <artifactId>cxf-rt-ws-policy</artifactId>
+            <version>${cxf.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>no.nav.syfo.tjenester</groupId>
+            <artifactId>egenAnsatt-v1-tjenestespesifikasjon</artifactId>
+            <version>${egenAnsatt-v1-tjenestespesifikasjon.version}</version>
         </dependency>
         <dependency>
-            <groupId>org.apache.httpcomponents</groupId>
-            <artifactId>httpcore</artifactId>
-            <scope>runtime</scope>
+            <groupId>no.nav.syfo.tjenester</groupId>
+            <artifactId>organisasjonRessursEnhet-v1-tjenestespesifikasjon</artifactId>
+            <version>${organisasjonRessursEnhet-v1-tjenestespesifikasjon.version}</version>
         </dependency>
         <dependency>
-            <groupId>org.apache.httpcomponents</groupId>
-            <artifactId>httpclient</artifactId>
-            <scope>runtime</scope>
+            <groupId>no.nav.sbl.dialogarena</groupId>
+            <artifactId>organisasjonenhet-v2-tjenestespesifikasjon</artifactId>
+            <version>${organisasjonenhet-v2-tjenestespesifikasjon.version}</version>
         </dependency>
+        <dependency>
+            <groupId>no.nav.sbl.dialogarena</groupId>
+            <artifactId>person-v3-tjenestespesifikasjon</artifactId>
+            <version>${person-v3-tjenestespesifikasjon.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.glassfish.jersey.core</groupId>
+            <artifactId>jersey-common</artifactId>
+            <version>2.26</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>${lombok.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
+            <version>3.5</version>
+        </dependency>
+
     </dependencies>
+
     <build>
-        <finalName>syfo-tilgangskontroll</finalName>
+        <extensions>
+            <extension>
+                <groupId>org.apache.maven.wagon</groupId>
+                <artifactId>wagon-webdav-jackrabbit</artifactId>
+                <version>1.0</version>
+            </extension>
+        </extensions>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>repackage</goal>
+                        </goals>
+                        <configuration>
+                            <finalName>app</finalName>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
     </build>
+
+    <profiles>
+        <profile>
+            <id>owasp</id>
+            <build>
+                <pluginManagement>
+                    <plugins>
+                        <plugin>
+                            <groupId>org.owasp</groupId>
+                            <artifactId>dependency-check-maven</artifactId>
+                            <version>3.1.2</version>
+                            <configuration>
+                                <failOnError>false</failOnError>
+                                <failBuildOnCVSS>8</failBuildOnCVSS>
+                            </configuration>
+                            <executions>
+                                <execution>
+                                    <goals>
+                                        <goal>check</goal>
+                                    </goals>
+                                </execution>
+                            </executions>
+                        </plugin>
+                    </plugins>
+                </pluginManagement>
+            </build>
+        </profile>
+        <profile>
+            <id>alltests</id>
+            <properties>
+                <tests>fast,slow</tests>
+            </properties>
+        </profile>
+    </profiles>
+
+    <distributionManagement>
+        <repository>
+            <id>maven-releases</id>
+            <name>NAV Internal Repository</name>
+            <url>https://repo.adeo.no/repository/maven-releases/</url>
+        </repository>
+        <snapshotRepository>
+            <id>maven-snapshots</id>
+            <name>NAV Snapshot Repository</name>
+            <url>https://repo.adeo.no/repository/maven-snapshots/</url>
+        </snapshotRepository>
+    </distributionManagement>
+
 </project>
