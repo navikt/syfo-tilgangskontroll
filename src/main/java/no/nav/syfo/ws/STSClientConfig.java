@@ -24,15 +24,8 @@ class STSClientConfig {
 
     // Only use no transportbinding on localhost, should use the requestSamlPolicy.xml with transport binding https
     // when in production.
-    private static final String STS_REQUEST_SAML_POLICY = "classpath:policy/requestSamlPolicyNoTransportBinding.xml";
+    private static final String STS_REQUEST_SAML_POLICY = "classpath:policy/requestSamlPolicy.xml";
     private static final String STS_CLIENT_AUTHENTICATION_POLICY = "classpath:policy/untPolicy.xml";
-
-    public static <T> T configureRequestSamlToken(T port) {
-        Client client = ClientProxy.getClient(port);
-        // do not have onbehalfof token so cache token in endpoint
-        configureStsRequestSamlToken(client, true);
-        return port;
-    }
 
     public static <T> T configureRequestSamlTokenOnBehalfOfOidc(T port) {
         Client client = ClientProxy.getClient(port);
