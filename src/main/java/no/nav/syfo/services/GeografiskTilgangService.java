@@ -8,6 +8,8 @@ import javax.inject.Inject;
 import java.util.Collection;
 import java.util.List;
 
+import static java.util.stream.Collectors.toList;
+
 @Service
 public class GeografiskTilgangService {
 
@@ -44,9 +46,14 @@ public class GeografiskTilgangService {
     }
 
     private boolean harRegionalTilgangTilBrukersEnhet(List<String> navKontorerForGT, List<String> veiledersEnheter, String veilederId) {
+        List<String> veiledersOverordnedeEnheter = veiledersEnheter.stream()
+                .map(organisasjonEnhetService::hentOverordnetEnhetForNAVKontor)
+                .flatMap(Collection::stream)
+                .collect(toList());
+
         return harRegionalTilgang(veilederId) && navKontorerForGT.stream()
                 .map(organisasjonEnhetService::hentOverordnetEnhetForNAVKontor)
                 .flatMap(Collection::stream)
-                .anyMatch(veiledersEnheter::contains);
+                .anyMatch(veiledersOverordnedeEnheter::contains);
     }
 }
