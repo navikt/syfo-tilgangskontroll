@@ -6,10 +6,9 @@ import org.springframework.context.annotation.*;
 import static org.mockito.Mockito.mock;
 
 @Configuration
-@Profile("test")
+@Profile({"test"})
 @Import(LocalApplicationConfig.class)
 public class TestApplicationConfig {
-
 
     @Bean
     @Primary
