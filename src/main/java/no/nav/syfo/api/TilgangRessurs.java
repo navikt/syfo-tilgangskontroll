@@ -1,29 +1,25 @@
 package no.nav.syfo.api;
 
 
-import lombok.extern.slf4j.Slf4j;
 import no.nav.security.oidc.api.ProtectedWithClaims;
 import no.nav.security.oidc.context.OIDCRequestContextHolder;
 import no.nav.syfo.domain.Tilgang;
 import no.nav.syfo.security.OIDCUtil;
 import no.nav.syfo.services.TilgangService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.inject.Inject;
-import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Response;
 
 import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
-import static javax.ws.rs.core.Response.Status.BAD_REQUEST;
 import static javax.ws.rs.core.Response.Status.FORBIDDEN;
 import static javax.ws.rs.core.Response.ok;
 import static javax.ws.rs.core.Response.status;
 import static no.nav.syfo.security.OIDCIssuer.INTERN;
-import static org.apache.commons.lang3.StringUtils.isEmpty;
 
-@Slf4j
 @RestController
 @ProtectedWithClaims(issuer = INTERN)
 @RequestMapping(value = "/api/tilgang")
@@ -33,7 +29,7 @@ public class TilgangRessurs {
 
     private TilgangService tilgangService;
 
-    @Inject
+    @Autowired
     public TilgangRessurs(OIDCRequestContextHolder contextHolder, TilgangService tilgangService) {
         this.contextHolder = contextHolder;
         this.tilgangService = tilgangService;
@@ -51,22 +47,16 @@ public class TilgangRessurs {
     }
 
     @GetMapping(path = "/tilgangtilbruker", produces = APPLICATION_JSON)
-    public Response tilgangTilBruker(@QueryParam("fnr") String fnr) {
-        if (isEmpty(fnr)) {
-            return status(BAD_REQUEST)
-                    .entity("fnr parameter is mandatory")
+    public Response tilgangTilBruker(@RequestParam String fnr) {
+        String veilederId = OIDCUtil.getSubjectFromOIDCToken(contextHolder, INTERN);
+        Tilgang tilgang = tilgangService.sjekkTilgang(fnr, veilederId);
+        if (!tilgang.isHarTilgang()) {
+            return status(FORBIDDEN)
+                    .entity(tilgang)
+                    .type(APPLICATION_JSON)
                     .build();
         } else {
-            String veilederId = OIDCUtil.getSubjectFromOIDCToken(contextHolder, INTERN);
-            Tilgang tilgang = tilgangService.sjekkTilgang(fnr, veilederId);
-            if (!tilgang.harTilgang) {
-                return status(FORBIDDEN)
-                        .entity(tilgang)
-                        .type(APPLICATION_JSON)
-                        .build();
-            } else {
-                return ok(new Tilgang().harTilgang(true)).build();
-            }
+            return ok(new Tilgang().withHarTilgang(true)).build();
         }
     }
 

@@ -9,9 +9,8 @@ import no.nav.tjeneste.virksomhet.person.v3.informasjon.WSPersonIdent;
 import no.nav.tjeneste.virksomhet.person.v3.meldinger.WSHentGeografiskTilknytningRequest;
 import no.nav.tjeneste.virksomhet.person.v3.meldinger.WSHentGeografiskTilknytningResponse;
 import org.slf4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import javax.inject.Inject;
 
 import static org.slf4j.LoggerFactory.getLogger;
 
@@ -19,7 +18,7 @@ import static org.slf4j.LoggerFactory.getLogger;
 public class PersonService {
     private static final Logger LOG = getLogger(PersonService.class);
 
-    @Inject
+    @Autowired
     private PersonV3 personV3;
 
     public PersonInfo hentPersonInfo(String fnr) {

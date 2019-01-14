@@ -28,6 +28,15 @@ resources:
   requests:
     cpu: 500m
     memory: 512Mi
+redis:
+  enabled: true
+  # limits for redis-sentinels
+  limits:
+    cpu: 100m
+    memory: 128Mi
+  requests:
+    cpu: 100m
+    memory: 128Mi
 fasitResources:
   used:
   - alias: srvsyfo-tilgangskontroll

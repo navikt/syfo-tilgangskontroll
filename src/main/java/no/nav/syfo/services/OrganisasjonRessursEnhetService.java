@@ -2,9 +2,9 @@ package no.nav.syfo.services;
 
 import no.nav.tjeneste.virksomhet.organisasjon.ressurs.enhet.v1.*;
 import org.slf4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.inject.Inject;
 import java.util.List;
 
 import static java.util.Collections.emptyList;
@@ -15,7 +15,7 @@ import static org.slf4j.LoggerFactory.getLogger;
 public class OrganisasjonRessursEnhetService {
     private static final Logger LOG = getLogger(OrganisasjonRessursEnhetService.class);
 
-    @Inject
+    @Autowired
     private OrganisasjonRessursEnhetV1 organisasjonRessursEnhetV1;
 
     public List<String> hentVeiledersEnheter(String veilederId) {
