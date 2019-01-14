@@ -2,9 +2,9 @@ package no.nav.syfo.services;
 
 import no.nav.syfo.domain.PersonInfo;
 import no.nav.syfo.domain.Tilgang;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
-
-import javax.inject.Inject;
 
 import static no.nav.syfo.domain.AdRoller.*;
 
@@ -12,47 +12,48 @@ import static no.nav.syfo.domain.AdRoller.*;
 public class TilgangService {
 
     public static final String GEOGRAFISK = "GEOGRAFISK";
+    public static final String TILGANGTILBRUKER = "tilgangtilbruker";
+    public static final String TILGANGTILTJENESTEN = "tilgangtiltjenesten";
 
-    @Inject
+    @Autowired
     private LdapService ldapService;
-    @Inject
+    @Autowired
     private PersonService personService;
-    @Inject
+    @Autowired
     private EgenAnsattService egenAnsattService;
-    @Inject
+    @Autowired
     private GeografiskTilgangService geografiskTilgangService;
 
-    // TODO fix @Cacheable(value = "tilgang", keyGenerator = "userkeygenerator")
+    @Cacheable(cacheNames = TILGANGTILBRUKER, key = "#veilederId.concat(#brukerFnr)", condition = "#brukerFnr != null && #veilederId != null")
     public Tilgang sjekkTilgang(String brukerFnr, String veilederId) {
-        if (!harTilgangTilSykefravaersoppfoelging(veilederId)) {
-            return new Tilgang().harTilgang(false).begrunnelse(SYFO.name());
+        if (!harTilgangTilTjenesten(veilederId)) {
+            return new Tilgang().withHarTilgang(false).withBegrunnelse(SYFO.name());
         }
 
         PersonInfo personInfo = personService.hentPersonInfo(brukerFnr);
 
         if (!geografiskTilgangService.harGeografiskTilgang(veilederId, personInfo)) {
-            return new Tilgang().harTilgang(false).begrunnelse(GEOGRAFISK);
+            return new Tilgang().withHarTilgang(false).withBegrunnelse(GEOGRAFISK);
         }
 
-        String diskresjonskode = personInfo.diskresjonskode();
+        String diskresjonskode = personInfo.getDiskresjonskode();
         if ("6".equals(diskresjonskode)) {
-            return new Tilgang().harTilgang(false).begrunnelse(KODE6.name());
+            return new Tilgang().withHarTilgang(false).withBegrunnelse(KODE6.name());
         } else if ("7".equals(diskresjonskode) && !harTilgangTilKode7(veilederId)) {
-            return new Tilgang().harTilgang(false).begrunnelse(KODE7.name());
+            return new Tilgang().withHarTilgang(false).withBegrunnelse(KODE7.name());
         }
 
         if (egenAnsattService.erEgenAnsatt(brukerFnr) && !harTilgangTilEgenAnsatt(veilederId)) {
-            return new Tilgang().harTilgang(false).begrunnelse(EGEN_ANSATT.name());
+            return new Tilgang().withHarTilgang(false).withBegrunnelse(EGEN_ANSATT.name());
         }
 
-        return new Tilgang().harTilgang(true);
+        return new Tilgang().withHarTilgang(true);
     }
 
-    // TODO fix @Cacheable(value = "tilgang", keyGenerator = "userkeygenerator")
+    @Cacheable(cacheNames = TILGANGTILTJENESTEN, key = "#veilederId", condition = "#veilederId != null")
     public boolean harTilgangTilTjenesten(String veilederId) {
         return harTilgangTilSykefravaersoppfoelging(veilederId);
     }
-
 
     private boolean harTilgangTilSykefravaersoppfoelging(String veilederId) {
         return ldapService.harTilgang(veilederId, SYFO.rolle);
