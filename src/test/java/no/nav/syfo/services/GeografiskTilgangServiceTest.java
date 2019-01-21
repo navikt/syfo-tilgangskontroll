@@ -21,7 +21,7 @@ import static org.mockito.Mockito.when;
 public class GeografiskTilgangServiceTest {
 
     private static final String VEILEDER_UID = "Z999999";
-    private static final PersonInfo PERSON_INFO = new PersonInfo("1", "brukersPostnummer");
+    private static final PersonInfo PERSON_INFO = new PersonInfo("", "brukersPostnummer");
 
     @Mock
     private LdapService ldapService;
@@ -58,7 +58,7 @@ public class GeografiskTilgangServiceTest {
 
     @Test
     public void harIkkeTilgangHvisVeilederIkkeHarTilgangTilSammeEnhetSomBruker() {
-        when( organisasjonRessursEnhetService.hentVeiledersEnheter(VEILEDER_UID)).thenReturn(singletonList("enHeltAnnenEnhet"));
+        when(organisasjonRessursEnhetService.hentVeiledersEnheter(VEILEDER_UID)).thenReturn(singletonList("enHeltAnnenEnhet"));
         assertThat(geografiskTilgangService.harGeografiskTilgang(VEILEDER_UID, PERSON_INFO)).isFalse();
     }
 
