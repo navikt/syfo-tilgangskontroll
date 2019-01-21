@@ -24,9 +24,13 @@ public class PersonService {
     public PersonInfo hentPersonInfo(String fnr) {
         try {
             WSHentGeografiskTilknytningResponse geografiskTilknytningResponse = personV3.hentGeografiskTilknytning(new WSHentGeografiskTilknytningRequest().withAktoer(new WSPersonIdent().withIdent(new WSNorskIdent().withIdent(fnr))));
-            String diskresjonskode = geografiskTilknytningResponse.getDiskresjonskode().getValue();
             String geografiskTilknytning = geografiskTilknytningResponse.getGeografiskTilknytning().getGeografiskTilknytning();
-            return new PersonInfo(diskresjonskode, geografiskTilknytning);
+            if(geografiskTilknytningResponse.getDiskresjonskode() != null && geografiskTilknytningResponse.getDiskresjonskode().getValue() != null){
+                String diskresjonskode = geografiskTilknytningResponse.getDiskresjonskode().getValue();
+                return new PersonInfo(diskresjonskode, geografiskTilknytning);
+            } else {
+                return new PersonInfo("", geografiskTilknytning);
+            }
         } catch (HentGeografiskTilknytningSikkerhetsbegrensing | HentGeografiskTilknytningPersonIkkeFunnet e) {
             LOG.error("Feil ved henting av geografisk tilknytning", e);
             throw new RuntimeException("Feil ved henting av geografisk tilknytning", e);
