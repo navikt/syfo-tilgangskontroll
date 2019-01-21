@@ -5,6 +5,11 @@ spring:
     redis:
       time-to-live: 1h
       cache-null-values: false
+  redis:
+    host: rfs-syfo-tilgangskontroll
+    port: 26379
+    sentinel:
+      master: mymaster
 
 no.nav.security.oidc:
   issuers: intern
