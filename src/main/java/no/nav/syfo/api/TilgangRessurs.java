@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.ws.rs.core.Response;
 
 import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
+import static javax.ws.rs.core.Response.Status.BAD_REQUEST;
 import static javax.ws.rs.core.Response.Status.FORBIDDEN;
 import static javax.ws.rs.core.Response.ok;
 import static javax.ws.rs.core.Response.status;
@@ -58,6 +59,23 @@ public class TilgangRessurs {
         } else {
             return ok(new Tilgang().withHarTilgang(true)).build();
         }
+    }
+
+    @GetMapping(path = "/tilgangtilenhet", produces = APPLICATION_JSON)
+    public Response tilgangTilEnhet(@RequestParam String enhet) {
+        String veilederId = OIDCUtil.getSubjectFromOIDCToken(contextHolder, INTERN);
+        if (!enhet.matches("\\d{4}$"))
+            return status(BAD_REQUEST)
+                    .entity("enhet paramater must be at least four digits long")
+                    .build();
+        Tilgang tilgang = tilgangService.sjekkTilgangTilEnhet(veilederId, enhet);
+        if (!tilgang.isHarTilgang()) {
+            return status(FORBIDDEN)
+                    .entity(tilgang)
+                    .type(APPLICATION_JSON)
+                    .build();
+        }
+        return ok(new Tilgang().withHarTilgang(true)).build();
     }
 
 }
