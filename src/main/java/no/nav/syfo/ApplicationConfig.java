@@ -62,12 +62,10 @@ public class ApplicationConfig {
     }
 
     @Bean
-    public LettuceConnectionFactory lettuceConnectionFactory(@Value("${redis.hostname}") String redisHostName,
-                                                             @Value("${redis.port}") int redisPort,
-                                                             @Value("${redis.sentinel.master}") String redisSentinelMaster) {
+    public LettuceConnectionFactory lettuceConnectionFactory() {
         return new LettuceConnectionFactory(new RedisSentinelConfiguration()
-                .master(redisSentinelMaster)
-                .sentinel(new RedisNode(redisHostName, redisPort)));
+                .master("mymaster")
+                .sentinel(new RedisNode("rfs-syfo-tilgangskontroll", 26379)));
     }
 
 }
