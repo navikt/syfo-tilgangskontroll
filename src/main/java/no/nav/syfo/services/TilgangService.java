@@ -56,8 +56,10 @@ public class TilgangService {
     }
 
     @Cacheable(cacheNames = TILGANGTILTJENESTEN, key = "#veilederId", condition = "#veilederId != null")
-    public boolean harTilgangTilTjenesten(String veilederId) {
-        return harTilgangTilSykefravaersoppfoelging(veilederId);
+    public Tilgang sjekkTilgangTilTjenesten(String veilederId) {
+        if (harTilgangTilTjenesten(veilederId))
+            return new Tilgang().withHarTilgang(true);
+        return new Tilgang().withHarTilgang(false).withBegrunnelse(SYFO.name());
     }
 
     @Cacheable(cacheNames = TILGANGTILENHET, key = "#veilederId.concat(#enhet)", condition = "#enhet != null && #veilederId != null")
@@ -67,6 +69,10 @@ public class TilgangService {
         if (!organisasjonRessursEnhetService.harTilgangTilEnhet(veilederId, enhet))
             return new Tilgang().withHarTilgang(false).withBegrunnelse(ENHET);
         return new Tilgang().withHarTilgang(true);
+    }
+
+    private boolean harTilgangTilTjenesten(String veilederId) {
+        return harTilgangTilSykefravaersoppfoelging(veilederId);
     }
 
     private boolean harTilgangTilSykefravaersoppfoelging(String veilederId) {

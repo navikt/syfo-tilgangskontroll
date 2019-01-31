@@ -8,6 +8,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 
@@ -46,7 +47,7 @@ public class TilgangRessursComponentTest {
         mockRoller(ldapServiceMock, VIGGO_VEILEDER, INNVILG, SYFO);
         loggInnVeilederMedOpenAM(oidcRequestContextHolder, VIGGO_VEILEDER);
 
-        assertEquals(200, tilgangRessurs.tilgangTilTjenesten().getStatus());
+        assertEquals(200, tilgangRessurs.tilgangTilTjenesten().getStatusCodeValue());
     }
 
     @Test
@@ -54,7 +55,7 @@ public class TilgangRessursComponentTest {
         loggInnVeilederMedOpenAM(oidcRequestContextHolder, VIGGO_VEILEDER);
         mockRoller(ldapServiceMock, VIGGO_VEILEDER, NEKT, SYFO);
 
-        assertEquals(403, tilgangRessurs.tilgangTilTjenesten().getStatus());
+        assertEquals(403, tilgangRessurs.tilgangTilTjenesten().getStatusCodeValue());
     }
 
     @Test
@@ -62,7 +63,7 @@ public class TilgangRessursComponentTest {
         loggInnVeilederMedOpenAM(oidcRequestContextHolder, VIGGO_VEILEDER);
         mockRoller(ldapServiceMock, VIGGO_VEILEDER, INNVILG, SYFO);
 
-        Response response = tilgangRessurs.tilgangTilBruker(BJARNE_BRUKER);
+        ResponseEntity response = tilgangRessurs.tilgangTilBruker(BJARNE_BRUKER);
         assertTilgangOK(response);
     }
 
@@ -73,7 +74,7 @@ public class TilgangRessursComponentTest {
         loggInnVeilederMedOpenAM(oidcRequestContextHolder, VIGGO_VEILEDER);
         mockRoller(ldapServiceMock, VIGGO_VEILEDER, INNVILG, SYFO);
 
-        Response response = tilgangRessurs.tilgangTilBruker(BENGT_KODE6_BRUKER);
+        ResponseEntity response = tilgangRessurs.tilgangTilBruker(BENGT_KODE6_BRUKER);
         assertTilgangNektet(response, KODE6.name());
     }
 
@@ -82,7 +83,7 @@ public class TilgangRessursComponentTest {
         loggInnVeilederMedOpenAM(oidcRequestContextHolder, VIGGO_VEILEDER);
         mockRoller(ldapServiceMock, VIGGO_VEILEDER, INNVILG, SYFO, KODE6);
 
-        Response response = tilgangRessurs.tilgangTilBruker(BENGT_KODE6_BRUKER);
+        ResponseEntity response = tilgangRessurs.tilgangTilBruker(BENGT_KODE6_BRUKER);
         assertTilgangNektet(response, KODE6.name());
     }
 
@@ -91,7 +92,7 @@ public class TilgangRessursComponentTest {
         loggInnVeilederMedOpenAM(oidcRequestContextHolder, VIGGO_VEILEDER);
         mockRoller(ldapServiceMock, VIGGO_VEILEDER, INNVILG, SYFO);
 
-        Response response = tilgangRessurs.tilgangTilBruker(BIRTE_KODE7_BRUKER);
+        ResponseEntity response = tilgangRessurs.tilgangTilBruker(BIRTE_KODE7_BRUKER);
         assertTilgangNektet(response, KODE7.name());
     }
 
@@ -100,7 +101,7 @@ public class TilgangRessursComponentTest {
         loggInnVeilederMedOpenAM(oidcRequestContextHolder, VIGGO_VEILEDER);
         mockRoller(ldapServiceMock, VIGGO_VEILEDER, INNVILG, SYFO, KODE7);
 
-        Response response = tilgangRessurs.tilgangTilBruker(BIRTE_KODE7_BRUKER);
+        ResponseEntity response = tilgangRessurs.tilgangTilBruker(BIRTE_KODE7_BRUKER);
         assertTilgangOK(response);
     }
 
@@ -109,7 +110,7 @@ public class TilgangRessursComponentTest {
         loggInnVeilederMedOpenAM(oidcRequestContextHolder, VIGGO_VEILEDER);
         mockRoller(ldapServiceMock, VIGGO_VEILEDER, INNVILG, SYFO);
 
-        Response response = tilgangRessurs.tilgangTilBruker(ERIK_EGENANSATT_BRUKER);
+        ResponseEntity response = tilgangRessurs.tilgangTilBruker(ERIK_EGENANSATT_BRUKER);
         assertTilgangNektet(response, EGEN_ANSATT.name());
     }
 
@@ -118,19 +119,19 @@ public class TilgangRessursComponentTest {
         loggInnVeilederMedOpenAM(oidcRequestContextHolder, VIGGO_VEILEDER);
         mockRoller(ldapServiceMock, VIGGO_VEILEDER, INNVILG, SYFO, EGEN_ANSATT);
 
-        Response response = tilgangRessurs.tilgangTilBruker(ERIK_EGENANSATT_BRUKER);
+        ResponseEntity response = tilgangRessurs.tilgangTilBruker(ERIK_EGENANSATT_BRUKER);
         assertTilgangOK(response);
     }
 
-    private void assertTilgangOK(Response response) {
-        assertEquals(200, response.getStatus());
-        Tilgang tilgang = (Tilgang) response.getEntity();
+    private void assertTilgangOK(ResponseEntity response) {
+        assertEquals(200, response.getStatusCodeValue());
+        Tilgang tilgang = (Tilgang) response.getBody();
         assertTrue(tilgang.isHarTilgang());
     }
 
-    private void assertTilgangNektet(Response response, String begrunnelse) {
-        assertEquals(403, response.getStatus());
-        Tilgang tilgang = (Tilgang) response.getEntity();
+    private void assertTilgangNektet(ResponseEntity response, String begrunnelse) {
+        assertEquals(403, response.getStatusCodeValue());
+        Tilgang tilgang = (Tilgang) response.getBody();
         assertFalse(tilgang.isHarTilgang());
         assertEquals(begrunnelse, tilgang.getBegrunnelse());
     }
