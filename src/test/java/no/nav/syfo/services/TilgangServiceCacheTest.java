@@ -77,13 +77,15 @@ public class TilgangServiceCacheTest {
     @Test
     public void cacheTilgangTilTjenesten() {
         for (int i = 0; i < 10; i++) {
-            tilgangService.harTilgangTilTjenesten(VEILEDER_1);
-            tilgangService.harTilgangTilTjenesten(VEILEDER_2);
+            tilgangService.sjekkTilgangTilTjenesten(VEILEDER_1);
+            tilgangService.sjekkTilgangTilTjenesten(VEILEDER_2);
         }
 
+        final Tilgang tilgangNektetSyfo = new Tilgang().withHarTilgang(false).withBegrunnelse(SYFO.name());
+
         Cache cache = redisCacheManager.getCache(TILGANGTILTJENESTEN);
-        assertEquals(FALSE, cache.get(VEILEDER_1).get());
-        assertEquals(FALSE, cache.get(VEILEDER_2).get());
+        assertEquals(tilgangNektetSyfo, cache.get(VEILEDER_1).get());
+        assertEquals(tilgangNektetSyfo, cache.get(VEILEDER_2).get());
 
         verify(ldapService, times(1)).harTilgang(VEILEDER_1, SYFO.rolle);
         verify(ldapService, times(1)).harTilgang(VEILEDER_2, SYFO.rolle);
