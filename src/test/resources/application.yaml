@@ -21,3 +21,7 @@ ldap:
   domain: TEST.LOCAL
   username: srvSSOLinux
   basedn: dc\=test,dc\=local
+
+server:
+  servlet:
+    context-path: /syfo-tilgangskontroll

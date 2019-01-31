@@ -9,18 +9,18 @@ replicas:
 port: 8080
 healthcheck:
   liveness:
-    path: /internal/isAlive
+    path: /syfo-tilgangskontroll/internal/isAlive
     initialDelay: 120
     timeout: 1
     periodSeconds: 10
     failureThreshold: 3
   readiness:
-    path: /internal/isReady
+    path: /syfo-tilgangskontroll/internal/isReady
     initialDelay: 120
     timeout: 1
 prometheus:
   enabled: true
-  path: /internal/prometheus
+  path: /syfo-tilgangskontroll/internal/prometheus
 resources:
   limits:
     cpu: 3000m
