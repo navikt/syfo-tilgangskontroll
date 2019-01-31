@@ -22,6 +22,9 @@ public class GeografiskTilgangServiceTest {
 
     private static final String VEILEDER_UID = "Z999999";
     private static final PersonInfo PERSON_INFO = new PersonInfo("1", "brukersPostnummer");
+    private static final String BRUKERS_ENHET = "brukersEnhet";
+    private static final String VEILEDERS_ENHET = "veiledersEnhet";
+    private static final String OVERORDNET_ENHET = "fylkeskontor";
 
     @Mock
     private LdapService ldapService;
@@ -35,7 +38,7 @@ public class GeografiskTilgangServiceTest {
     @Before
     public void setup() {
         when(ldapService.harTilgang(anyString(), any())).thenReturn(false);
-        when(organisasjonEnhetService.finnNAVKontorForGT("brukersPostnummer")).thenReturn(asList("brukersEnhet", "enAnnenEnhet"));
+        when(organisasjonEnhetService.finnNAVKontorForGT(PERSON_INFO.geografiskTilknytning())).thenReturn(asList(BRUKERS_ENHET, "enAnnenEnhet"));
     }
 
     @Test
@@ -52,7 +55,7 @@ public class GeografiskTilgangServiceTest {
 
     @Test
     public void harTilgangHvisVeilederHarTilgangTilSammeEnhetSomBruker() {
-        when(organisasjonRessursEnhetService.hentVeiledersEnheter(VEILEDER_UID)).thenReturn(asList("brukersEnhet", "enHeltAnnenEnhet"));
+        when(organisasjonRessursEnhetService.hentVeiledersEnheter(VEILEDER_UID)).thenReturn(asList(BRUKERS_ENHET, "enHeltAnnenEnhet"));
         assertThat(geografiskTilgangService.harGeografiskTilgang(VEILEDER_UID, PERSON_INFO)).isTrue();
     }
 
@@ -65,14 +68,15 @@ public class GeografiskTilgangServiceTest {
     @Test
     public void harTilgangHvisRegionalTilgangOgTilgangTilEnhetensFylkeskontor() {
         when(ldapService.harTilgang(VEILEDER_UID, REGIONAL.rolle)).thenReturn(true);
-        when(organisasjonRessursEnhetService.hentVeiledersEnheter(VEILEDER_UID)).thenReturn(singletonList("fylkeskontor"));
-        when(organisasjonEnhetService.hentOverordnetEnhetForNAVKontor("brukersEnhet")).thenReturn(singletonList("fylkeskontor"));
+        when(organisasjonRessursEnhetService.hentVeiledersEnheter(VEILEDER_UID)).thenReturn(singletonList(VEILEDERS_ENHET));
+        when(organisasjonEnhetService.hentOverordnetEnhetForNAVKontor(VEILEDERS_ENHET)).thenReturn(singletonList(OVERORDNET_ENHET));
+        when(organisasjonEnhetService.hentOverordnetEnhetForNAVKontor(BRUKERS_ENHET)).thenReturn(singletonList(OVERORDNET_ENHET));
         assertThat(geografiskTilgangService.harGeografiskTilgang(VEILEDER_UID, PERSON_INFO)).isTrue();
     }
 
     @Test
     public void harIkkeTilgangHvisTilgangTilEnhetensFylkeskontorMenIkkeRegionalTilgang() {
-        when(organisasjonRessursEnhetService.hentVeiledersEnheter(VEILEDER_UID)).thenReturn(singletonList("fylkeskontor"));
+        when(organisasjonRessursEnhetService.hentVeiledersEnheter(VEILEDER_UID)).thenReturn(singletonList(OVERORDNET_ENHET));
         assertThat(geografiskTilgangService.harGeografiskTilgang(VEILEDER_UID, PERSON_INFO)).isFalse();
     }
 }
