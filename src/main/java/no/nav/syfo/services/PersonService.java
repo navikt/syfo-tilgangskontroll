@@ -4,6 +4,7 @@ import no.nav.syfo.domain.PersonInfo;
 import no.nav.tjeneste.virksomhet.person.v3.HentGeografiskTilknytningPersonIkkeFunnet;
 import no.nav.tjeneste.virksomhet.person.v3.HentGeografiskTilknytningSikkerhetsbegrensing;
 import no.nav.tjeneste.virksomhet.person.v3.PersonV3;
+import no.nav.tjeneste.virksomhet.person.v3.informasjon.WSGeografiskTilknytning;
 import no.nav.tjeneste.virksomhet.person.v3.informasjon.WSNorskIdent;
 import no.nav.tjeneste.virksomhet.person.v3.informasjon.WSPersonIdent;
 import no.nav.tjeneste.virksomhet.person.v3.meldinger.WSHentGeografiskTilknytningRequest;
@@ -13,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import static org.slf4j.LoggerFactory.getLogger;
+import static java.util.Optional.ofNullable;
 
 @Service
 public class PersonService {
@@ -24,7 +26,7 @@ public class PersonService {
     public PersonInfo hentPersonInfo(String fnr) {
         try {
             WSHentGeografiskTilknytningResponse geografiskTilknytningResponse = personV3.hentGeografiskTilknytning(new WSHentGeografiskTilknytningRequest().withAktoer(new WSPersonIdent().withIdent(new WSNorskIdent().withIdent(fnr))));
-            String geografiskTilknytning = geografiskTilknytningResponse.getGeografiskTilknytning().getGeografiskTilknytning();
+            String geografiskTilknytning = ofNullable(geografiskTilknytningResponse.getGeografiskTilknytning()).map(WSGeografiskTilknytning::getGeografiskTilknytning).orElse("");
             if(geografiskTilknytningResponse.getDiskresjonskode() != null && geografiskTilknytningResponse.getDiskresjonskode().getValue() != null){
                 String diskresjonskode = geografiskTilknytningResponse.getDiskresjonskode().getValue();
                 return new PersonInfo(diskresjonskode, geografiskTilknytning);
