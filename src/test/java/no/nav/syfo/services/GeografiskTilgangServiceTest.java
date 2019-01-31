@@ -38,7 +38,7 @@ public class GeografiskTilgangServiceTest {
     @Before
     public void setup() {
         when(ldapService.harTilgang(anyString(), any())).thenReturn(false);
-        when(organisasjonEnhetService.finnNAVKontorForGT(PERSON_INFO.geografiskTilknytning())).thenReturn(asList(BRUKERS_ENHET, "enAnnenEnhet"));
+        when(organisasjonEnhetService.finnNAVKontorForGT(PERSON_INFO.getGeografiskTilknytning())).thenReturn(asList(BRUKERS_ENHET, "enAnnenEnhet"));
     }
 
     @Test
