@@ -1,7 +1,7 @@
 # ref https://raw.githubusercontent.com/nais/naisd/master/nais_example.yaml
 name: syfo-tilgangskontroll
 image: "repo.adeo.no:5443/syfo-tilgangskontroll"
-team: sykefravaer-veden
+team: teamsykefravr
 replicas:
   min: 2
   max: 4
@@ -28,15 +28,6 @@ resources:
   requests:
     cpu: 500m
     memory: 512Mi
-redis:
-  enabled: true
-  # limits for redis-sentinels
-  limits:
-    cpu: 100m
-    memory: 128Mi
-  requests:
-    cpu: 100m
-    memory: 128Mi
 fasitResources:
   used:
   - alias: srvsyfo-tilgangskontroll
