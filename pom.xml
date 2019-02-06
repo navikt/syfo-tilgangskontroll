@@ -32,7 +32,6 @@
         <organisasjonRessursEnhet-v1-tjenestespesifikasjon.version>1.0.3</organisasjonRessursEnhet-v1-tjenestespesifikasjon.version>
         <person-v3-tjenestespesifikasjon.version>3.0.2</person-v3-tjenestespesifikasjon.version>
 
-        <embedded-redis.version>0.7.2</embedded-redis.version>
     </properties>
 
     <dependencies>
@@ -61,15 +60,10 @@
             <version>${jersey-common.version}</version>
         </dependency>
 
-        <!-- Caching w/redis -->
+        <!-- Caching -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-cache</artifactId>
-            <version>${spring-boot.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-data-redis</artifactId>
             <version>${spring-boot.version}</version>
         </dependency>
 
@@ -78,13 +72,6 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
             <version>${spring-boot.version}</version>
-            <scope>test</scope>
-        </dependency>
-
-        <dependency>
-            <groupId>it.ozimov</groupId>
-            <artifactId>embedded-redis</artifactId>
-            <version>${embedded-redis.version}</version>
             <scope>test</scope>
         </dependency>
 
