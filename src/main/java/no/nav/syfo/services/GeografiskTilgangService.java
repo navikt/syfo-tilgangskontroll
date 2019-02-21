@@ -2,9 +2,9 @@ package no.nav.syfo.services;
 
 import no.nav.syfo.domain.AdRoller;
 import no.nav.syfo.domain.PersonInfo;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.inject.Inject;
 import java.util.Collection;
 import java.util.List;
 
@@ -13,18 +13,18 @@ import static java.util.stream.Collectors.toList;
 @Service
 public class GeografiskTilgangService {
 
-    @Inject
+    @Autowired
     private LdapService ldapService;
-    @Inject
+    @Autowired
     private OrganisasjonRessursEnhetService organisasjonRessursEnhetService;
-    @Inject
+    @Autowired
     private OrganisasjonEnhetService organisasjonEnhetService;
 
     public boolean harGeografiskTilgang(String veilederId, PersonInfo personInfo) {
         if (harNasjonalTilgang(veilederId)) {
             return true;
         }
-        final List<String> navKontorerForGT = organisasjonEnhetService.finnNAVKontorForGT(personInfo.geografiskTilknytning());
+        final List<String> navKontorerForGT = organisasjonEnhetService.finnNAVKontorForGT(personInfo.getGeografiskTilknytning());
         final List<String> veiledersEnheter = organisasjonRessursEnhetService.hentVeiledersEnheter(veilederId);
 
         return harLokalTilgangTilBrukersEnhet(navKontorerForGT, veiledersEnheter)

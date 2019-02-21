@@ -21,10 +21,10 @@ import static org.mockito.Mockito.when;
 public class GeografiskTilgangServiceTest {
 
     private static final String VEILEDER_UID = "Z999999";
-    private static final PersonInfo PERSON_INFO = new PersonInfo("1", "brukersPostnummer");
     private static final String BRUKERS_ENHET = "brukersEnhet";
     private static final String VEILEDERS_ENHET = "veiledersEnhet";
     private static final String OVERORDNET_ENHET = "fylkeskontor";
+    private static final PersonInfo PERSON_INFO = new PersonInfo("", "brukersPostnummer");
 
     @Mock
     private LdapService ldapService;
@@ -38,7 +38,7 @@ public class GeografiskTilgangServiceTest {
     @Before
     public void setup() {
         when(ldapService.harTilgang(anyString(), any())).thenReturn(false);
-        when(organisasjonEnhetService.finnNAVKontorForGT(PERSON_INFO.geografiskTilknytning())).thenReturn(asList(BRUKERS_ENHET, "enAnnenEnhet"));
+        when(organisasjonEnhetService.finnNAVKontorForGT(PERSON_INFO.getGeografiskTilknytning())).thenReturn(asList(BRUKERS_ENHET, "enAnnenEnhet"));
     }
 
     @Test
@@ -61,7 +61,7 @@ public class GeografiskTilgangServiceTest {
 
     @Test
     public void harIkkeTilgangHvisVeilederIkkeHarTilgangTilSammeEnhetSomBruker() {
-        when( organisasjonRessursEnhetService.hentVeiledersEnheter(VEILEDER_UID)).thenReturn(singletonList("enHeltAnnenEnhet"));
+        when(organisasjonRessursEnhetService.hentVeiledersEnheter(VEILEDER_UID)).thenReturn(singletonList("enHeltAnnenEnhet"));
         assertThat(geografiskTilgangService.harGeografiskTilgang(VEILEDER_UID, PERSON_INFO)).isFalse();
     }
 

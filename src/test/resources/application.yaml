@@ -2,6 +2,8 @@ spring:
   main.banner-mode: 'off'
   profiles:
     active: local
+  cache:
+    type: none
 
 securitytokenservice.url: sts.url
 

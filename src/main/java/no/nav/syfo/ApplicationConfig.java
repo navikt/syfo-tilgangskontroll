@@ -23,7 +23,7 @@ public class ApplicationConfig {
 
     @Bean
     @Primary
-    public OrganisasjonEnhetV2 organisasjonEnhetV2 (@Value("${virksomhet.organisasjonEnhet.v2.endpointurl}") String serviceUrl) {
+    public OrganisasjonEnhetV2 organisasjonEnhetV2(@Value("${virksomhet.organisasjonEnhet.v2.endpointurl}") String serviceUrl) {
         return new WsOIDCClient<OrganisasjonEnhetV2>().createPort(serviceUrl, OrganisasjonEnhetV2.class, singletonList(new LogErrorHandler()));
     }
 
@@ -44,5 +44,4 @@ public class ApplicationConfig {
     public PersonV3 personV3(@Value("${virksomhet.person.v3.endpointurl}") String serviceUrl) {
         return new WsOIDCClient<PersonV3>().createPort(serviceUrl, PersonV3.class, singletonList(new LogErrorHandler()));
     }
-
 }

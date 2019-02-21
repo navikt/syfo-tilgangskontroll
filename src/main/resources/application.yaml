@@ -1,7 +1,5 @@
 spring:
   main.banner-mode: 'off'
-  profiles:
-    active: remote
 
 no.nav.security.oidc:
   issuers: intern

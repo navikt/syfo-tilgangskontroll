@@ -14,12 +14,11 @@ public class PersonMock implements PersonV3 {
     public static final String ERIK_EGENANSATT_BRUKER = "12345670330";
 
     private static final WSKommune __0330 = new WSKommune().withGeografiskTilknytning("0330");
-    private static final WSDiskresjonskoder IKKE_DISKRESJON = new WSDiskresjonskoder().withValue("1");
-    private static final WSDiskresjonskoder KODE_6 = new WSDiskresjonskoder().withValue("6");
-    private static final WSDiskresjonskoder KODE_7 = new WSDiskresjonskoder().withValue("7");
+    private static final WSDiskresjonskoder KODE_6 = new WSDiskresjonskoder().withValue("SPSF");
+    private static final WSDiskresjonskoder KODE_7 = new WSDiskresjonskoder().withValue("SPFO");
 
     private static final WSHentGeografiskTilknytningResponse VANLIG_PERSON = new WSHentGeografiskTilknytningResponse()
-            .withDiskresjonskode(IKKE_DISKRESJON)
+            .withDiskresjonskode(null)
             .withGeografiskTilknytning(__0330);
     private static final WSHentGeografiskTilknytningResponse KODE6_PERSON = new WSHentGeografiskTilknytningResponse()
             .withDiskresjonskode(KODE_6)
