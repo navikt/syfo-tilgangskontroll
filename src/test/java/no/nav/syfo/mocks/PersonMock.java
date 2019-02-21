@@ -14,8 +14,8 @@ public class PersonMock implements PersonV3 {
     public static final String ERIK_EGENANSATT_BRUKER = "12345670330";
 
     private static final WSKommune __0330 = new WSKommune().withGeografiskTilknytning("0330");
-    private static final WSDiskresjonskoder KODE_6 = new WSDiskresjonskoder().withValue("6");
-    private static final WSDiskresjonskoder KODE_7 = new WSDiskresjonskoder().withValue("7");
+    private static final WSDiskresjonskoder KODE_6 = new WSDiskresjonskoder().withValue("SPSF");
+    private static final WSDiskresjonskoder KODE_7 = new WSDiskresjonskoder().withValue("SPFO");
 
     private static final WSHentGeografiskTilknytningResponse VANLIG_PERSON = new WSHentGeografiskTilknytningResponse()
             .withDiskresjonskode(null)
