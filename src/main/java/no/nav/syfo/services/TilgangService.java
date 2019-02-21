@@ -28,6 +28,8 @@ public class TilgangService {
     private OrganisasjonRessursEnhetService organisasjonRessursEnhetService;
 
     private final static String ENHET = "ENHET";
+    private final static String DISKRESJONSKODE_KODE6 = "SPSF";
+    private final static String DISKRESJONSKODE_KODE7 = "SPFO";
 
     @Cacheable(cacheNames = TILGANGTILBRUKER, key = "#veilederId.concat(#brukerFnr)", condition = "#brukerFnr != null && #veilederId != null")
     public Tilgang sjekkTilgang(String brukerFnr, String veilederId) {
@@ -42,9 +44,9 @@ public class TilgangService {
         }
 
         String diskresjonskode = personInfo.getDiskresjonskode();
-        if ("6".equals(diskresjonskode)) {
+        if (DISKRESJONSKODE_KODE6.equals(diskresjonskode)) {
             return new Tilgang().withHarTilgang(false).withBegrunnelse(KODE6.name());
-        } else if ("7".equals(diskresjonskode) && !harTilgangTilKode7(veilederId)) {
+        } else if (DISKRESJONSKODE_KODE7.equals(diskresjonskode) && !harTilgangTilKode7(veilederId)) {
             return new Tilgang().withHarTilgang(false).withBegrunnelse(KODE7.name());
         }
 
