@@ -19,8 +19,6 @@ public class TilgangService {
     @Autowired
     private LdapService ldapService;
     @Autowired
-    private PersonService personService;
-    @Autowired
     private EgenAnsattService egenAnsattService;
     @Autowired
     private GeografiskTilgangService geografiskTilgangService;
@@ -32,12 +30,10 @@ public class TilgangService {
     private final static String DISKRESJONSKODE_KODE7 = "SPFO";
 
     @Cacheable(cacheNames = TILGANGTILBRUKER, key = "#veilederId.concat(#brukerFnr)", condition = "#brukerFnr != null && #veilederId != null")
-    public Tilgang sjekkTilgang(String brukerFnr, String veilederId) {
+    public Tilgang sjekkTilgang(String brukerFnr, String veilederId, PersonInfo personInfo) {
         if (!harTilgangTilTjenesten(veilederId)) {
             return new Tilgang().withHarTilgang(false).withBegrunnelse(SYFO.name());
         }
-
-        PersonInfo personInfo = personService.hentPersonInfo(brukerFnr);
 
         if (!geografiskTilgangService.harGeografiskTilgang(veilederId, personInfo)) {
             return new Tilgang().withHarTilgang(false).withBegrunnelse(GEOGRAFISK);
