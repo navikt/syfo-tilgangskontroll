@@ -64,6 +64,11 @@ fasitResources:
     resourceType: baseurl
     propertyMap:
       url: NO_NAV_SECURITY_OIDC_ISSUER_INTERN_DISCOVERYURL
+  - alias: loginservice_oidc
+    resourceType: azureoidc
+    propertyMap:
+      discoveryUri: NO_NAV_SECURITY_OIDC_ISSUER_AZUREOIDC_DISCOVERYURL
+      clientId: NO_NAV_SECURITY_OIDC_ISSUER_AZUREOIDC_ACCEPTEDAUDIENCE
   exposed:
   - alias: tilgangskontrollapi
     resourceType: restservice

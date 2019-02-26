@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import static no.nav.syfo.security.OIDCIssuer.INTERN_AZURE_OIDC;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.http.ResponseEntity.ok;
 import static org.springframework.http.ResponseEntity.status;
@@ -17,7 +18,6 @@ import static org.springframework.http.HttpStatus.BAD_REQUEST;
 import static no.nav.syfo.security.OIDCIssuer.INTERN;
 
 @RestController
-@ProtectedWithClaims(issuer = INTERN)
 @RequestMapping(value = "/api/tilgang")
 public class TilgangRessurs {
 
@@ -32,6 +32,7 @@ public class TilgangRessurs {
     }
 
     @GetMapping(path = "/tilgangtiltjenesten")
+    @ProtectedWithClaims(issuer = INTERN)
     public ResponseEntity tilgangTilTjenesten() {
         String veilederId = OIDCUtil.getSubjectFromOIDCToken(contextHolder, INTERN);
         Tilgang tilgang = tilgangService.sjekkTilgangTilTjenesten(veilederId);
@@ -39,6 +40,7 @@ public class TilgangRessurs {
     }
 
     @GetMapping(path = "/tilgangtilbruker")
+    @ProtectedWithClaims(issuer = INTERN)
     public ResponseEntity tilgangTilBruker(@RequestParam String fnr) {
         String veilederId = OIDCUtil.getSubjectFromOIDCToken(contextHolder, INTERN);
         Tilgang tilgang = tilgangService.sjekkTilgang(fnr, veilederId);
@@ -46,8 +48,9 @@ public class TilgangRessurs {
     }
 
     @GetMapping(path = "/tilgangtilenhet")
+    @ProtectedWithClaims(issuer = INTERN_AZURE_OIDC)
     public ResponseEntity tilgangTilEnhet(@RequestParam String enhet) {
-        String veilederId = OIDCUtil.getSubjectFromOIDCToken(contextHolder, INTERN);
+        String veilederId = OIDCUtil.getSubjectFromOIDCToken(contextHolder, INTERN_AZURE_OIDC);
         if (!enhet.matches("\\d{4}$"))
             return status(BAD_REQUEST)
                     .body("enhet paramater must be at least four digits long");
