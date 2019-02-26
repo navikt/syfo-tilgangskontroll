@@ -12,12 +12,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import javax.ws.rs.core.Response;
+import java.text.ParseException;
 
 import static no.nav.syfo.domain.AdRoller.*;
-import static no.nav.syfo.mocks.OrganisasjonRessursEnhetMock.VIGGO_VEILEDER;
+import static no.nav.syfo.mocks.OrganisasjonRessursEnhetMock.*;
 import static no.nav.syfo.mocks.PersonMock.*;
 import static no.nav.syfo.util.LdapUtil.mockRoller;
+import static no.nav.syfo.util.OidcTestHelper.loggInnVeilederMedAzure;
 import static no.nav.syfo.util.OidcTestHelper.loggInnVeilederMedOpenAM;
 import static org.junit.Assert.*;
 
@@ -33,6 +34,9 @@ public class TilgangRessursComponentTest {
     private static final boolean INNVILG = true;
     private static final boolean NEKT = false;
 
+    private static final int HTTP_STATUS_OK = 200;
+    private static final int HTTP_STATUS_FORBIDDEN = 403;
+
     @Autowired
     private OIDCRequestContextHolder oidcRequestContextHolder;
 
@@ -44,10 +48,10 @@ public class TilgangRessursComponentTest {
 
     @Test
     public void tilgangTilTjenestenInnvilget() {
-        mockRoller(ldapServiceMock, VIGGO_VEILEDER, INNVILG, SYFO);
         loggInnVeilederMedOpenAM(oidcRequestContextHolder, VIGGO_VEILEDER);
+        mockRoller(ldapServiceMock, VIGGO_VEILEDER, INNVILG, SYFO);
 
-        assertEquals(200, tilgangRessurs.tilgangTilTjenesten().getStatusCodeValue());
+        assertEquals(HTTP_STATUS_OK, tilgangRessurs.tilgangTilTjenesten().getStatusCodeValue());
     }
 
     @Test
@@ -55,7 +59,7 @@ public class TilgangRessursComponentTest {
         loggInnVeilederMedOpenAM(oidcRequestContextHolder, VIGGO_VEILEDER);
         mockRoller(ldapServiceMock, VIGGO_VEILEDER, NEKT, SYFO);
 
-        assertEquals(403, tilgangRessurs.tilgangTilTjenesten().getStatusCodeValue());
+        assertEquals(HTTP_STATUS_FORBIDDEN, tilgangRessurs.tilgangTilTjenesten().getStatusCodeValue());
     }
 
     @Test
@@ -123,14 +127,30 @@ public class TilgangRessursComponentTest {
         assertTilgangOK(response);
     }
 
+    @Test
+    public void tilgangTilEnhetInnvilget() throws ParseException{
+        loggInnVeilederMedAzure(oidcRequestContextHolder, VIGGO_VEILEDER);
+        mockRoller(ldapServiceMock, VIGGO_VEILEDER, INNVILG, SYFO);
+
+        assertEquals(HTTP_STATUS_OK, tilgangRessurs.tilgangTilEnhet(ENHET_1_ID).getStatusCodeValue());
+    }
+
+    @Test
+    public void tilgangTilEnhetNektet() throws ParseException{
+        loggInnVeilederMedAzure(oidcRequestContextHolder, VIGGO_VEILEDER);
+        mockRoller(ldapServiceMock, VIGGO_VEILEDER, INNVILG, SYFO);
+
+        assertEquals(HTTP_STATUS_FORBIDDEN, tilgangRessurs.tilgangTilEnhet(ENHET_3_ID).getStatusCodeValue());
+    }
+
     private void assertTilgangOK(ResponseEntity response) {
-        assertEquals(200, response.getStatusCodeValue());
+        assertEquals(HTTP_STATUS_OK, response.getStatusCodeValue());
         Tilgang tilgang = (Tilgang) response.getBody();
         assertTrue(tilgang.isHarTilgang());
     }
 
     private void assertTilgangNektet(ResponseEntity response, String begrunnelse) {
-        assertEquals(403, response.getStatusCodeValue());
+        assertEquals(HTTP_STATUS_FORBIDDEN, response.getStatusCodeValue());
         Tilgang tilgang = (Tilgang) response.getBody();
         assertFalse(tilgang.isHarTilgang());
         assertEquals(begrunnelse, tilgang.getBegrunnelse());
