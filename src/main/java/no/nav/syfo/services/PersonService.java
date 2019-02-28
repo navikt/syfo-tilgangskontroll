@@ -36,6 +36,9 @@ public class PersonService {
         } catch (HentGeografiskTilknytningSikkerhetsbegrensing | HentGeografiskTilknytningPersonIkkeFunnet e) {
             LOG.error("Feil ved henting av geografisk tilknytning", e);
             throw new RuntimeException("Feil ved henting av geografisk tilknytning", e);
+        } catch (Exception e) {
+            LOG.error("Henting av geografisk tilknytning fra personV3 feilet pga en uventet exception", e);
+            throw new RuntimeException("Fikk en uventet exception ved henting av geografisk tilknytning", e);
         }
     }
 }

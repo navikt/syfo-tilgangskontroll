@@ -2,19 +2,21 @@ package no.nav.syfo.api;
 
 import no.nav.security.oidc.api.ProtectedWithClaims;
 import no.nav.security.oidc.context.OIDCRequestContextHolder;
+import no.nav.syfo.domain.PersonInfo;
 import no.nav.syfo.domain.Tilgang;
 import no.nav.syfo.security.OIDCUtil;
+import no.nav.syfo.services.PersonService;
 import no.nav.syfo.services.TilgangService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import static no.nav.syfo.security.OIDCIssuer.INTERN;
+import static org.springframework.http.HttpStatus.BAD_REQUEST;
+import static org.springframework.http.HttpStatus.FORBIDDEN;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.http.ResponseEntity.ok;
 import static org.springframework.http.ResponseEntity.status;
-import static org.springframework.http.HttpStatus.FORBIDDEN;
-import static org.springframework.http.HttpStatus.BAD_REQUEST;
-import static no.nav.syfo.security.OIDCIssuer.INTERN;
 
 @RestController
 @ProtectedWithClaims(issuer = INTERN)
@@ -25,10 +27,13 @@ public class TilgangRessurs {
 
     private TilgangService tilgangService;
 
+    private PersonService personService;
+
     @Autowired
-    public TilgangRessurs(OIDCRequestContextHolder contextHolder, TilgangService tilgangService) {
+    public TilgangRessurs(OIDCRequestContextHolder contextHolder, TilgangService tilgangService, PersonService personService) {
         this.contextHolder = contextHolder;
         this.tilgangService = tilgangService;
+        this.personService = personService;
     }
 
     @GetMapping(path = "/tilgangtiltjenesten")
@@ -41,7 +46,8 @@ public class TilgangRessurs {
     @GetMapping(path = "/tilgangtilbruker")
     public ResponseEntity tilgangTilBruker(@RequestParam String fnr) {
         String veilederId = OIDCUtil.getSubjectFromOIDCToken(contextHolder, INTERN);
-        Tilgang tilgang = tilgangService.sjekkTilgang(fnr, veilederId);
+        PersonInfo personInfo = personService.hentPersonInfo(fnr);
+        Tilgang tilgang = tilgangService.sjekkTilgang(fnr, veilederId, personInfo);
         return lagRespons(tilgang);
     }
 
