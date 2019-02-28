@@ -1,6 +1,8 @@
 package no.nav.syfo;
 
 import no.nav.syfo.ws.LogErrorHandler;
+import no.nav.syfo.ws.STSClientConfig;
+import no.nav.syfo.ws.WsClient;
 import no.nav.syfo.ws.WsOIDCClient;
 import no.nav.tjeneste.pip.egen.ansatt.v1.EgenAnsattV1;
 import no.nav.tjeneste.virksomhet.organisasjon.ressurs.enhet.v1.OrganisasjonRessursEnhetV1;
@@ -24,24 +26,32 @@ public class ApplicationConfig {
     @Bean
     @Primary
     public OrganisasjonEnhetV2 organisasjonEnhetV2(@Value("${virksomhet.organisasjonEnhet.v2.endpointurl}") String serviceUrl) {
-        return new WsOIDCClient<OrganisasjonEnhetV2>().createPort(serviceUrl, OrganisasjonEnhetV2.class, singletonList(new LogErrorHandler()));
+        OrganisasjonEnhetV2 port = new WsClient<OrganisasjonEnhetV2>().createPort(serviceUrl, OrganisasjonEnhetV2.class, singletonList(new LogErrorHandler()));
+        STSClientConfig.configureRequestSamlToken(port);
+        return port;
     }
 
     @Bean
     @Primary
     public EgenAnsattV1 egenAnsattV1(@Value("${virksomhet.egenansatt.v1.endpointurl}") String serviceUrl) {
-        return new WsOIDCClient<EgenAnsattV1>().createPort(serviceUrl, EgenAnsattV1.class, singletonList(new LogErrorHandler()));
+        EgenAnsattV1 port = new WsClient<EgenAnsattV1>().createPort(serviceUrl, EgenAnsattV1.class, singletonList(new LogErrorHandler()));
+        STSClientConfig.configureRequestSamlToken(port);
+        return port;
     }
 
     @Bean
     @Primary
     public OrganisasjonRessursEnhetV1 organisasjonRessursEnhetV1(@Value("${virksomhet.organisasjonressursenhet.v1.endpointurl}") String serviceUrl) {
-        return new WsOIDCClient<OrganisasjonRessursEnhetV1>().createPort(serviceUrl, OrganisasjonRessursEnhetV1.class, singletonList(new LogErrorHandler()));
+        OrganisasjonRessursEnhetV1 port = new WsClient<OrganisasjonRessursEnhetV1>().createPort(serviceUrl, OrganisasjonRessursEnhetV1.class, singletonList(new LogErrorHandler()));
+        STSClientConfig.configureRequestSamlToken(port);
+        return port;
     }
 
     @Bean
     @Primary
     public PersonV3 personV3(@Value("${virksomhet.person.v3.endpointurl}") String serviceUrl) {
-        return new WsOIDCClient<PersonV3>().createPort(serviceUrl, PersonV3.class, singletonList(new LogErrorHandler()));
+        PersonV3 port = new WsClient<PersonV3>().createPort(serviceUrl, PersonV3.class, singletonList(new LogErrorHandler()));
+        STSClientConfig.configureRequestSamlToken(port);
+        return port;
     }
 }

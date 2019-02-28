@@ -17,7 +17,7 @@ import org.apache.neethi.Policy;
 
 import java.util.HashMap;
 
-class STSClientConfig {
+public class STSClientConfig {
     public static final String STS_URL_KEY = "SECURITYTOKENSERVICE_URL";
     public static final String SERVICEUSER_USERNAME = "SRVSYFO_TILGANGSKONTROLL_USERNAME";
     public static final String SERVICEUSER_PASSWORD = "SRVSYFO_TILGANGSKONTROLL_PASSWORD";
@@ -26,6 +26,13 @@ class STSClientConfig {
     // when in production.
     private static final String STS_REQUEST_SAML_POLICY = "classpath:policy/requestSamlPolicy.xml";
     private static final String STS_CLIENT_AUTHENTICATION_POLICY = "classpath:policy/untPolicy.xml";
+
+    public static <T> T configureRequestSamlToken(T port) {
+        Client client = ClientProxy.getClient(port);
+        // do not have onbehalfof token so cache token in endpoint
+        configureStsRequestSamlToken(client, true);
+        return port;
+    }
 
     public static <T> T configureRequestSamlTokenOnBehalfOfOidc(T port) {
         Client client = ClientProxy.getClient(port);
