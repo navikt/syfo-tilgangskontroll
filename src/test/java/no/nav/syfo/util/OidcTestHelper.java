@@ -24,7 +24,7 @@ public class OidcTestHelper {
     }
 
     public static void loggInnVeilederMedAzure(OIDCRequestContextHolder oidcRequestContextHolder, String veilederIdent) throws ParseException {
-        JWTClaimsSet claimsSet = JWTClaimsSet.parse(lagOIDCClaimSetMedVeilederIdent(veilederIdent));
+        JWTClaimsSet claimsSet = JWTClaimsSet.parse("{\"NAVident\":\"" + veilederIdent + "\"}");
         SignedJWT jwt = JwtTokenGenerator.createSignedJWT(claimsSet);
         String issuer = "veileder";
         TokenContext tokenContext = new TokenContext(issuer, jwt.serialize());
@@ -37,13 +37,6 @@ public class OidcTestHelper {
 
     public static void loggUtAlle(OIDCRequestContextHolder oidcRequestContextHolder) {
         oidcRequestContextHolder.setOIDCValidationContext(null);
-    }
-
-    private static String lagOIDCClaimSetMedVeilederIdent(String veilederIdent) {
-        return "{\"sub\":\"subVerdi\",\"ver\":\"1.0\",\"NAVident\":\"" + veilederIdent + "\",\"aio\":\"aioVerdi\",\"amr\":[\"amr0\"],\"iss\":\"issUri\",\"onprem_sid\":\"onpremSidVerdi\"" +
-                ",\"groups\":[\"gruppe1\",\"gruppe2\",\"gruppe3\"],\"oid\":\"oidVerdi\",\"uti\":\"utiVerdi\",\"given_name\":\"VIGGO\",\"nonce\":\"nonceVerdi\",\"tid\":\"tidVerdi\"" +
-                ",\"aud\":\"audVerdi\",\"unique_name\":\"VIGGO.VEILEDER@nav.no\",\"upn\":\"VIGGO.VEILEDER@nav.no\",\"nbf\":123456789,\"name\":\"VIGGO VEILEDER\",\"exp\":123456789,\"" +
-                "ipaddr\":\"127.0.0.1\",\"iat\":123456789,\"family_name\":\"VEILEDER\"}";
     }
 
 }
