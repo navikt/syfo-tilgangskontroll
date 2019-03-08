@@ -15,28 +15,25 @@ public class OidcTestHelper {
     public static void loggInnVeilederMedOpenAM(OIDCRequestContextHolder oidcRequestContextHolder, String subject) {
         //OIDC-hack - legg til token og oidcclaims for en test-person
         SignedJWT jwt = JwtTokenGenerator.createSignedJWT(subject);
-        String issuer = "intern";
-        TokenContext tokenContext = new TokenContext(issuer, jwt.serialize());
-        OIDCClaims oidcClaims = new OIDCClaims(jwt);
-        OIDCValidationContext oidcValidationContext = new OIDCValidationContext();
-        oidcValidationContext.addValidatedToken(issuer, tokenContext, oidcClaims);
-        oidcRequestContextHolder.setOIDCValidationContext(oidcValidationContext);
+        settOIDCValidationContext(oidcRequestContextHolder, jwt, "intern");
     }
 
     public static void loggInnVeilederMedAzure(OIDCRequestContextHolder oidcRequestContextHolder, String veilederIdent) throws ParseException {
         JWTClaimsSet claimsSet = JWTClaimsSet.parse("{\"NAVident\":\"" + veilederIdent + "\"}");
         SignedJWT jwt = JwtTokenGenerator.createSignedJWT(claimsSet);
-        String issuer = "veileder";
+        settOIDCValidationContext(oidcRequestContextHolder, jwt, "veileder");
+    }
+
+    public static void loggUtAlle(OIDCRequestContextHolder oidcRequestContextHolder) {
+        oidcRequestContextHolder.setOIDCValidationContext(null);
+    }
+
+    private static void settOIDCValidationContext(OIDCRequestContextHolder oidcRequestContextHolder, SignedJWT jwt, String issuer) {
         TokenContext tokenContext = new TokenContext(issuer, jwt.serialize());
         OIDCClaims oidcClaims = new OIDCClaims(jwt);
         OIDCValidationContext oidcValidationContext = new OIDCValidationContext();
         oidcValidationContext.addValidatedToken(issuer, tokenContext, oidcClaims);
         oidcRequestContextHolder.setOIDCValidationContext(oidcValidationContext);
-
-    }
-
-    public static void loggUtAlle(OIDCRequestContextHolder oidcRequestContextHolder) {
-        oidcRequestContextHolder.setOIDCValidationContext(null);
     }
 
 }
