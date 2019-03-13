@@ -48,6 +48,12 @@
             <version>${spring-boot.version}</version>
         </dependency>
 
+        <!-- LOMBOK -->
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+        </dependency>
+        
         <!-- REST utils -->
         <dependency>
             <groupId>javax.ws.rs</groupId>

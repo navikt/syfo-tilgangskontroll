@@ -1,5 +1,6 @@
 package no.nav.syfo.services;
 
+import lombok.extern.slf4j.Slf4j;
 import no.nav.tjeneste.virksomhet.organisasjonenhet.v2.FinnNAVKontorUgyldigInput;
 import no.nav.tjeneste.virksomhet.organisasjonenhet.v2.HentOverordnetEnhetListeEnhetIkkeFunnet;
 import no.nav.tjeneste.virksomhet.organisasjonenhet.v2.OrganisasjonEnhetV2;
@@ -10,7 +11,6 @@ import no.nav.tjeneste.virksomhet.organisasjonenhet.v2.informasjon.WSOrganisasjo
 import no.nav.tjeneste.virksomhet.organisasjonenhet.v2.meldinger.WSFinnNAVKontorRequest;
 import no.nav.tjeneste.virksomhet.organisasjonenhet.v2.meldinger.WSFinnNAVKontorResponse;
 import no.nav.tjeneste.virksomhet.organisasjonenhet.v2.meldinger.WSHentOverordnetEnhetListeRequest;
-import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -19,11 +19,10 @@ import java.util.List;
 import static java.util.Collections.emptyList;
 import static java.util.stream.Collectors.toList;
 import static java.util.stream.Stream.of;
-import static org.slf4j.LoggerFactory.getLogger;
 
+@Slf4j
 @Service
 public class OrganisasjonEnhetService {
-    private static final Logger LOG = getLogger(OrganisasjonEnhetService.class);
 
     @Autowired
     private OrganisasjonEnhetV2 organisasjonEnhetV2;
@@ -38,7 +37,7 @@ public class OrganisasjonEnhetService {
                     .map(WSOrganisasjonsenhet::getEnhetId)
                     .collect(toList());
         } catch (HentOverordnetEnhetListeEnhetIkkeFunnet | RuntimeException e) {
-            LOG.info("Feil ved henting av NAV Ressurs sin fylkesenhet.", e);
+            log.info("Feil ved henting av NAV Ressurs sin fylkesenhet.", e);
             return emptyList();
         }
     }
@@ -56,7 +55,7 @@ public class OrganisasjonEnhetService {
                     .collect(toList());
         } catch (FinnNAVKontorUgyldigInput |
                 RuntimeException e) {
-            LOG.info("Finner ikke NAV-kontor for geografisk tilknytning " + geografiskTilknytning, e);
+            log.info("Finner ikke NAV-kontor for geografisk tilknytning " + geografiskTilknytning, e);
             return emptyList();
         }
     }
