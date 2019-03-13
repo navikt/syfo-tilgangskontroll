@@ -1,5 +1,7 @@
 spring:
   main.banner-mode: 'off'
+  cache:
+      type: none
 
 no.nav.security.oidc:
   issuers: intern,veileder
