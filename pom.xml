@@ -22,7 +22,6 @@
         <javax.ws.rs.version>2.0.1</javax.ws.rs.version>
         <jersey-common.version>2.26</jersey-common.version>
         <logstash-logback-encoder.version>4.10</logstash-logback-encoder.version>
-        <prometheus.version>0.3.0</prometheus.version>
         <micrometer-registry-prometheus.version>1.0.6</micrometer-registry-prometheus.version>
         <cxf.version>3.2.0</cxf.version>
         <oidc-spring-support.version>0.2.12</oidc-spring-support.version>
@@ -53,7 +52,7 @@
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
         </dependency>
-        
+
         <!-- REST utils -->
         <dependency>
             <groupId>javax.ws.rs</groupId>
@@ -113,6 +112,13 @@
             <artifactId>oidc-test-support</artifactId>
             <version>${oidc-spring-support.version}</version>
             <scope>test</scope>
+        </dependency>
+
+        <!-- METRICS -->
+        <dependency>
+            <groupId>io.micrometer</groupId>
+            <artifactId>micrometer-registry-prometheus</artifactId>
+            <version>${micrometer-registry-prometheus.version}</version>
         </dependency>
 
         <!-- SOAP w/CXF -->
