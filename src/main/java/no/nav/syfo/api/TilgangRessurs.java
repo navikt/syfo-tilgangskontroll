@@ -40,25 +40,25 @@ public class TilgangRessurs {
     @GetMapping(path = "/tilgangtilbruker")
     @ProtectedWithClaims(issuer = INTERN)
     public ResponseEntity tilgangTilBruker(@RequestParam String fnr) {
-        return sjekkTilgangTilBruker(fnr);
+        return sjekkTilgangTilBruker(OIDCUtil.getSubjectFromOIDCToken(contextHolder, INTERN), fnr);
     }
 
     @GetMapping(path = "/tilgangtiltjenesten")
     @ProtectedWithClaims(issuer = INTERN)
     public ResponseEntity tilgangTilTjenesten() {
-        return sjekkTilgangTilTjenesten();
+        return sjekkTilgangTilTjenesten(OIDCUtil.getSubjectFromOIDCToken(contextHolder, INTERN));
     }
-    
+
     @GetMapping(path = "/syfo")
     @ProtectedWithClaims(issuer = AZURE)
     public ResponseEntity tilgangTilTjenestenViaAzure() {
-        return sjekkTilgangTilTjenesten();
+        return sjekkTilgangTilTjenesten(OIDCUtil.getSubjectFromAzureOIDCToken(contextHolder, AZURE, NAVIDENT));
     }
 
     @GetMapping(path = "/bruker")
     @ProtectedWithClaims(issuer = AZURE)
     public ResponseEntity tilgangTilBrukerViaAzure(@RequestParam String fnr) {
-        return sjekkTilgangTilBruker(fnr);
+        return sjekkTilgangTilBruker(OIDCUtil.getSubjectFromAzureOIDCToken(contextHolder, AZURE, NAVIDENT), fnr);
     }
 
     @GetMapping(path = "/enhet")
@@ -72,14 +72,12 @@ public class TilgangRessurs {
         return lagRespons(tilgang);
     }
 
-    private ResponseEntity sjekkTilgangTilTjenesten() {
-        String veilederId = OIDCUtil.getSubjectFromOIDCToken(contextHolder, INTERN);
+    private ResponseEntity sjekkTilgangTilTjenesten(String veilederId) {
         Tilgang tilgang = tilgangService.sjekkTilgangTilTjenesten(veilederId);
         return lagRespons(tilgang);
     }
 
-    private ResponseEntity sjekkTilgangTilBruker(String fnr) {
-        String veilederId = OIDCUtil.getSubjectFromOIDCToken(contextHolder, INTERN);
+    private ResponseEntity sjekkTilgangTilBruker(String veilederId, String fnr) {
         PersonInfo personInfo = personService.hentPersonInfo(fnr);
         Tilgang tilgang = tilgangService.sjekkTilgang(fnr, veilederId, personInfo);
         return lagRespons(tilgang);

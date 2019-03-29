@@ -29,7 +29,7 @@ import static org.junit.Assert.*;
 @ActiveProfiles("test")
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = LocalApplication.class)
-public class TilgangRessursComponentTest {
+public class TilgangRessursViaAzureComponentTest {
 
     private static final boolean INNVILG = true;
     private static final boolean NEKT = false;
@@ -47,84 +47,100 @@ public class TilgangRessursComponentTest {
     TilgangRessurs tilgangRessurs;
 
     @Test
-    public void tilgangTilTjenestenInnvilget() {
-        loggInnVeilederMedOpenAM(oidcRequestContextHolder, VIGGO_VEILEDER);
+    public void tilgangTilTjenestenInnvilget() throws ParseException {
+        loggInnVeilederMedAzure(oidcRequestContextHolder, VIGGO_VEILEDER);
         mockRoller(ldapServiceMock, VIGGO_VEILEDER, INNVILG, SYFO);
 
-        assertEquals(HTTP_STATUS_OK, tilgangRessurs.tilgangTilTjenesten().getStatusCodeValue());
+        assertEquals(HTTP_STATUS_OK, tilgangRessurs.tilgangTilTjenestenViaAzure().getStatusCodeValue());
     }
 
     @Test
-    public void tilgangTilTjenestenNektet() {
-        loggInnVeilederMedOpenAM(oidcRequestContextHolder, VIGGO_VEILEDER);
+    public void tilgangTilTjenestenNektet() throws ParseException {
+        loggInnVeilederMedAzure(oidcRequestContextHolder, VIGGO_VEILEDER);
         mockRoller(ldapServiceMock, VIGGO_VEILEDER, NEKT, SYFO);
 
-        assertEquals(HTTP_STATUS_FORBIDDEN, tilgangRessurs.tilgangTilTjenesten().getStatusCodeValue());
+        assertEquals(HTTP_STATUS_FORBIDDEN, tilgangRessurs.tilgangTilTjenestenViaAzure().getStatusCodeValue());
     }
 
     @Test
-    public void tilgangTilBrukerInnvilget() {
-        loggInnVeilederMedOpenAM(oidcRequestContextHolder, VIGGO_VEILEDER);
+    public void tilgangTilBrukerInnvilget() throws ParseException {
+        loggInnVeilederMedAzure(oidcRequestContextHolder, VIGGO_VEILEDER);
         mockRoller(ldapServiceMock, VIGGO_VEILEDER, INNVILG, SYFO);
 
-        ResponseEntity response = tilgangRessurs.tilgangTilBruker(BJARNE_BRUKER);
+        ResponseEntity response = tilgangRessurs.tilgangTilBrukerViaAzure(BJARNE_BRUKER);
         assertTilgangOK(response);
     }
 
     //TODO test geografi
 
     @Test
-    public void tilgangTilKode6BrukerNektet() {
-        loggInnVeilederMedOpenAM(oidcRequestContextHolder, VIGGO_VEILEDER);
+    public void tilgangTilKode6BrukerNektet() throws ParseException {
+        loggInnVeilederMedAzure(oidcRequestContextHolder, VIGGO_VEILEDER);
         mockRoller(ldapServiceMock, VIGGO_VEILEDER, INNVILG, SYFO);
 
-        ResponseEntity response = tilgangRessurs.tilgangTilBruker(BENGT_KODE6_BRUKER);
+        ResponseEntity response = tilgangRessurs.tilgangTilBrukerViaAzure(BENGT_KODE6_BRUKER);
         assertTilgangNektet(response, KODE6.name());
     }
 
     @Test
-    public void tilgangTilKode6BrukerNektesAlltid() {
-        loggInnVeilederMedOpenAM(oidcRequestContextHolder, VIGGO_VEILEDER);
+    public void tilgangTilKode6BrukerNektesAlltid() throws ParseException {
+        loggInnVeilederMedAzure(oidcRequestContextHolder, VIGGO_VEILEDER);
         mockRoller(ldapServiceMock, VIGGO_VEILEDER, INNVILG, SYFO, KODE6);
 
-        ResponseEntity response = tilgangRessurs.tilgangTilBruker(BENGT_KODE6_BRUKER);
+        ResponseEntity response = tilgangRessurs.tilgangTilBrukerViaAzure(BENGT_KODE6_BRUKER);
         assertTilgangNektet(response, KODE6.name());
     }
 
     @Test
-    public void tilgangTilKode7BrukerNektet() {
-        loggInnVeilederMedOpenAM(oidcRequestContextHolder, VIGGO_VEILEDER);
+    public void tilgangTilKode7BrukerNektet() throws ParseException {
+        loggInnVeilederMedAzure(oidcRequestContextHolder, VIGGO_VEILEDER);
         mockRoller(ldapServiceMock, VIGGO_VEILEDER, INNVILG, SYFO);
 
-        ResponseEntity response = tilgangRessurs.tilgangTilBruker(BIRTE_KODE7_BRUKER);
+        ResponseEntity response = tilgangRessurs.tilgangTilBrukerViaAzure(BIRTE_KODE7_BRUKER);
         assertTilgangNektet(response, KODE7.name());
     }
 
     @Test
-    public void tilgangTilKode7BrukerInnvilget() {
-        loggInnVeilederMedOpenAM(oidcRequestContextHolder, VIGGO_VEILEDER);
+    public void tilgangTilKode7BrukerInnvilget() throws ParseException {
+        loggInnVeilederMedAzure(oidcRequestContextHolder, VIGGO_VEILEDER);
         mockRoller(ldapServiceMock, VIGGO_VEILEDER, INNVILG, SYFO, KODE7);
 
-        ResponseEntity response = tilgangRessurs.tilgangTilBruker(BIRTE_KODE7_BRUKER);
+        ResponseEntity response = tilgangRessurs.tilgangTilBrukerViaAzure(BIRTE_KODE7_BRUKER);
         assertTilgangOK(response);
     }
 
     @Test
-    public void tilgangTilEgenAnsattBrukerNektet() {
-        loggInnVeilederMedOpenAM(oidcRequestContextHolder, VIGGO_VEILEDER);
+    public void tilgangTilEgenAnsattBrukerNektet() throws ParseException {
+        loggInnVeilederMedAzure(oidcRequestContextHolder, VIGGO_VEILEDER);
         mockRoller(ldapServiceMock, VIGGO_VEILEDER, INNVILG, SYFO);
 
-        ResponseEntity response = tilgangRessurs.tilgangTilBruker(ERIK_EGENANSATT_BRUKER);
+        ResponseEntity response = tilgangRessurs.tilgangTilBrukerViaAzure(ERIK_EGENANSATT_BRUKER);
         assertTilgangNektet(response, EGEN_ANSATT.name());
     }
 
     @Test
-    public void tilgangTilEgenAnsattBrukerInnvilget() {
-        loggInnVeilederMedOpenAM(oidcRequestContextHolder, VIGGO_VEILEDER);
+    public void tilgangTilEgenAnsattBrukerInnvilget() throws ParseException {
+        loggInnVeilederMedAzure(oidcRequestContextHolder, VIGGO_VEILEDER);
         mockRoller(ldapServiceMock, VIGGO_VEILEDER, INNVILG, SYFO, EGEN_ANSATT);
 
-        ResponseEntity response = tilgangRessurs.tilgangTilBruker(ERIK_EGENANSATT_BRUKER);
+        ResponseEntity response = tilgangRessurs.tilgangTilBrukerViaAzure(ERIK_EGENANSATT_BRUKER);
         assertTilgangOK(response);
+    }
+
+    @Test
+    public void tilgangTilEnhetInnvilget() throws ParseException {
+        loggInnVeilederMedAzure(oidcRequestContextHolder, VIGGO_VEILEDER);
+        mockRoller(ldapServiceMock, VIGGO_VEILEDER, INNVILG, SYFO);
+
+        assertEquals(HTTP_STATUS_OK, tilgangRessurs.tilgangTilEnhet(ENHET_1_ID).getStatusCodeValue());
+    }
+
+    @Test
+    public void tilgangTilEnhetNektet() throws ParseException {
+        loggInnVeilederMedAzure(oidcRequestContextHolder, VIGGO_VEILEDER);
+        mockRoller(ldapServiceMock, VIGGO_VEILEDER, INNVILG, SYFO);
+
+        assertEquals(HTTP_STATUS_FORBIDDEN, tilgangRessurs.tilgangTilEnhet(ENHET_3_ID).getStatusCodeValue());
     }
 
     private void assertTilgangOK(ResponseEntity response) {
