@@ -37,24 +37,35 @@ public class TilgangRessurs {
         this.personService = personService;
     }
 
-    @GetMapping(path = "/tilgangtiltjenesten")
-    @ProtectedWithClaims(issuer = INTERN)
-    public ResponseEntity tilgangTilTjenesten() {
-        String veilederId = OIDCUtil.getSubjectFromOIDCToken(contextHolder, INTERN);
-        Tilgang tilgang = tilgangService.sjekkTilgangTilTjenesten(veilederId);
-        return lagRespons(tilgang);
-    }
-
     @GetMapping(path = "/tilgangtilbruker")
     @ProtectedWithClaims(issuer = INTERN)
     public ResponseEntity tilgangTilBruker(@RequestParam String fnr) {
         String veilederId = OIDCUtil.getSubjectFromOIDCToken(contextHolder, INTERN);
-        PersonInfo personInfo = personService.hentPersonInfo(fnr);
-        Tilgang tilgang = tilgangService.sjekkTilgang(fnr, veilederId, personInfo);
-        return lagRespons(tilgang);
+        return sjekkTilgangTilBruker(veilederId, fnr);
     }
 
-    @GetMapping(path = "/tilgangtilenhet")
+    @GetMapping(path = "/tilgangtiltjenesten")
+    @ProtectedWithClaims(issuer = INTERN)
+    public ResponseEntity tilgangTilTjenesten() {
+        String veilederId = OIDCUtil.getSubjectFromOIDCToken(contextHolder, INTERN);
+        return sjekkTilgangTilTjenesten(veilederId);
+    }
+
+    @GetMapping(path = "/syfo")
+    @ProtectedWithClaims(issuer = AZURE)
+    public ResponseEntity tilgangTilTjenestenViaAzure() {
+        String veilederId = OIDCUtil.getSubjectFromAzureOIDCToken(contextHolder, AZURE, NAVIDENT);
+        return sjekkTilgangTilTjenesten(veilederId);
+    }
+
+    @GetMapping(path = "/bruker")
+    @ProtectedWithClaims(issuer = AZURE)
+    public ResponseEntity tilgangTilBrukerViaAzure(@RequestParam String fnr) {
+        String veilederId = OIDCUtil.getSubjectFromAzureOIDCToken(contextHolder, AZURE, NAVIDENT);
+        return sjekkTilgangTilBruker(veilederId, fnr);
+    }
+
+    @GetMapping(path = "/enhet")
     @ProtectedWithClaims(issuer = AZURE)
     public ResponseEntity tilgangTilEnhet(@RequestParam String enhet) {
         String veilederId = OIDCUtil.getSubjectFromAzureOIDCToken(contextHolder, AZURE, NAVIDENT);
@@ -62,6 +73,17 @@ public class TilgangRessurs {
             return status(BAD_REQUEST)
                     .body("enhet paramater must be at least four digits long");
         Tilgang tilgang = tilgangService.sjekkTilgangTilEnhet(veilederId, enhet);
+        return lagRespons(tilgang);
+    }
+
+    private ResponseEntity sjekkTilgangTilTjenesten(String veilederId) {
+        Tilgang tilgang = tilgangService.sjekkTilgangTilTjenesten(veilederId);
+        return lagRespons(tilgang);
+    }
+
+    private ResponseEntity sjekkTilgangTilBruker(String veilederId, String fnr) {
+        PersonInfo personInfo = personService.hentPersonInfo(fnr);
+        Tilgang tilgang = tilgangService.sjekkTilgang(fnr, veilederId, personInfo);
         return lagRespons(tilgang);
     }
 
