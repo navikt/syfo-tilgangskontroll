@@ -37,24 +37,31 @@ public class TilgangRessurs {
         this.personService = personService;
     }
 
-    @GetMapping(path = "/tilgangtiltjenesten")
-    @ProtectedWithClaims(issuer = INTERN)
-    public ResponseEntity tilgangTilTjenesten() {
-        String veilederId = OIDCUtil.getSubjectFromOIDCToken(contextHolder, INTERN);
-        Tilgang tilgang = tilgangService.sjekkTilgangTilTjenesten(veilederId);
-        return lagRespons(tilgang);
-    }
-
     @GetMapping(path = "/tilgangtilbruker")
     @ProtectedWithClaims(issuer = INTERN)
     public ResponseEntity tilgangTilBruker(@RequestParam String fnr) {
-        String veilederId = OIDCUtil.getSubjectFromOIDCToken(contextHolder, INTERN);
-        PersonInfo personInfo = personService.hentPersonInfo(fnr);
-        Tilgang tilgang = tilgangService.sjekkTilgang(fnr, veilederId, personInfo);
-        return lagRespons(tilgang);
+        return sjekkTilgangTilBruker(fnr);
     }
 
-    @GetMapping(path = "/tilgangtilenhet")
+    @GetMapping(path = "/tilgangtiltjenesten")
+    @ProtectedWithClaims(issuer = INTERN)
+    public ResponseEntity tilgangTilTjenesten() {
+        return sjekkTilgangTilTjenesten();
+    }
+    
+    @GetMapping(path = "/syfo")
+    @ProtectedWithClaims(issuer = AZURE)
+    public ResponseEntity tilgangTilTjenestenViaAzure() {
+        return sjekkTilgangTilTjenesten();
+    }
+
+    @GetMapping(path = "/bruker")
+    @ProtectedWithClaims(issuer = AZURE)
+    public ResponseEntity tilgangTilBrukerViaAzure(@RequestParam String fnr) {
+        return sjekkTilgangTilBruker(fnr);
+    }
+
+    @GetMapping(path = "/enhet")
     @ProtectedWithClaims(issuer = AZURE)
     public ResponseEntity tilgangTilEnhet(@RequestParam String enhet) {
         String veilederId = OIDCUtil.getSubjectFromAzureOIDCToken(contextHolder, AZURE, NAVIDENT);
@@ -62,6 +69,19 @@ public class TilgangRessurs {
             return status(BAD_REQUEST)
                     .body("enhet paramater must be at least four digits long");
         Tilgang tilgang = tilgangService.sjekkTilgangTilEnhet(veilederId, enhet);
+        return lagRespons(tilgang);
+    }
+
+    private ResponseEntity sjekkTilgangTilTjenesten() {
+        String veilederId = OIDCUtil.getSubjectFromOIDCToken(contextHolder, INTERN);
+        Tilgang tilgang = tilgangService.sjekkTilgangTilTjenesten(veilederId);
+        return lagRespons(tilgang);
+    }
+
+    private ResponseEntity sjekkTilgangTilBruker(String fnr) {
+        String veilederId = OIDCUtil.getSubjectFromOIDCToken(contextHolder, INTERN);
+        PersonInfo personInfo = personService.hentPersonInfo(fnr);
+        Tilgang tilgang = tilgangService.sjekkTilgang(fnr, veilederId, personInfo);
         return lagRespons(tilgang);
     }
 
