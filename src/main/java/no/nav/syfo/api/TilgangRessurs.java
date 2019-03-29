@@ -40,25 +40,29 @@ public class TilgangRessurs {
     @GetMapping(path = "/tilgangtilbruker")
     @ProtectedWithClaims(issuer = INTERN)
     public ResponseEntity tilgangTilBruker(@RequestParam String fnr) {
+        String veilederId = OIDCUtil.getSubjectFromOIDCToken(contextHolder, INTERN);
         return sjekkTilgangTilBruker(OIDCUtil.getSubjectFromOIDCToken(contextHolder, INTERN), fnr);
     }
 
     @GetMapping(path = "/tilgangtiltjenesten")
     @ProtectedWithClaims(issuer = INTERN)
     public ResponseEntity tilgangTilTjenesten() {
-        return sjekkTilgangTilTjenesten(OIDCUtil.getSubjectFromOIDCToken(contextHolder, INTERN));
+        String veilederId = OIDCUtil.getSubjectFromOIDCToken(contextHolder, INTERN);
+        return sjekkTilgangTilTjenesten(veilederId);
     }
 
     @GetMapping(path = "/syfo")
     @ProtectedWithClaims(issuer = AZURE)
     public ResponseEntity tilgangTilTjenestenViaAzure() {
-        return sjekkTilgangTilTjenesten(OIDCUtil.getSubjectFromAzureOIDCToken(contextHolder, AZURE, NAVIDENT));
+        String veilederId = OIDCUtil.getSubjectFromAzureOIDCToken(contextHolder, AZURE, NAVIDENT);
+        return sjekkTilgangTilTjenesten(veilederId);
     }
 
     @GetMapping(path = "/bruker")
     @ProtectedWithClaims(issuer = AZURE)
     public ResponseEntity tilgangTilBrukerViaAzure(@RequestParam String fnr) {
-        return sjekkTilgangTilBruker(OIDCUtil.getSubjectFromAzureOIDCToken(contextHolder, AZURE, NAVIDENT), fnr);
+        String veilederId = OIDCUtil.getSubjectFromAzureOIDCToken(contextHolder, AZURE, NAVIDENT);
+        return sjekkTilgangTilBruker(veilederId, fnr);
     }
 
     @GetMapping(path = "/enhet")
