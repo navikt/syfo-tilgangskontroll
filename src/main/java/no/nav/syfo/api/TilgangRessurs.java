@@ -41,7 +41,7 @@ public class TilgangRessurs {
     @ProtectedWithClaims(issuer = INTERN)
     public ResponseEntity tilgangTilBruker(@RequestParam String fnr) {
         String veilederId = OIDCUtil.getSubjectFromOIDCToken(contextHolder, INTERN);
-        return sjekkTilgangTilBruker(OIDCUtil.getSubjectFromOIDCToken(contextHolder, INTERN), fnr);
+        return sjekkTilgangTilBruker(veilederId, fnr);
     }
 
     @GetMapping(path = "/tilgangtiltjenesten")
