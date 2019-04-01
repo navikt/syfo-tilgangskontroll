@@ -13,12 +13,16 @@ import static java.util.stream.Collectors.toList;
 @Service
 public class GeografiskTilgangService {
 
+    private final LdapService ldapService;
+    private final OrganisasjonRessursEnhetService organisasjonRessursEnhetService;
+    private final OrganisasjonEnhetService organisasjonEnhetService;
+
     @Autowired
-    private LdapService ldapService;
-    @Autowired
-    private OrganisasjonRessursEnhetService organisasjonRessursEnhetService;
-    @Autowired
-    private OrganisasjonEnhetService organisasjonEnhetService;
+    public GeografiskTilgangService(LdapService ldapService, OrganisasjonRessursEnhetService organisasjonRessursEnhetService, OrganisasjonEnhetService organisasjonEnhetService) {
+        this.ldapService = ldapService;
+        this.organisasjonRessursEnhetService = organisasjonRessursEnhetService;
+        this.organisasjonEnhetService = organisasjonEnhetService;
+    }
 
     public boolean harGeografiskTilgang(String veilederId, PersonInfo personInfo) {
         if (harNasjonalTilgang(veilederId)) {

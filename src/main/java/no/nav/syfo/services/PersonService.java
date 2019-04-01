@@ -19,8 +19,12 @@ import static java.util.Optional.ofNullable;
 @Service
 public class PersonService {
 
+    private final PersonV3 personV3;
+
     @Autowired
-    private PersonV3 personV3;
+    public PersonService(PersonV3 personV3) {
+        this.personV3 = personV3;
+    }
 
     public PersonInfo hentPersonInfo(String fnr) {
         try {

@@ -24,8 +24,12 @@ import static java.util.stream.Stream.of;
 @Service
 public class OrganisasjonEnhetService {
 
+    private final OrganisasjonEnhetV2 organisasjonEnhetV2;
+
     @Autowired
-    private OrganisasjonEnhetV2 organisasjonEnhetV2;
+    public OrganisasjonEnhetService(OrganisasjonEnhetV2 organisasjonEnhetV2) {
+        this.organisasjonEnhetV2 = organisasjonEnhetV2;
+    }
 
     public List<String> hentOverordnetEnhetForNAVKontor(String enhet) {
         try {
