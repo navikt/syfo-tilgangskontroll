@@ -14,8 +14,12 @@ import static java.util.stream.Collectors.toList;
 @Service
 public class OrganisasjonRessursEnhetService {
 
+    private final OrganisasjonRessursEnhetV1 organisasjonRessursEnhetV1;
+
     @Autowired
-    private OrganisasjonRessursEnhetV1 organisasjonRessursEnhetV1;
+    public OrganisasjonRessursEnhetService(OrganisasjonRessursEnhetV1 organisasjonRessursEnhetV1) {
+        this.organisasjonRessursEnhetV1 = organisasjonRessursEnhetV1;
+    }
 
     public List<String> hentVeiledersEnheter(String veilederId) {
         try {

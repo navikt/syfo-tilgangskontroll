@@ -8,8 +8,12 @@ import org.springframework.stereotype.Service;
 @Service
 public class EgenAnsattService {
 
+    private final EgenAnsattV1 egenAnsattV1;
+
     @Autowired
-    private EgenAnsattV1 egenAnsattV1;
+    public EgenAnsattService(EgenAnsattV1 egenAnsattV1) {
+        this.egenAnsattV1 = egenAnsattV1;
+    }
 
     boolean erEgenAnsatt(String fnr) {
         return egenAnsattV1.hentErEgenAnsattEllerIFamilieMedEgenAnsatt(new WSHentErEgenAnsattEllerIFamilieMedEgenAnsattRequest()

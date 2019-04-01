@@ -16,18 +16,27 @@ public class TilgangService {
     public static final String TILGANGTILTJENESTEN = "tilgangtiltjenesten";
     public static final String TILGANGTILENHET = "tilgangtilenhet";
 
-    @Autowired
-    private LdapService ldapService;
-    @Autowired
-    private EgenAnsattService egenAnsattService;
-    @Autowired
-    private GeografiskTilgangService geografiskTilgangService;
-    @Autowired
-    private OrganisasjonRessursEnhetService organisasjonRessursEnhetService;
+    private final LdapService ldapService;
+    private final EgenAnsattService egenAnsattService;
+    private final GeografiskTilgangService geografiskTilgangService;
+    private final OrganisasjonRessursEnhetService organisasjonRessursEnhetService;
 
     private final static String ENHET = "ENHET";
     private final static String DISKRESJONSKODE_KODE6 = "SPSF";
     private final static String DISKRESJONSKODE_KODE7 = "SPFO";
+
+    @Autowired
+    public TilgangService(
+            LdapService ldapService,
+            EgenAnsattService egenAnsattService,
+            GeografiskTilgangService geografiskTilgangService,
+            OrganisasjonRessursEnhetService organisasjonRessursEnhetService
+    ) {
+        this.ldapService = ldapService;
+        this.egenAnsattService = egenAnsattService;
+        this.geografiskTilgangService = geografiskTilgangService;
+        this.organisasjonRessursEnhetService = organisasjonRessursEnhetService;
+    }
 
     @Cacheable(cacheNames = TILGANGTILBRUKER, key = "#veilederId.concat(#brukerFnr)", condition = "#brukerFnr != null && #veilederId != null")
     public Tilgang sjekkTilgang(String brukerFnr, String veilederId, PersonInfo personInfo) {
