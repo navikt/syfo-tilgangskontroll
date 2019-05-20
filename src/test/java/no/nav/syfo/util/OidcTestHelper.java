@@ -2,26 +2,26 @@ package no.nav.syfo.util;
 
 import com.nimbusds.jwt.JWTClaimsSet;
 import com.nimbusds.jwt.SignedJWT;
-import no.nav.security.oidc.context.OIDCClaims;
-import no.nav.security.oidc.context.OIDCRequestContextHolder;
-import no.nav.security.oidc.context.OIDCValidationContext;
-import no.nav.security.oidc.context.TokenContext;
+import no.nav.security.oidc.context.*;
 import no.nav.security.oidc.test.support.JwtTokenGenerator;
 
 import java.text.ParseException;
+
+import static no.nav.syfo.security.OIDCIssuer.AZURE;
+import static no.nav.syfo.security.OIDCIssuer.INTERN;
 
 public class OidcTestHelper {
 
     public static void loggInnVeilederMedOpenAM(OIDCRequestContextHolder oidcRequestContextHolder, String subject) {
         //OIDC-hack - legg til token og oidcclaims for en test-person
         SignedJWT jwt = JwtTokenGenerator.createSignedJWT(subject);
-        settOIDCValidationContext(oidcRequestContextHolder, jwt, "intern");
+        settOIDCValidationContext(oidcRequestContextHolder, jwt, INTERN);
     }
 
     public static void loggInnVeilederMedAzure(OIDCRequestContextHolder oidcRequestContextHolder, String veilederIdent) throws ParseException {
         JWTClaimsSet claimsSet = JWTClaimsSet.parse("{\"NAVident\":\"" + veilederIdent + "\"}");
         SignedJWT jwt = JwtTokenGenerator.createSignedJWT(claimsSet);
-        settOIDCValidationContext(oidcRequestContextHolder, jwt, "veileder");
+        settOIDCValidationContext(oidcRequestContextHolder, jwt, AZURE);
     }
 
     public static void loggUtAlle(OIDCRequestContextHolder oidcRequestContextHolder) {
