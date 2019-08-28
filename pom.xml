@@ -23,7 +23,7 @@
         <jersey-common.version>2.26</jersey-common.version>
         <logstash-logback-encoder.version>4.10</logstash-logback-encoder.version>
         <micrometer-registry-prometheus.version>1.0.6</micrometer-registry-prometheus.version>
-        <cxf.version>3.2.0</cxf.version>
+        <cxf.version>3.3.3</cxf.version>
         <oidc-spring-support.version>0.2.12</oidc-spring-support.version>
 
         <egenAnsatt-v1-tjenestespesifikasjon.version>1.0.2</egenAnsatt-v1-tjenestespesifikasjon.version>
