@@ -7,9 +7,7 @@ import org.apache.cxf.endpoint.Client;
 import org.apache.cxf.endpoint.Endpoint;
 import org.apache.cxf.frontend.ClientProxy;
 import org.apache.cxf.service.model.EndpointInfo;
-import org.apache.cxf.ws.policy.EndpointPolicy;
-import org.apache.cxf.ws.policy.PolicyBuilder;
-import org.apache.cxf.ws.policy.PolicyEngine;
+import org.apache.cxf.ws.policy.*;
 import org.apache.cxf.ws.policy.attachment.reference.ReferenceResolver;
 import org.apache.cxf.ws.policy.attachment.reference.RemoteReferenceResolver;
 import org.apache.cxf.ws.security.trust.STSClient;
@@ -18,10 +16,6 @@ import org.apache.neethi.Policy;
 import java.util.HashMap;
 
 public class STSClientConfig {
-    public static final String STS_URL_KEY = "SECURITYTOKENSERVICE_URL";
-    public static final String SERVICEUSER_USERNAME = "SRVSYFO_TILGANGSKONTROLL_USERNAME";
-    public static final String SERVICEUSER_PASSWORD = "SRVSYFO_TILGANGSKONTROLL_PASSWORD";
-
     // Only use no transportbinding on localhost, should use the requestSamlPolicy.xml with transport binding https
     // when in production.
     private static final String STS_REQUEST_SAML_POLICY = "classpath:policy/requestSamlPolicy.xml";
@@ -54,9 +48,9 @@ public class STSClientConfig {
 
     protected static void configureStsWithPolicyForClient(STSClient stsClient, Client client, String policyReference,
                                                           boolean cacheTokenInEndpoint) {
-        String location = requireProperty(STS_URL_KEY);
-        String username = requireProperty(SERVICEUSER_USERNAME);
-        String password = requireProperty(SERVICEUSER_PASSWORD);
+        String location = System.getenv("SECURITYTOKENSERVICE_URL");
+        String username = System.getenv("srv_username");
+        String password = System.getenv("srv_password");
 
         configureSTSClient(stsClient, location, username, password);
 
@@ -66,13 +60,15 @@ public class STSClientConfig {
         setEndpointPolicyReference(client, policyReference);
     }
 
-    /** Creating custom STS client because the STS on Datapower requires KeyType as a child to RequestSecurityToken and
+    /**
+     * Creating custom STS client because the STS on Datapower requires KeyType as a child to RequestSecurityToken and
      * TokenType as a child to SecondaryParameters. Standard CXF client put both elements in SecondaryParameters. By
      * overriding the useSecondaryParameters method you can exactly specify the request in the
      * RequestSecurityTokenTemplate in the policy.
      *
      * @param bus
-     * @return */
+     * @return
+     */
     protected static STSClient createCustomSTSClient(Bus bus) {
         return new STSClientWSTrust13and14(bus);
     }
