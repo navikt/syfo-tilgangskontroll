@@ -25,7 +25,7 @@ public class ApplicationConfig {
 
     @Bean
     @Primary
-    public OrganisasjonEnhetV2 organisasjonEnhetV2(@Value("${virksomhet.organisasjonEnhet.v2.endpointurl}") String serviceUrl) {
+    public OrganisasjonEnhetV2 organisasjonEnhetV2(@Value("${organisasjonEnhet.v2.url}") String serviceUrl) {
         OrganisasjonEnhetV2 port = new WsClient<OrganisasjonEnhetV2>().createPort(serviceUrl, OrganisasjonEnhetV2.class, singletonList(new LogErrorHandler()));
         STSClientConfig.configureRequestSamlToken(port);
         return port;
@@ -33,7 +33,7 @@ public class ApplicationConfig {
 
     @Bean
     @Primary
-    public EgenAnsattV1 egenAnsattV1(@Value("${virksomhet.egenansatt.v1.endpointurl}") String serviceUrl) {
+    public EgenAnsattV1 egenAnsattV1(@Value("${egenansatt.v1.url}") String serviceUrl) {
         EgenAnsattV1 port = new WsClient<EgenAnsattV1>().createPort(serviceUrl, EgenAnsattV1.class, singletonList(new LogErrorHandler()));
         STSClientConfig.configureRequestSamlToken(port);
         return port;
@@ -41,7 +41,7 @@ public class ApplicationConfig {
 
     @Bean
     @Primary
-    public OrganisasjonRessursEnhetV1 organisasjonRessursEnhetV1(@Value("${virksomhet.organisasjonressursenhet.v1.endpointurl}") String serviceUrl) {
+    public OrganisasjonRessursEnhetV1 organisasjonRessursEnhetV1(@Value("${organisasjonressursenhet.v1.url}") String serviceUrl) {
         OrganisasjonRessursEnhetV1 port = new WsClient<OrganisasjonRessursEnhetV1>().createPort(serviceUrl, OrganisasjonRessursEnhetV1.class, singletonList(new LogErrorHandler()));
         STSClientConfig.configureRequestSamlToken(port);
         return port;
@@ -49,7 +49,7 @@ public class ApplicationConfig {
 
     @Bean
     @Primary
-    public PersonV3 personV3(@Value("${virksomhet.person.v3.endpointurl}") String serviceUrl) {
+    public PersonV3 personV3(@Value("${person.v3.url}") String serviceUrl) {
         PersonV3 port = new WsClient<PersonV3>().createPort(serviceUrl, PersonV3.class, singletonList(new LogErrorHandler()));
         STSClientConfig.configureRequestSamlToken(port);
         return port;
