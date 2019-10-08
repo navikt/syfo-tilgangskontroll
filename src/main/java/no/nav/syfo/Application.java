@@ -9,12 +9,12 @@ import org.springframework.core.io.FileSystemResource;
 @SpringBootApplication
 @EnableOIDCTokenValidation
 public class Application {
-    public PropertySourcesPlaceholderConfigurer propertySourcesPlaceholderConfigurer() {
-        PropertySourcesPlaceholderConfigurer properties = new PropertySourcesPlaceholderConfigurer();
-        properties.setLocation(new FileSystemResource("/secrets/ldap/ldap"));
-        properties.setIgnoreResourceNotFound(false);
-        return properties;
-    }
+//    public PropertySourcesPlaceholderConfigurer propertySourcesPlaceholderConfigurer() {
+//        PropertySourcesPlaceholderConfigurer properties = new PropertySourcesPlaceholderConfigurer();
+//        properties.setLocation(new FileSystemResource("./config.properties"));
+//        properties.setIgnoreResourceNotFound(false);
+//        return properties;
+//    }
 
     public static void main(String[] args) {
         SpringApplication.run(Application.class, args);
