@@ -25,7 +25,9 @@ public class CacheConfig {
         cacheManager.setCaches(asList(
                 new ConcurrentMapCache(TILGANGTILBRUKER),
                 new ConcurrentMapCache(TILGANGTILENHET),
-                new ConcurrentMapCache(TILGANGTILTJENESTEN)
+                new ConcurrentMapCache(TILGANGTILTJENESTEN),
+                new ConcurrentMapCache(CACHENAME_EGENANSATT),
+                new ConcurrentMapCache(CACHENAME_PERSON_INFO)
         ));
         return cacheManager;
     }
