@@ -6,15 +6,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
+import static no.nav.syfo.config.CacheConfig.*;
 import static no.nav.syfo.domain.AdRoller.*;
 
 @Service
 public class TilgangService {
 
     public static final String GEOGRAFISK = "GEOGRAFISK";
-    public static final String TILGANGTILBRUKER = "tilgangtilbruker";
-    public static final String TILGANGTILTJENESTEN = "tilgangtiltjenesten";
-    public static final String TILGANGTILENHET = "tilgangtilenhet";
 
     private final LdapService ldapService;
     private final EgenAnsattService egenAnsattService;

@@ -4,17 +4,18 @@ import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.cache.concurrent.ConcurrentMapCache;
 import org.springframework.cache.support.SimpleCacheManager;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Profile;
+import org.springframework.context.annotation.*;
 
 import static java.util.Arrays.asList;
-import static no.nav.syfo.services.TilgangService.*;
 
 @Configuration
 @EnableCaching
 @Profile({"remote"})
 public class CacheConfig {
+
+    public static final String TILGANGTILBRUKER = "tilgangtilbruker";
+    public static final String TILGANGTILTJENESTEN = "tilgangtiltjenesten";
+    public static final String TILGANGTILENHET = "tilgangtilenhet";
 
     @Bean
     public CacheManager cacheManager() {
