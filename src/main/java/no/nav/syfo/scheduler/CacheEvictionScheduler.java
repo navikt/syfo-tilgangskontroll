@@ -17,6 +17,7 @@ public class CacheEvictionScheduler {
 
     private final int MINUTE_MS = 60 * 1000;
     private final int HOUR_MS = 60 * MINUTE_MS;
+    private final int CACHE_EVICTION_RATE = 12 * HOUR_MS;
 
     private CacheManager cachemanager;
 
@@ -25,7 +26,7 @@ public class CacheEvictionScheduler {
         this.cachemanager = cachemanager;
     }
 
-    @Scheduled(fixedRate = HOUR_MS)
+    @Scheduled(fixedRate = CACHE_EVICTION_RATE)
     public void evictAllCachesAtInteval() {
         evictAllCaches();
     }
