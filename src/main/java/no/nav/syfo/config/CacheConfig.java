@@ -16,6 +16,8 @@ public class CacheConfig {
     public static final String TILGANGTILBRUKER = "tilgangtilbruker";
     public static final String TILGANGTILTJENESTEN = "tilgangtiltjenesten";
     public static final String TILGANGTILENHET = "tilgangtilenhet";
+    public static final String CACHENAME_EGENANSATT = "egenansatt";
+    public static final String CACHENAME_PERSON_INFO = "personinfo";
 
     @Bean
     public CacheManager cacheManager() {
