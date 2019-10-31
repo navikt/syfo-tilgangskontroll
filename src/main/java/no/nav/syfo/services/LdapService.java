@@ -1,6 +1,7 @@
 package no.nav.syfo.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 
@@ -10,6 +11,7 @@ import javax.naming.ldap.InitialLdapContext;
 import javax.naming.ldap.LdapContext;
 import java.util.Hashtable;
 
+import static no.nav.syfo.config.CacheConfig.CACHENAME_VEILEDER_LDAP;
 import static org.apache.commons.lang3.StringUtils.substringBetween;
 
 @Service
@@ -29,6 +31,7 @@ public class LdapService {
         SEARCHBASE = "OU=Users,OU=NAV,OU=BusinessUnits," + springEnv.getRequiredProperty("ldap.basedn");
     }
 
+    @Cacheable(cacheNames = CACHENAME_VEILEDER_LDAP, key = "#veilederUid.concat(#rolle)", condition = "#veilederUid != null && #rolle != null")
     public boolean harTilgang(String veilederUid, String rolle) {
         try {
             SearchControls searchCtrl = new SearchControls();
