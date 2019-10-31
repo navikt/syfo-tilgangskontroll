@@ -17,6 +17,9 @@ public class CacheConfig {
     public static final String TILGANGTILTJENESTEN = "tilgangtiltjenesten";
     public static final String TILGANGTILENHET = "tilgangtilenhet";
     public static final String CACHENAME_EGENANSATT = "egenansatt";
+    public static final String CACHENAME_ENHET_OVERORDNET_ENHETER = "enhetoverordnetenheter";
+    public static final String CACHENAME_GEOGRAFISK_TILHORIGHET_ENHETER = "geografisktilhorighetenheter";
+    public static final String CACHENAME_VEILEDER_ENHETER = "veilederenhet";
     public static final String CACHENAME_PERSON_INFO = "personinfo";
 
     @Bean
@@ -27,6 +30,9 @@ public class CacheConfig {
                 new ConcurrentMapCache(TILGANGTILENHET),
                 new ConcurrentMapCache(TILGANGTILTJENESTEN),
                 new ConcurrentMapCache(CACHENAME_EGENANSATT),
+                new ConcurrentMapCache(CACHENAME_ENHET_OVERORDNET_ENHETER),
+                new ConcurrentMapCache(CACHENAME_GEOGRAFISK_TILHORIGHET_ENHETER),
+                new ConcurrentMapCache(CACHENAME_VEILEDER_ENHETER),
                 new ConcurrentMapCache(CACHENAME_PERSON_INFO)
         ));
         return cacheManager;

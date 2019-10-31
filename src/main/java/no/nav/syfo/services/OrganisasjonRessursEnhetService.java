@@ -3,12 +3,14 @@ package no.nav.syfo.services;
 import lombok.extern.slf4j.Slf4j;
 import no.nav.tjeneste.virksomhet.organisasjon.ressurs.enhet.v1.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 import static java.util.Collections.emptyList;
 import static java.util.stream.Collectors.toList;
+import static no.nav.syfo.config.CacheConfig.CACHENAME_VEILEDER_ENHETER;
 
 @Slf4j
 @Service
@@ -21,6 +23,7 @@ public class OrganisasjonRessursEnhetService {
         this.organisasjonRessursEnhetV1 = organisasjonRessursEnhetV1;
     }
 
+    @Cacheable(cacheNames = CACHENAME_VEILEDER_ENHETER, key = "#veilederId", condition = "#veilederId != null")
     public List<String> hentVeiledersEnheter(String veilederId) {
         try {
             return organisasjonRessursEnhetV1
