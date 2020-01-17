@@ -7,8 +7,7 @@ import no.nav.security.oidc.test.support.JwtTokenGenerator;
 
 import java.text.ParseException;
 
-import static no.nav.syfo.security.OIDCIssuer.AZURE;
-import static no.nav.syfo.security.OIDCIssuer.INTERN;
+import static no.nav.syfo.security.OIDCIssuer.*;
 
 public class OidcTestHelper {
 
@@ -22,6 +21,12 @@ public class OidcTestHelper {
         JWTClaimsSet claimsSet = JWTClaimsSet.parse("{\"NAVident\":\"" + veilederIdent + "\"}");
         SignedJWT jwt = JwtTokenGenerator.createSignedJWT(claimsSet);
         settOIDCValidationContext(oidcRequestContextHolder, jwt, AZURE);
+    }
+
+    public static void logInVeilederWithAzure2(OIDCRequestContextHolder oidcRequestContextHolder, String veilederIdent) throws ParseException {
+        JWTClaimsSet claimsSet = JWTClaimsSet.parse("{\"NAVident\":\"" + veilederIdent + "\"}");
+        SignedJWT jwt = JwtTokenGenerator.createSignedJWT(claimsSet);
+        settOIDCValidationContext(oidcRequestContextHolder, jwt, VEILEDERAZURE);
     }
 
     public static void loggUtAlle(OIDCRequestContextHolder oidcRequestContextHolder) {

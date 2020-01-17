@@ -12,8 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import static no.nav.syfo.security.OIDCClaim.NAVIDENT;
-import static no.nav.syfo.security.OIDCIssuer.AZURE;
-import static no.nav.syfo.security.OIDCIssuer.INTERN;
+import static no.nav.syfo.security.OIDCIssuer.*;
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
 import static org.springframework.http.HttpStatus.FORBIDDEN;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
@@ -74,6 +73,13 @@ public class TilgangRessurs {
                     .body("enhet paramater must be at least four digits long");
         Tilgang tilgang = tilgangService.sjekkTilgangTilEnhet(veilederId, enhet);
         return lagRespons(tilgang);
+    }
+
+    @GetMapping(path = "/navident/bruker/{fnr}")
+    @ProtectedWithClaims(issuer = VEILEDERAZURE)
+    public ResponseEntity accessToPersonViaAzure(@PathVariable String fnr) {
+        String veilederId = OIDCUtil.getSubjectFromAzureOIDCToken(contextHolder, VEILEDERAZURE, NAVIDENT);
+        return sjekkTilgangTilBruker(veilederId, fnr);
     }
 
     private ResponseEntity sjekkTilgangTilTjenesten(String veilederId) {
