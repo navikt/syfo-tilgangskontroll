@@ -21,3 +21,8 @@ at den er god nok.
 
 Bygges og deployes av Jenkins:
 https://jenkins-digisyfo.adeo.no/job/digisyfo/job/syfo-tilgangskontroll/
+
+**Redis Cache**
+
+Syfo-tilgangskontroll bruker redis for cache.
+Redis pod må startes manuelt ved å kjøre følgdende kommando: `kubectl apply -f redis-config.yaml`.

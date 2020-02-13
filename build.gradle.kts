@@ -49,14 +49,14 @@ dependencies {
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlinLibVersion")
     implementation("org.jetbrains.kotlin:kotlin-reflect:$kotlinLibVersion")
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin:$kotlinJacksonVersion")
-    
+
     implementation("org.springframework.boot:spring-boot-starter-web:$springBootVersion")
     implementation("org.springframework.boot:spring-boot-starter-actuator:$springBootVersion")
     implementation("org.projectlombok:lombok:1.16.22")
     annotationProcessor("org.projectlombok:lombok:1.18.6")
     implementation("javax.ws.rs:javax.ws.rs-api:2.0.1")
     implementation("org.glassfish.jersey.core:jersey-common:2.26")
-    implementation("org.springframework.boot:spring-boot-starter-cache:$springBootVersion")
+    implementation("org.springframework.boot:spring-boot-starter-data-redis:$springBootVersion")
     implementation("org.slf4j:slf4j-api:1.7.25")
     implementation("org.springframework.boot:spring-boot-starter-logging:$springBootVersion")
     implementation("net.logstash.logback:logstash-logback-encoder:4.10")

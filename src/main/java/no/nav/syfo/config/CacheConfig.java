@@ -2,11 +2,14 @@ package no.nav.syfo.config;
 
 import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.EnableCaching;
-import org.springframework.cache.concurrent.ConcurrentMapCache;
-import org.springframework.cache.support.SimpleCacheManager;
 import org.springframework.context.annotation.*;
+import org.springframework.data.redis.cache.RedisCacheConfiguration;
+import org.springframework.data.redis.cache.RedisCacheManager;
+import org.springframework.data.redis.connection.RedisConnectionFactory;
 
-import static java.util.Arrays.asList;
+import java.time.Duration;
+import java.util.HashMap;
+import java.util.Map;
 
 @Configuration
 @EnableCaching
@@ -24,19 +27,26 @@ public class CacheConfig {
     public static final String CACHENAME_PERSON_INFO = "personinfo";
 
     @Bean
-    public CacheManager cacheManager() {
-        SimpleCacheManager cacheManager = new SimpleCacheManager();
-        cacheManager.setCaches(asList(
-                new ConcurrentMapCache(TILGANGTILBRUKER),
-                new ConcurrentMapCache(TILGANGTILENHET),
-                new ConcurrentMapCache(TILGANGTILTJENESTEN),
-                new ConcurrentMapCache(CACHENAME_EGENANSATT),
-                new ConcurrentMapCache(CACHENAME_ENHET_OVERORDNET_ENHETER),
-                new ConcurrentMapCache(CACHENAME_GEOGRAFISK_TILHORIGHET_ENHETER),
-                new ConcurrentMapCache(CACHENAME_VEILEDER_ENHETER),
-                new ConcurrentMapCache(CACHENAME_VEILEDER_LDAP),
-                new ConcurrentMapCache(CACHENAME_PERSON_INFO)
-        ));
-        return cacheManager;
+    public CacheManager cacheManager(RedisConnectionFactory redisConnectionFactory) {
+        Map<String, RedisCacheConfiguration> cacheConfigurations = new HashMap<>();
+
+        RedisCacheConfiguration defaultConfig = RedisCacheConfiguration
+                .defaultCacheConfig()
+                .entryTtl(Duration.ofHours(12L));
+
+        cacheConfigurations.put(TILGANGTILBRUKER, defaultConfig);
+        cacheConfigurations.put(TILGANGTILTJENESTEN, defaultConfig);
+        cacheConfigurations.put(TILGANGTILENHET, defaultConfig);
+        cacheConfigurations.put(CACHENAME_EGENANSATT, defaultConfig);
+        cacheConfigurations.put(CACHENAME_ENHET_OVERORDNET_ENHETER, defaultConfig);
+        cacheConfigurations.put(CACHENAME_GEOGRAFISK_TILHORIGHET_ENHETER, defaultConfig);
+        cacheConfigurations.put(CACHENAME_VEILEDER_ENHETER, defaultConfig);
+        cacheConfigurations.put(CACHENAME_VEILEDER_LDAP, defaultConfig);
+        cacheConfigurations.put(CACHENAME_PERSON_INFO, defaultConfig);
+
+        return RedisCacheManager.builder(redisConnectionFactory)
+                .cacheDefaults(RedisCacheConfiguration.defaultCacheConfig())
+                .withInitialCacheConfigurations(cacheConfigurations)
+                .build();
     }
 }

@@ -1,7 +1,9 @@
 spring:
   main.banner-mode: 'off'
-  cache:
-      type: none
+  cache.type: redis
+  redis:
+    host: syfo-tilgangskontroll-redis
+    port: 6379
 
 no.nav.security.oidc:
   issuers: intern,veileder
