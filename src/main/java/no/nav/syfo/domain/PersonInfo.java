@@ -1,8 +1,9 @@
 package no.nav.syfo.domain;
 
+import java.io.Serializable;
 import java.util.Objects;
 
-public class PersonInfo {
+public class PersonInfo implements Serializable {
     private final String diskresjonskode;
     private final String geografiskTilknytning;
 
