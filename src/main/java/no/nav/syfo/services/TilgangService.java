@@ -18,6 +18,7 @@ public class TilgangService {
     private final EgenAnsattService egenAnsattService;
     private final GeografiskTilgangService geografiskTilgangService;
     private final OrganisasjonRessursEnhetService organisasjonRessursEnhetService;
+    private final PersonService personService;
 
     private final static String ENHET = "ENHET";
     private final static String DISKRESJONSKODE_KODE6 = "SPSF";
@@ -28,12 +29,19 @@ public class TilgangService {
             LdapService ldapService,
             EgenAnsattService egenAnsattService,
             GeografiskTilgangService geografiskTilgangService,
-            OrganisasjonRessursEnhetService organisasjonRessursEnhetService
+            OrganisasjonRessursEnhetService organisasjonRessursEnhetService,
+            PersonService personService
     ) {
         this.ldapService = ldapService;
         this.egenAnsattService = egenAnsattService;
         this.geografiskTilgangService = geografiskTilgangService;
         this.organisasjonRessursEnhetService = organisasjonRessursEnhetService;
+        this.personService = personService;
+    }
+
+    public Tilgang sjekkTilgangTilBruker(String veilederId, String fnr) {
+        PersonInfo personInfo = personService.hentPersonInfo(fnr);
+        return sjekkTilgang(fnr, veilederId, personInfo);
     }
 
     @Cacheable(cacheNames = TILGANGTILBRUKER, key = "#veilederId.concat(#brukerFnr)", condition = "#brukerFnr != null && #veilederId != null")

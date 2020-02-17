@@ -16,6 +16,13 @@ public class Metric {
         this.registry = registry;
     }
 
+    public void countEvent(String name) {
+        registry.counter(
+                addPrefix(name),
+                Tags.of("type", "info")
+        ).increment();
+    }
+
     public void tellHttpKall(int kode) {
         registry.counter(
                 addPrefix("httpstatus"),
