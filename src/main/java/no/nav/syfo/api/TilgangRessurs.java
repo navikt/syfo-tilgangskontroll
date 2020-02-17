@@ -1,15 +1,18 @@
 package no.nav.syfo.api;
 
+import lombok.extern.slf4j.Slf4j;
 import no.nav.security.oidc.api.ProtectedWithClaims;
 import no.nav.security.oidc.context.OIDCRequestContextHolder;
-import no.nav.syfo.domain.PersonInfo;
 import no.nav.syfo.domain.Tilgang;
+import no.nav.syfo.metric.Metric;
 import no.nav.syfo.security.OIDCUtil;
-import no.nav.syfo.services.PersonService;
 import no.nav.syfo.services.TilgangService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 import static no.nav.syfo.security.OIDCClaim.NAVIDENT;
 import static no.nav.syfo.security.OIDCIssuer.*;
@@ -19,28 +22,33 @@ import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.http.ResponseEntity.ok;
 import static org.springframework.http.ResponseEntity.status;
 
+@Slf4j
 @RestController
 @RequestMapping(value = "/api/tilgang")
 public class TilgangRessurs {
 
     private OIDCRequestContextHolder contextHolder;
 
+    private Metric metric;
+
     private TilgangService tilgangService;
 
-    private PersonService personService;
-
     @Autowired
-    public TilgangRessurs(OIDCRequestContextHolder contextHolder, TilgangService tilgangService, PersonService personService) {
+    public TilgangRessurs(
+            OIDCRequestContextHolder contextHolder,
+            Metric metric,
+            TilgangService tilgangService
+    ) {
         this.contextHolder = contextHolder;
+        this.metric = metric;
         this.tilgangService = tilgangService;
-        this.personService = personService;
     }
 
     @GetMapping(path = "/tilgangtilbruker")
     @ProtectedWithClaims(issuer = INTERN)
     public ResponseEntity tilgangTilBruker(@RequestParam String fnr) {
         String veilederId = OIDCUtil.getSubjectFromOIDCToken(contextHolder, INTERN);
-        return sjekkTilgangTilBruker(veilederId, fnr);
+        return sjekktilgangTilBruker(veilederId, fnr);
     }
 
     @GetMapping(path = "/tilgangtiltjenesten")
@@ -61,7 +69,14 @@ public class TilgangRessurs {
     @ProtectedWithClaims(issuer = AZURE)
     public ResponseEntity tilgangTilBrukerViaAzure(@RequestParam String fnr) {
         String veilederId = OIDCUtil.getSubjectFromAzureOIDCToken(contextHolder, AZURE, NAVIDENT);
-        return sjekkTilgangTilBruker(veilederId, fnr);
+        return sjekktilgangTilBruker(veilederId, fnr);
+    }
+
+    @PostMapping(path = "/brukere")
+    @ProtectedWithClaims(issuer = AZURE)
+    public ResponseEntity tilgangTilBrukereViaAzure(@RequestBody List<String> fnrList) {
+        String veilederId = OIDCUtil.getSubjectFromAzureOIDCToken(contextHolder, AZURE, NAVIDENT);
+        return sjekkTilgangTilBrukere(veilederId, fnrList);
     }
 
     @GetMapping(path = "/enhet")
@@ -79,7 +94,7 @@ public class TilgangRessurs {
     @ProtectedWithClaims(issuer = VEILEDERAZURE)
     public ResponseEntity accessToPersonViaAzure(@PathVariable String fnr) {
         String veilederId = OIDCUtil.getSubjectFromAzureOIDCToken(contextHolder, VEILEDERAZURE, NAVIDENT);
-        return sjekkTilgangTilBruker(veilederId, fnr);
+        return sjekktilgangTilBruker(veilederId, fnr);
     }
 
     private ResponseEntity sjekkTilgangTilTjenesten(String veilederId) {
@@ -87,10 +102,27 @@ public class TilgangRessurs {
         return lagRespons(tilgang);
     }
 
-    private ResponseEntity sjekkTilgangTilBruker(String veilederId, String fnr) {
-        PersonInfo personInfo = personService.hentPersonInfo(fnr);
-        Tilgang tilgang = tilgangService.sjekkTilgang(fnr, veilederId, personInfo);
+    private ResponseEntity sjekktilgangTilBruker(String veilederId, String fnr) {
+        Tilgang tilgang = tilgangService.sjekkTilgangTilBruker(veilederId, fnr);
         return lagRespons(tilgang);
+    }
+
+    private ResponseEntity sjekkTilgangTilBrukere(String veilederId, List<String> fnrList) {
+        List<String> filtrerteBrukereMedTilgang = fnrList
+                .stream()
+                .filter((fnr) -> {
+                    try {
+                        return tilgangService.sjekkTilgangTilBruker(veilederId, fnr).isHarTilgang();
+                    } catch (RuntimeException e) {
+                        log.error("Uventet feil ved sjekk av tilgang til bruker i liste: {} : {}", e.toString(), e.getMessage(), e);
+                        metric.countEvent("access_persons_person_error");
+                        return false;
+                    }
+                })
+                .collect(Collectors.toList());
+        return ok()
+                .contentType(APPLICATION_JSON)
+                .body(filtrerteBrukereMedTilgang);
     }
 
     private ResponseEntity lagRespons(Tilgang tilgang) {
@@ -102,5 +134,4 @@ public class TilgangRessurs {
                 .contentType(APPLICATION_JSON)
                 .body(tilgang);
     }
-
 }

@@ -14,6 +14,8 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import java.text.ParseException;
 
+import static java.util.Arrays.asList;
+import static java.util.Collections.singletonList;
 import static no.nav.syfo.domain.AdRoller.*;
 import static no.nav.syfo.mocks.OrganisasjonRessursEnhetMock.*;
 import static no.nav.syfo.mocks.PersonMock.*;
@@ -109,6 +111,20 @@ public class TilgangRessursViaAzureComponentTest {
 
         ResponseEntity response = tilgangRessurs.tilgangTilBrukerViaAzure(BIRTE_KODE7_BRUKER);
         assertTilgangOK(response);
+    }
+
+    @Test
+    public void tilgangTilBrukereSYFO() {
+        mockRoller(ldapServiceMock, VIGGO_VEILEDER, INNVILG, SYFO);
+
+        ResponseEntity response = tilgangRessurs.tilgangTilBrukereViaAzure(asList(
+                BJARNE_BRUKER,
+                BENGT_KODE6_BRUKER,
+                BIRTE_KODE7_BRUKER,
+                ERIK_EGENANSATT_BRUKER
+        ));
+        assertEquals(response.getStatusCodeValue(), 200);
+        assertEquals(response.getBody(), singletonList(BJARNE_BRUKER));
     }
 
     @Test
