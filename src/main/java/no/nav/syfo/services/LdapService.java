@@ -1,5 +1,6 @@
 package no.nav.syfo.services;
 
+import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.core.env.Environment;
@@ -10,12 +11,16 @@ import javax.naming.directory.*;
 import javax.naming.ldap.InitialLdapContext;
 import javax.naming.ldap.LdapContext;
 import java.util.Hashtable;
+import java.util.Optional;
 
 import static no.nav.syfo.config.CacheConfig.CACHENAME_VEILEDER_LDAP;
 import static org.apache.commons.lang3.StringUtils.substringBetween;
+import static org.slf4j.LoggerFactory.getLogger;
 
 @Service
 public class LdapService {
+
+    private static final Logger LOG = getLogger(LdapService.class);
 
     private final Hashtable<String, String> env = new Hashtable<>();
     private static String SEARCHBASE;
@@ -38,13 +43,19 @@ public class LdapService {
             searchCtrl.setSearchScope(SearchControls.SUBTREE_SCOPE);
 
             NamingEnumeration<SearchResult> result = ldapContext().search(SEARCHBASE, String.format("(&(objectClass=user)(CN=%s))", veilederUid), searchCtrl);
-            Attributes ldapAttributes = result.next().getAttributes();
-            NamingEnumeration namingEnumeration = ldapAttributes.get("memberof").getAll();
+            Optional<SearchResult> searchResult = Optional.ofNullable(result.next());
 
-            while (namingEnumeration.hasMore()) {
-                if (hentRolleNavn(namingEnumeration.next().toString()).contains(rolle)) {
-                    return true;
+            if (searchResult.isPresent()) {
+                Attributes ldapAttributes = searchResult.get().getAttributes();
+                NamingEnumeration namingEnumeration = ldapAttributes.get("memberof").getAll();
+
+                while (namingEnumeration.hasMore()) {
+                    if (hentRolleNavn(namingEnumeration.next().toString()).contains(rolle)) {
+                        return true;
+                    }
                 }
+            } else {
+                LOG.error("SearchResult from LDAP was empty for veileder {}", veilederUid);
             }
         } catch (NamingException e) {
             throw new RuntimeException(e);
