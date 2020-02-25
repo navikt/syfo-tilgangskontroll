@@ -8,6 +8,7 @@ version = "1.0.0"
 
 val cxfVersion = "3.3.3"
 val oidcSpringSupportVersion = "0.2.12"
+val egenAnsattV1Version = "1.2019.09.25-00.21-49b69f0625e0"
 val personV3Version = "1.2019.07.11-06.47-b55f47790a9d"
 val springBootVersion = "2.1.8.RELEASE"
 val kotlinLibVersion = "1.3.50"
@@ -70,7 +71,7 @@ dependencies {
     implementation("org.apache.cxf:cxf-rt-transports-http:$cxfVersion")
     implementation("org.apache.cxf:cxf-rt-frontend-jaxws:$cxfVersion")
 
-    implementation("no.nav.syfo.tjenester:egenAnsatt-v1-tjenestespesifikasjon:1.0.2")
+    implementation("no.nav.tjenestespesifikasjoner:egenansatt-v1-tjenestespesifikasjon:$egenAnsattV1Version")
     implementation("no.nav.syfo.tjenester:organisasjonRessursEnhet-v1-tjenestespesifikasjon:1.0.3")
     implementation("no.nav.sbl.dialogarena:organisasjonenhet-v2-tjenestespesifikasjon:2.1.0")
     implementation("no.nav.tjenestespesifikasjoner:person-v3-tjenestespesifikasjon:$personV3Version")
