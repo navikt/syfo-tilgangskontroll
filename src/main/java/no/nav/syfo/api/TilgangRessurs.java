@@ -15,7 +15,8 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import static no.nav.syfo.security.OIDCClaim.NAVIDENT;
-import static no.nav.syfo.security.OIDCIssuer.*;
+import static no.nav.syfo.security.OIDCIssuer.AZURE;
+import static no.nav.syfo.security.OIDCIssuer.VEILEDERAZURE;
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
 import static org.springframework.http.HttpStatus.FORBIDDEN;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
@@ -42,20 +43,6 @@ public class TilgangRessurs {
         this.contextHolder = contextHolder;
         this.metric = metric;
         this.tilgangService = tilgangService;
-    }
-
-    @GetMapping(path = "/tilgangtilbruker")
-    @ProtectedWithClaims(issuer = INTERN)
-    public ResponseEntity tilgangTilBruker(@RequestParam String fnr) {
-        String veilederId = OIDCUtil.getSubjectFromOIDCToken(contextHolder, INTERN);
-        return sjekktilgangTilBruker(veilederId, fnr);
-    }
-
-    @GetMapping(path = "/tilgangtiltjenesten")
-    @ProtectedWithClaims(issuer = INTERN)
-    public ResponseEntity tilgangTilTjenesten() {
-        String veilederId = OIDCUtil.getSubjectFromOIDCToken(contextHolder, INTERN);
-        return sjekkTilgangTilTjenesten(veilederId);
     }
 
     @GetMapping(path = "/syfo")
