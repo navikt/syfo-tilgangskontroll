@@ -6,12 +6,8 @@ spring:
     port: 6379
 
 no.nav.security.oidc:
-  issuers: intern,veileder
+  issuers: veileder,veilederaad
   issuer:
-    intern:
-      discoveryurl: <syfonais>
-      accepted_audience: modiabrukerdialog-p,modiabrukerdialog-q1,veilarblogin-p,veilarblogin-q1,fpsak-frontend-p,fpsak-frontend-q1,fplos-p,fplos-q1
-      cookie_name: ID_token
     veileder:
       discoveryurl: <syfonais>
       accepted_audience: <syfonais>
