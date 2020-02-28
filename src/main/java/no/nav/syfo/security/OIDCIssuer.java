@@ -4,5 +4,4 @@ public class OIDCIssuer {
     public final static String INTERN = "intern";
     public final static String AZURE = "veileder";
     public final static String VEILEDERAZURE = "veilederaad";
-    public final static String EKSTERN = "selvbetjening";
 }

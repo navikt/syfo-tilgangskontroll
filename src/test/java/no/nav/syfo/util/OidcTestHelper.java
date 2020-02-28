@@ -7,15 +7,10 @@ import no.nav.security.oidc.test.support.JwtTokenGenerator;
 
 import java.text.ParseException;
 
-import static no.nav.syfo.security.OIDCIssuer.*;
+import static no.nav.syfo.security.OIDCIssuer.AZURE;
+import static no.nav.syfo.security.OIDCIssuer.VEILEDERAZURE;
 
 public class OidcTestHelper {
-
-    public static void loggInnVeilederMedOpenAM(OIDCRequestContextHolder oidcRequestContextHolder, String subject) {
-        //OIDC-hack - legg til token og oidcclaims for en test-person
-        SignedJWT jwt = JwtTokenGenerator.createSignedJWT(subject);
-        settOIDCValidationContext(oidcRequestContextHolder, jwt, INTERN);
-    }
 
     public static void loggInnVeilederMedAzure(OIDCRequestContextHolder oidcRequestContextHolder, String veilederIdent) throws ParseException {
         JWTClaimsSet claimsSet = JWTClaimsSet.parse("{\"NAVident\":\"" + veilederIdent + "\"}");
