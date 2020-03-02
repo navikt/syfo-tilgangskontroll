@@ -1,18 +1,12 @@
 package no.nav.syfo;
 
-import no.nav.syfo.ws.LogErrorHandler;
-import no.nav.syfo.ws.STSClientConfig;
-import no.nav.syfo.ws.WsClient;
-import no.nav.syfo.ws.WsOIDCClient;
+import no.nav.syfo.ws.*;
 import no.nav.tjeneste.pip.egen.ansatt.v1.EgenAnsattV1;
 import no.nav.tjeneste.virksomhet.organisasjon.ressurs.enhet.v1.OrganisasjonRessursEnhetV1;
 import no.nav.tjeneste.virksomhet.organisasjonenhet.v2.OrganisasjonEnhetV2;
 import no.nav.tjeneste.virksomhet.person.v3.binding.PersonV3;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Primary;
-import org.springframework.context.annotation.Profile;
+import org.springframework.context.annotation.*;
 
 import static java.util.Collections.singletonList;
 
