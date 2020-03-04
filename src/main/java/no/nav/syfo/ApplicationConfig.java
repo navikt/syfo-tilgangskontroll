@@ -7,10 +7,12 @@ import no.nav.tjeneste.virksomhet.organisasjonenhet.v2.OrganisasjonEnhetV2;
 import no.nav.tjeneste.virksomhet.person.v3.binding.PersonV3;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.*;
+import org.springframework.retry.annotation.EnableRetry;
 
 import static java.util.Collections.singletonList;
 
 @Configuration
+@EnableRetry
 @Profile("remote")
 @SuppressWarnings("unchecked")
 public class ApplicationConfig {
