@@ -54,13 +54,15 @@ dependencies {
 
     implementation("org.springframework.boot:spring-boot-starter-web:$springBootVersion")
     implementation("org.springframework.boot:spring-boot-starter-actuator:$springBootVersion")
+    implementation("org.springframework.boot:spring-boot-starter-logging:$springBootVersion")
+    implementation("org.springframework.boot:spring-boot-starter-data-redis:$springBootVersion")
+
     implementation("org.projectlombok:lombok:1.16.22")
     annotationProcessor("org.projectlombok:lombok:1.18.6")
+
     implementation("javax.ws.rs:javax.ws.rs-api:2.0.1")
     implementation("org.glassfish.jersey.core:jersey-common:2.26")
-    implementation("org.springframework.boot:spring-boot-starter-data-redis:$springBootVersion")
     implementation("org.slf4j:slf4j-api:1.7.25")
-    implementation("org.springframework.boot:spring-boot-starter-logging:$springBootVersion")
     implementation("net.logstash.logback:logstash-logback-encoder:4.10")
     implementation("no.nav.security:oidc-spring-support:$oidcSpringSupportVersion")
     implementation("io.micrometer:micrometer-registry-prometheus:1.0.6")
