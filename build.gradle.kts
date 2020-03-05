@@ -11,6 +11,7 @@ val oidcSpringSupportVersion = "0.2.12"
 val egenAnsattV1Version = "1.2019.09.25-00.21-49b69f0625e0"
 val personV3Version = "1.2019.07.11-06.47-b55f47790a9d"
 val springBootVersion = "2.1.8.RELEASE"
+val springRetryVersion = "1.2.4.RELEASE"
 val kotlinLibVersion = "1.3.50"
 val kotlinJacksonVersion = "2.9.8"
 
@@ -56,6 +57,9 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-actuator:$springBootVersion")
     implementation("org.springframework.boot:spring-boot-starter-logging:$springBootVersion")
     implementation("org.springframework.boot:spring-boot-starter-data-redis:$springBootVersion")
+    implementation("org.springframework.boot:spring-boot-starter-aop:$springBootVersion")
+
+    implementation("org.springframework.retry:spring-retry:$springRetryVersion")
 
     implementation("org.projectlombok:lombok:1.16.22")
     annotationProcessor("org.projectlombok:lombok:1.18.6")
