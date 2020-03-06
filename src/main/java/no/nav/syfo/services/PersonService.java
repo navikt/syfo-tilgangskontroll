@@ -48,10 +48,10 @@ public class PersonService {
             log.error("Feil ved henting av geografisk tilknytning", e);
             throw new RuntimeException("Feil ved henting av geografisk tilknytning", e);
         } catch (Exception e) {
-            log.error("Henting av geografisk tilknytning fra personV3 feilet pga en uventet exception", e);
             if (e instanceof SOAPFaultException) {
                 throw e;
             } else {
+                log.error("Henting av geografisk tilknytning fra personV3 feilet pga en uventet exception", e);
                 throw new RuntimeException("Fikk en uventet exception ved henting av geografisk tilknytning", e);
             }
         }
