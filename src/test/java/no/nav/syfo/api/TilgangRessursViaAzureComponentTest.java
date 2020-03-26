@@ -2,12 +2,15 @@ package no.nav.syfo.api;
 
 import no.nav.security.oidc.context.OIDCRequestContextHolder;
 import no.nav.syfo.LocalApplication;
+import no.nav.syfo.axsys.AxsysConsumer;
+import no.nav.syfo.axsys.AxsysEnhet;
 import no.nav.syfo.domain.Tilgang;
 import no.nav.syfo.services.LdapService;
 import org.junit.*;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
@@ -19,10 +22,14 @@ import static java.util.Collections.singletonList;
 import static no.nav.syfo.domain.AdRoller.*;
 import static no.nav.syfo.mocks.OrganisasjonRessursEnhetMock.*;
 import static no.nav.syfo.mocks.PersonMock.*;
+import static no.nav.syfo.testhelper.UserConstants.NAV_ENHETID_1;
+import static no.nav.syfo.testhelper.UserConstants.NAV_ENHET_NAVN;
 import static no.nav.syfo.util.LdapUtil.mockRoller;
 import static no.nav.syfo.util.OidcTestHelper.loggInnVeilederMedAzure;
 import static no.nav.syfo.util.OidcTestHelper.loggUtAlle;
 import static org.junit.Assert.*;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.when;
 
 /**
  * Komponent / blackbox test av møtebehovsfunskjonaliteten (med Azure innlogging) - test at endepunktet (controlleren, for enkelhets skyld)
@@ -40,6 +47,8 @@ public class TilgangRessursViaAzureComponentTest {
     private static final int HTTP_STATUS_OK = 200;
     private static final int HTTP_STATUS_FORBIDDEN = 403;
 
+    @MockBean
+    private AxsysConsumer axsysConsumer;
     @Autowired
     private OIDCRequestContextHolder oidcRequestContextHolder;
 
@@ -146,8 +155,14 @@ public class TilgangRessursViaAzureComponentTest {
     @Test
     public void tilgangTilEnhetInnvilget() {
         mockRoller(ldapServiceMock, VIGGO_VEILEDER, INNVILG, SYFO);
+        when(axsysConsumer.enheter(VIGGO_VEILEDER)).thenReturn(singletonList(
+                new AxsysEnhet(
+                        NAV_ENHETID_1,
+                        NAV_ENHET_NAVN
+                )
+        ));
 
-        assertEquals(HTTP_STATUS_OK, tilgangRessurs.tilgangTilEnhet(ENHET_1_ID).getStatusCodeValue());
+        assertEquals(HTTP_STATUS_OK, tilgangRessurs.tilgangTilEnhet(NAV_ENHETID_1).getStatusCodeValue());
     }
 
     @Test
