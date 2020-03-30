@@ -78,7 +78,6 @@ dependencies {
     implementation("org.apache.cxf:cxf-rt-frontend-jaxws:$cxfVersion")
 
     implementation("no.nav.tjenestespesifikasjoner:egenansatt-v1-tjenestespesifikasjon:$egenAnsattV1Version")
-    implementation("no.nav.syfo.tjenester:organisasjonRessursEnhet-v1-tjenestespesifikasjon:1.0.3")
     implementation("no.nav.sbl.dialogarena:organisasjonenhet-v2-tjenestespesifikasjon:2.1.0")
     implementation("no.nav.tjenestespesifikasjoner:person-v3-tjenestespesifikasjon:$personV3Version")
 
