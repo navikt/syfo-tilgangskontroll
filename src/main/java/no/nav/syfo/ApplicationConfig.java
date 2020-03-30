@@ -8,6 +8,7 @@ import no.nav.tjeneste.virksomhet.person.v3.binding.PersonV3;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.*;
 import org.springframework.retry.annotation.EnableRetry;
+import org.springframework.web.client.RestTemplate;
 
 import static java.util.Collections.singletonList;
 
@@ -16,6 +17,12 @@ import static java.util.Collections.singletonList;
 @Profile("remote")
 @SuppressWarnings("unchecked")
 public class ApplicationConfig {
+
+    @Bean
+    @Primary
+    public RestTemplate restTemplate() {
+        return new RestTemplate();
+    }
 
     /* Web service clients */
 

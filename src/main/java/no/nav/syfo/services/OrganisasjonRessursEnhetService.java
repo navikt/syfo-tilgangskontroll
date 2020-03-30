@@ -36,10 +36,4 @@ public class OrganisasjonRessursEnhetService {
             return emptyList();
         }
     }
-
-    public boolean harTilgangTilEnhet(String veilederId, String navEnhet) {
-        return hentVeiledersEnheter(veilederId)
-                .stream()
-                .anyMatch(enhet -> enhet.equals(navEnhet));
-    }
 }

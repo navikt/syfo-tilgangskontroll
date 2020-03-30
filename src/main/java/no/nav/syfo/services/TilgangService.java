@@ -1,5 +1,6 @@
 package no.nav.syfo.services;
 
+import no.nav.syfo.axsys.AxsysConsumer;
 import no.nav.syfo.domain.PersonInfo;
 import no.nav.syfo.domain.Tilgang;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,10 +15,10 @@ public class TilgangService {
 
     public static final String GEOGRAFISK = "GEOGRAFISK";
 
+    private final AxsysConsumer axsysConsumer;
     private final LdapService ldapService;
     private final EgenAnsattService egenAnsattService;
     private final GeografiskTilgangService geografiskTilgangService;
-    private final OrganisasjonRessursEnhetService organisasjonRessursEnhetService;
     private final PersonService personService;
 
     private final static String ENHET = "ENHET";
@@ -26,16 +27,16 @@ public class TilgangService {
 
     @Autowired
     public TilgangService(
+            AxsysConsumer axsysConsumer,
             LdapService ldapService,
             EgenAnsattService egenAnsattService,
             GeografiskTilgangService geografiskTilgangService,
-            OrganisasjonRessursEnhetService organisasjonRessursEnhetService,
             PersonService personService
     ) {
         this.ldapService = ldapService;
         this.egenAnsattService = egenAnsattService;
         this.geografiskTilgangService = geografiskTilgangService;
-        this.organisasjonRessursEnhetService = organisasjonRessursEnhetService;
+        this.axsysConsumer = axsysConsumer;
         this.personService = personService;
     }
 
@@ -79,7 +80,7 @@ public class TilgangService {
     public Tilgang sjekkTilgangTilEnhet(String veilederId, String enhet) {
         if (!harTilgangTilSykefravaersoppfoelging(veilederId))
             return new Tilgang().withHarTilgang(false).withBegrunnelse(SYFO.name());
-        if (!organisasjonRessursEnhetService.harTilgangTilEnhet(veilederId, enhet))
+        if (!harTilgangTilEnhet(veilederId, enhet))
             return new Tilgang().withHarTilgang(false).withBegrunnelse(ENHET);
         return new Tilgang().withHarTilgang(true);
     }
@@ -98,5 +99,11 @@ public class TilgangService {
 
     private boolean harTilgangTilEgenAnsatt(String veilederId) {
         return ldapService.harTilgang(veilederId, EGEN_ANSATT.rolle);
+    }
+
+    private boolean harTilgangTilEnhet(String veilederId, String navEnhetId) {
+        return axsysConsumer.enheter(veilederId)
+                .stream()
+                .anyMatch(enhet -> enhet.getEnhetId().equals(navEnhetId));
     }
 }

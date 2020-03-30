@@ -19,6 +19,7 @@ public class CacheConfig {
     public static final String TILGANGTILBRUKER = "tilgangtilbruker";
     public static final String TILGANGTILTJENESTEN = "tilgangtiltjenesten";
     public static final String TILGANGTILENHET = "tilgangtilenhet";
+    public static final String CACHENAME_AXSYS_ENHETER = "axsysenheter";
     public static final String CACHENAME_EGENANSATT = "egenansatt";
     public static final String CACHENAME_ENHET_OVERORDNET_ENHETER = "enhetoverordnetenheter";
     public static final String CACHENAME_GEOGRAFISK_TILHORIGHET_ENHETER = "geografisktilhorighetenheter";
@@ -37,6 +38,7 @@ public class CacheConfig {
         cacheConfigurations.put(TILGANGTILBRUKER, defaultConfig);
         cacheConfigurations.put(TILGANGTILTJENESTEN, defaultConfig);
         cacheConfigurations.put(TILGANGTILENHET, defaultConfig);
+        cacheConfigurations.put(CACHENAME_AXSYS_ENHETER, defaultConfig);
         cacheConfigurations.put(CACHENAME_EGENANSATT, defaultConfig);
         cacheConfigurations.put(CACHENAME_ENHET_OVERORDNET_ENHETER, defaultConfig);
         cacheConfigurations.put(CACHENAME_GEOGRAFISK_TILHORIGHET_ENHETER, defaultConfig);
