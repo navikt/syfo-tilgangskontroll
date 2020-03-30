@@ -1,5 +1,7 @@
 package no.nav.syfo.services;
 
+import no.nav.syfo.axsys.AxsysConsumer;
+import no.nav.syfo.axsys.AxsysEnhet;
 import no.nav.syfo.domain.AdRoller;
 import no.nav.syfo.domain.PersonInfo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,14 +15,18 @@ import static java.util.stream.Collectors.toList;
 @Service
 public class GeografiskTilgangService {
 
+    private final AxsysConsumer axsysConsumer;
     private final LdapService ldapService;
-    private final OrganisasjonRessursEnhetService organisasjonRessursEnhetService;
     private final OrganisasjonEnhetService organisasjonEnhetService;
 
     @Autowired
-    public GeografiskTilgangService(LdapService ldapService, OrganisasjonRessursEnhetService organisasjonRessursEnhetService, OrganisasjonEnhetService organisasjonEnhetService) {
+    public GeografiskTilgangService(
+            AxsysConsumer axsysConsumer,
+            LdapService ldapService,
+            OrganisasjonEnhetService organisasjonEnhetService
+    ) {
+        this.axsysConsumer = axsysConsumer;
         this.ldapService = ldapService;
-        this.organisasjonRessursEnhetService = organisasjonRessursEnhetService;
         this.organisasjonEnhetService = organisasjonEnhetService;
     }
 
@@ -29,7 +35,10 @@ public class GeografiskTilgangService {
             return true;
         }
         final List<String> navKontorerForGT = organisasjonEnhetService.finnNAVKontorForGT(personInfo.getGeografiskTilknytning());
-        final List<String> veiledersEnheter = organisasjonRessursEnhetService.hentVeiledersEnheter(veilederId);
+        final List<String> veiledersEnheter = axsysConsumer.enheter(veilederId)
+                .stream()
+                .map(AxsysEnhet::getEnhetId)
+                .collect(toList());
 
         return harLokalTilgangTilBrukersEnhet(navKontorerForGT, veiledersEnheter)
                 || harRegionalTilgangTilBrukersEnhet(navKontorerForGT, veiledersEnheter, veilederId);

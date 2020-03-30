@@ -20,15 +20,12 @@ import java.text.ParseException;
 import static java.util.Arrays.asList;
 import static java.util.Collections.singletonList;
 import static no.nav.syfo.domain.AdRoller.*;
-import static no.nav.syfo.mocks.OrganisasjonRessursEnhetMock.*;
 import static no.nav.syfo.mocks.PersonMock.*;
-import static no.nav.syfo.testhelper.UserConstants.NAV_ENHETID_1;
-import static no.nav.syfo.testhelper.UserConstants.NAV_ENHET_NAVN;
+import static no.nav.syfo.testhelper.UserConstants.*;
 import static no.nav.syfo.util.LdapUtil.mockRoller;
 import static no.nav.syfo.util.OidcTestHelper.loggInnVeilederMedAzure;
 import static no.nav.syfo.util.OidcTestHelper.loggUtAlle;
 import static org.junit.Assert.*;
-import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 
 /**
@@ -60,7 +57,18 @@ public class TilgangRessursViaAzureComponentTest {
 
     @Before
     public void setup() throws ParseException {
-        loggInnVeilederMedAzure(oidcRequestContextHolder, VIGGO_VEILEDER);
+        when(axsysConsumer.enheter(VEILEDER_ID)).thenReturn(
+                asList(
+                        new AxsysEnhet(
+                                NAV_ENHETID_1,
+                                NAV_ENHET_NAVN
+                        ),
+                        new AxsysEnhet(
+                                NAV_ENHETID_2,
+                                NAV_ENHET_NAVN
+                        ))
+        );
+        loggInnVeilederMedAzure(oidcRequestContextHolder, VEILEDER_ID);
     }
 
     @After
@@ -70,21 +78,21 @@ public class TilgangRessursViaAzureComponentTest {
 
     @Test
     public void tilgangTilTjenestenInnvilget() {
-        mockRoller(ldapServiceMock, VIGGO_VEILEDER, INNVILG, SYFO);
+        mockRoller(ldapServiceMock, VEILEDER_ID, INNVILG, SYFO);
 
         assertEquals(HTTP_STATUS_OK, tilgangRessurs.tilgangTilTjenestenViaAzure().getStatusCodeValue());
     }
 
     @Test
     public void tilgangTilTjenestenNektet() {
-        mockRoller(ldapServiceMock, VIGGO_VEILEDER, NEKT, SYFO);
+        mockRoller(ldapServiceMock, VEILEDER_ID, NEKT, SYFO);
 
         assertEquals(HTTP_STATUS_FORBIDDEN, tilgangRessurs.tilgangTilTjenestenViaAzure().getStatusCodeValue());
     }
 
     @Test
     public void tilgangTilBrukerInnvilget() {
-        mockRoller(ldapServiceMock, VIGGO_VEILEDER, INNVILG, SYFO);
+        mockRoller(ldapServiceMock, VEILEDER_ID, INNVILG, SYFO);
 
         ResponseEntity response = tilgangRessurs.tilgangTilBrukerViaAzure(BJARNE_BRUKER);
         assertTilgangOK(response);
@@ -92,7 +100,7 @@ public class TilgangRessursViaAzureComponentTest {
 
     @Test
     public void tilgangTilKode6BrukerNektet() {
-        mockRoller(ldapServiceMock, VIGGO_VEILEDER, INNVILG, SYFO);
+        mockRoller(ldapServiceMock, VEILEDER_ID, INNVILG, SYFO);
 
         ResponseEntity response = tilgangRessurs.tilgangTilBrukerViaAzure(BENGT_KODE6_BRUKER);
         assertTilgangNektet(response, KODE6.name());
@@ -100,7 +108,7 @@ public class TilgangRessursViaAzureComponentTest {
 
     @Test
     public void tilgangTilKode6BrukerNektesAlltid() {
-        mockRoller(ldapServiceMock, VIGGO_VEILEDER, INNVILG, SYFO, KODE6);
+        mockRoller(ldapServiceMock, VEILEDER_ID, INNVILG, SYFO, KODE6);
 
         ResponseEntity response = tilgangRessurs.tilgangTilBrukerViaAzure(BENGT_KODE6_BRUKER);
         assertTilgangNektet(response, KODE6.name());
@@ -108,7 +116,7 @@ public class TilgangRessursViaAzureComponentTest {
 
     @Test
     public void tilgangTilKode7BrukerNektet() {
-        mockRoller(ldapServiceMock, VIGGO_VEILEDER, INNVILG, SYFO);
+        mockRoller(ldapServiceMock, VEILEDER_ID, INNVILG, SYFO);
 
         ResponseEntity response = tilgangRessurs.tilgangTilBrukerViaAzure(BIRTE_KODE7_BRUKER);
         assertTilgangNektet(response, KODE7.name());
@@ -116,7 +124,7 @@ public class TilgangRessursViaAzureComponentTest {
 
     @Test
     public void tilgangTilKode7BrukerInnvilget() {
-        mockRoller(ldapServiceMock, VIGGO_VEILEDER, INNVILG, SYFO, KODE7);
+        mockRoller(ldapServiceMock, VEILEDER_ID, INNVILG, SYFO, KODE7);
 
         ResponseEntity response = tilgangRessurs.tilgangTilBrukerViaAzure(BIRTE_KODE7_BRUKER);
         assertTilgangOK(response);
@@ -124,7 +132,7 @@ public class TilgangRessursViaAzureComponentTest {
 
     @Test
     public void tilgangTilBrukereSYFO() {
-        mockRoller(ldapServiceMock, VIGGO_VEILEDER, INNVILG, SYFO);
+        mockRoller(ldapServiceMock, VEILEDER_ID, INNVILG, SYFO);
 
         ResponseEntity response = tilgangRessurs.tilgangTilBrukereViaAzure(asList(
                 BJARNE_BRUKER,
@@ -138,7 +146,7 @@ public class TilgangRessursViaAzureComponentTest {
 
     @Test
     public void tilgangTilEgenAnsattBrukerNektet() {
-        mockRoller(ldapServiceMock, VIGGO_VEILEDER, INNVILG, SYFO);
+        mockRoller(ldapServiceMock, VEILEDER_ID, INNVILG, SYFO);
 
         ResponseEntity response = tilgangRessurs.tilgangTilBrukerViaAzure(ERIK_EGENANSATT_BRUKER);
         assertTilgangNektet(response, EGEN_ANSATT.name());
@@ -146,7 +154,7 @@ public class TilgangRessursViaAzureComponentTest {
 
     @Test
     public void tilgangTilEgenAnsattBrukerInnvilget() {
-        mockRoller(ldapServiceMock, VIGGO_VEILEDER, INNVILG, SYFO, EGEN_ANSATT);
+        mockRoller(ldapServiceMock, VEILEDER_ID, INNVILG, SYFO, EGEN_ANSATT);
 
         ResponseEntity response = tilgangRessurs.tilgangTilBrukerViaAzure(ERIK_EGENANSATT_BRUKER);
         assertTilgangOK(response);
@@ -154,8 +162,8 @@ public class TilgangRessursViaAzureComponentTest {
 
     @Test
     public void tilgangTilEnhetInnvilget() {
-        mockRoller(ldapServiceMock, VIGGO_VEILEDER, INNVILG, SYFO);
-        when(axsysConsumer.enheter(VIGGO_VEILEDER)).thenReturn(singletonList(
+        mockRoller(ldapServiceMock, VEILEDER_ID, INNVILG, SYFO);
+        when(axsysConsumer.enheter(VEILEDER_ID)).thenReturn(singletonList(
                 new AxsysEnhet(
                         NAV_ENHETID_1,
                         NAV_ENHET_NAVN
@@ -167,9 +175,9 @@ public class TilgangRessursViaAzureComponentTest {
 
     @Test
     public void tilgangTilEnhetNektet() {
-        mockRoller(ldapServiceMock, VIGGO_VEILEDER, INNVILG, SYFO);
+        mockRoller(ldapServiceMock, VEILEDER_ID, INNVILG, SYFO);
 
-        assertEquals(HTTP_STATUS_FORBIDDEN, tilgangRessurs.tilgangTilEnhet(ENHET_3_ID).getStatusCodeValue());
+        assertEquals(HTTP_STATUS_FORBIDDEN, tilgangRessurs.tilgangTilEnhet(NAV_ENHETID_3).getStatusCodeValue());
     }
 
     private void assertTilgangOK(ResponseEntity response) {
