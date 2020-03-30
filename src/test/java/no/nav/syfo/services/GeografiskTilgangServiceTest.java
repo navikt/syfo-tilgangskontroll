@@ -1,5 +1,7 @@
 package no.nav.syfo.services;
 
+import no.nav.syfo.axsys.AxsysConsumer;
+import no.nav.syfo.axsys.AxsysEnhet;
 import no.nav.syfo.domain.AdRoller;
 import no.nav.syfo.domain.PersonInfo;
 import org.junit.Before;
@@ -12,6 +14,7 @@ import org.mockito.junit.MockitoJUnitRunner;
 import static java.util.Arrays.asList;
 import static java.util.Collections.singletonList;
 import static no.nav.syfo.domain.AdRoller.REGIONAL;
+import static no.nav.syfo.testhelper.UserConstants.NAV_ENHET_NAVN;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
@@ -27,9 +30,9 @@ public class GeografiskTilgangServiceTest {
     private static final PersonInfo PERSON_INFO = new PersonInfo("", "brukersPostnummer");
 
     @Mock
-    private LdapService ldapService;
+    private AxsysConsumer axsysConsumer;
     @Mock
-    private OrganisasjonRessursEnhetService organisasjonRessursEnhetService;
+    private LdapService ldapService;
     @Mock
     private OrganisasjonEnhetService organisasjonEnhetService;
     @InjectMocks
@@ -55,20 +58,40 @@ public class GeografiskTilgangServiceTest {
 
     @Test
     public void harTilgangHvisVeilederHarTilgangTilSammeEnhetSomBruker() {
-        when(organisasjonRessursEnhetService.hentVeiledersEnheter(VEILEDER_UID)).thenReturn(asList(BRUKERS_ENHET, "enHeltAnnenEnhet"));
+        when(axsysConsumer.enheter(VEILEDER_UID)).thenReturn(
+                asList(
+                        new AxsysEnhet(
+                                BRUKERS_ENHET,
+                                NAV_ENHET_NAVN
+                        ),
+                        new AxsysEnhet(
+                                "enHeltAnnenEnhet",
+                                NAV_ENHET_NAVN
+                        ))
+        );
         assertThat(geografiskTilgangService.harGeografiskTilgang(VEILEDER_UID, PERSON_INFO)).isTrue();
     }
 
     @Test
     public void harIkkeTilgangHvisVeilederIkkeHarTilgangTilSammeEnhetSomBruker() {
-        when(organisasjonRessursEnhetService.hentVeiledersEnheter(VEILEDER_UID)).thenReturn(singletonList("enHeltAnnenEnhet"));
+        when(axsysConsumer.enheter(VEILEDER_UID)).thenReturn(
+                singletonList(new AxsysEnhet(
+                        "enHeltAnnenEnhet",
+                        NAV_ENHET_NAVN
+                ))
+        );
         assertThat(geografiskTilgangService.harGeografiskTilgang(VEILEDER_UID, PERSON_INFO)).isFalse();
     }
 
     @Test
     public void harTilgangHvisRegionalTilgangOgTilgangTilEnhetensFylkeskontor() {
         when(ldapService.harTilgang(VEILEDER_UID, REGIONAL.rolle)).thenReturn(true);
-        when(organisasjonRessursEnhetService.hentVeiledersEnheter(VEILEDER_UID)).thenReturn(singletonList(VEILEDERS_ENHET));
+        when(axsysConsumer.enheter(VEILEDER_UID)).thenReturn(
+                singletonList(new AxsysEnhet(
+                        VEILEDERS_ENHET,
+                        NAV_ENHET_NAVN
+                ))
+        );
         when(organisasjonEnhetService.hentOverordnetEnhetForNAVKontor(VEILEDERS_ENHET)).thenReturn(singletonList(OVERORDNET_ENHET));
         when(organisasjonEnhetService.hentOverordnetEnhetForNAVKontor(BRUKERS_ENHET)).thenReturn(singletonList(OVERORDNET_ENHET));
         assertThat(geografiskTilgangService.harGeografiskTilgang(VEILEDER_UID, PERSON_INFO)).isTrue();
@@ -76,7 +99,12 @@ public class GeografiskTilgangServiceTest {
 
     @Test
     public void harIkkeTilgangHvisTilgangTilEnhetensFylkeskontorMenIkkeRegionalTilgang() {
-        when(organisasjonRessursEnhetService.hentVeiledersEnheter(VEILEDER_UID)).thenReturn(singletonList(OVERORDNET_ENHET));
+        when(axsysConsumer.enheter(VEILEDER_UID)).thenReturn(
+                singletonList(new AxsysEnhet(
+                        OVERORDNET_ENHET,
+                        NAV_ENHET_NAVN
+                ))
+        );
         assertThat(geografiskTilgangService.harGeografiskTilgang(VEILEDER_UID, PERSON_INFO)).isFalse();
     }
 }
