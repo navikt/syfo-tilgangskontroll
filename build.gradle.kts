@@ -9,6 +9,7 @@ version = "1.0.0"
 val cxfVersion = "3.3.3"
 val oidcSpringSupportVersion = "0.2.18"
 val egenAnsattV1Version = "1.2019.09.25-00.21-49b69f0625e0"
+val organisasjonenhetV2Version = "1.2019.09.25-00.21-49b69f0625e0"
 val personV3Version = "1.2019.07.11-06.47-b55f47790a9d"
 val springBootVersion = "2.1.8.RELEASE"
 val springRetryVersion = "1.2.4.RELEASE"
@@ -43,9 +44,9 @@ allOpen {
 repositories {
     mavenCentral()
     jcenter()
-    maven(url = "https://repo.adeo.no/repository/maven-releases/")
     maven(url = "https://dl.bintray.com/kotlin/kotlinx/")
     maven(url = "http://packages.confluent.io/maven/")
+    maven(url = "https://repo1.maven.org/maven2/")
 }
 
 dependencies {
@@ -78,7 +79,7 @@ dependencies {
     implementation("org.apache.cxf:cxf-rt-frontend-jaxws:$cxfVersion")
 
     implementation("no.nav.tjenestespesifikasjoner:egenansatt-v1-tjenestespesifikasjon:$egenAnsattV1Version")
-    implementation("no.nav.sbl.dialogarena:organisasjonenhet-v2-tjenestespesifikasjon:2.1.0")
+    implementation("no.nav.tjenestespesifikasjoner:organisasjonenhet-v2-tjenestespesifikasjon:$organisasjonenhetV2Version")
     implementation("no.nav.tjenestespesifikasjoner:person-v3-tjenestespesifikasjon:$personV3Version")
 
     testImplementation("org.springframework.boot:spring-boot-starter-test:$springBootVersion")
