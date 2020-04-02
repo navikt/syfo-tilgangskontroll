@@ -12,15 +12,15 @@ at den er god nok.
 
 **Bygg og deploy**
 
+*Pipeline*
+ Pipeline er på Github Action.
+ Commits til Master-branch deployes automatisk til dev-fss og prod-fss.
+ Commits til ikke-master-branch bygges uten automatisk deploy.
+
 *Lokalt*
 
 - Bygg med `mvn clean install`
 - Start ved å kjøre `LocalApplication`  
-
-*Preprod og prod*
-
-Bygges og deployes av Jenkins:
-https://jenkins-digisyfo.adeo.no/job/digisyfo/job/syfo-tilgangskontroll/
 
 **Redis Cache**
 

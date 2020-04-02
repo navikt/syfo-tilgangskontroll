@@ -1,0 +1,75 @@
+apiVersion: "nais.io/v1alpha1"
+kind: "Application"
+metadata:
+  name: syfo-tilgangskontroll
+  namespace: default
+  labels:
+    team: teamsykefravr
+spec:
+  image: {{ image }}
+  port: 8080
+  team: teamsykefravr
+  liveness:
+    path: /syfo-tilgangskontroll/internal/isAlive
+    initialDelay: 30
+    timeout: 1
+    periodSeconds: 10
+    failureThreshold: 5
+  readiness:
+    path: /syfo-tilgangskontroll/internal/isReady
+    initialDelay: 30
+    timeout: 1
+  resources:
+    limits:
+      cpu: 3000m
+      memory: 2048Mi
+    requests:
+      cpu: 1000m
+      memory: 1024Mi
+  replicas:
+    min: 4
+    max: 8
+    cpuThresholdPercentage: 90
+  prometheus:
+    enabled: true
+    path: /syfo-tilgangskontroll/internal/prometheus
+  ingresses:
+    - "https://syfo-tilgangskontroll.nais.preprod.local"
+    - "https://app-q1.adeo.no/syfo-tilgangskontroll"
+  vault:
+    enabled: true
+    sidecar: true
+    paths:
+      - kvPath: "serviceuser/data/dev/srvssolinux"
+        mountPath: "/secrets/ldap/ldap"
+      - kvPath: "/kv/preprod/fss/syfo-tilgangskontroll/default"
+        mountPath: "/var/run/secrets/nais.io/vault"
+  env:
+    - name: APP_NAME
+      value: "syfo-tilgangskontroll"
+    - name: APPDYNAMICS_CONTROLLER_HOST_NAME
+      value: appdynamics.adeo.no
+    - name: APPDYNAMICS_CONTROLLER_PORT
+      value: "443"
+    - name: APPDYNAMICS_CONTROLLER_SSL_ENABLED
+      value: "true"
+    - name: NO_NAV_SECURITY_OIDC_ISSUER_VEILEDER_DISCOVERYURL
+      value: https://login.microsoftonline.com/966ac572-f5b7-4bbe-aa88-c76419c0f851/.well-known/openid-configuration
+    - name: NO_NAV_SECURITY_OIDC_ISSUER_VEILEDER_ACCEPTEDAUDIENCE
+      value: 38e07d31-659d-4595-939a-f18dce3446c5,595e0237-37db-4d5e-8dde-4fb3d0bf8839,33ad42cc-b88c-45c9-b640-8c8a4c93d3a1,38e07d31-659d-4595-939a-f18dce3446c5
+    - name: NO_NAV_SECURITY_OIDC_ISSUER_VEILEDERAAD_DISCOVERYURL
+      value: https://login.microsoftonline.com/966ac572-f5b7-4bbe-aa88-c76419c0f851/v2.0/.well-known/openid-configuration
+    - name: NO_NAV_SECURITY_OIDC_ISSUER_VEILEDERAAD_ACCEPTEDAUDIENCE
+      value: ddde7aee-5015-4d01-8fd3-dab1c8763bd9
+    - name: SECURITYTOKENSERVICE_URL
+      value: https://sts-q1.preprod.local/SecurityTokenServiceProvider/
+    - name: EGENANSATT_V1_URL
+      value: https://wasapp-q1.adeo.no/tpsws/EgenAnsatt_v1
+    - name: ORGANISASJONENHET_V2_URL
+      value: https://app-q1.adeo.no/norg2/ws/OrganisasjonEnhet/v2
+    - name: PERSON_V3_URL
+      value: https://wasapp-q1.adeo.no/tpsws/ws/Person/v3
+    - name: LDAP_URL
+      value: ldaps://ldapgw.preprod.local
+    - name: LDAP_BASEDN
+      value: dc=preprod,dc=local
