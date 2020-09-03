@@ -6,15 +6,16 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 group = "no.nav.syfo"
 version = "1.0.0"
 
-val cxfVersion = "3.3.3"
+val cxfVersion = "3.3.4"
 val oidcSpringSupportVersion = "0.2.18"
 val egenAnsattV1Version = "1.2019.09.25-00.21-49b69f0625e0"
 val organisasjonenhetV2Version = "1.2019.09.25-00.21-49b69f0625e0"
 val personV3Version = "1.2019.07.11-06.47-b55f47790a9d"
-val springBootVersion = "2.1.8.RELEASE"
+val springBootVersion = "2.2.0.RELEASE"
 val springRetryVersion = "1.2.4.RELEASE"
 val kotlinLibVersion = "1.3.50"
-val kotlinJacksonVersion = "2.9.8"
+val kotlinJacksonVersion = "2.10.0"
+val logbackVersion = "6.3"
 
 plugins {
     kotlin("jvm") version "1.3.50"
@@ -68,7 +69,7 @@ dependencies {
     implementation("javax.ws.rs:javax.ws.rs-api:2.0.1")
     implementation("org.glassfish.jersey.core:jersey-common:2.26")
     implementation("org.slf4j:slf4j-api:1.7.25")
-    implementation("net.logstash.logback:logstash-logback-encoder:4.10")
+    implementation("net.logstash.logback:logstash-logback-encoder:$logbackVersion")
     implementation("no.nav.security:oidc-spring-support:$oidcSpringSupportVersion")
     implementation("io.micrometer:micrometer-registry-prometheus:1.0.6")
 
