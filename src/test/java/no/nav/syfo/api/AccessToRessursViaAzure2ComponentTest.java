@@ -5,7 +5,6 @@ import no.nav.syfo.LocalApplication;
 import no.nav.syfo.axsys.AxsysConsumer;
 import no.nav.syfo.axsys.AxsysEnhet;
 import no.nav.syfo.domain.Tilgang;
-import no.nav.syfo.security.TokenConsumer;
 import no.nav.syfo.services.LdapService;
 import org.junit.*;
 import org.junit.runner.RunWith;
@@ -27,7 +26,6 @@ import static no.nav.syfo.util.OidcTestHelper.logInVeilederWithAzure2;
 import static no.nav.syfo.util.OidcTestHelper.loggUtAlle;
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.when;
-import static org.mockito.ArgumentMatchers.any;
 
 @ActiveProfiles("test")
 @RunWith(SpringRunner.class)
@@ -42,10 +40,6 @@ public class AccessToRessursViaAzure2ComponentTest {
 
     @MockBean
     private AxsysConsumer axsysConsumer;
-
-    @MockBean
-    private TokenConsumer tokenConsumer;
-
     @Autowired
     private OIDCRequestContextHolder oidcRequestContextHolder;
 
@@ -67,9 +61,6 @@ public class AccessToRessursViaAzure2ComponentTest {
                                 NAV_ENHETID_2,
                                 NAV_ENHET_NAVN
                         ))
-        );
-        when(tokenConsumer.getSubjectFromMsGraph(any(OIDCRequestContextHolder.class))).thenReturn(
-            VEILEDER_ID
         );
         logInVeilederWithAzure2(oidcRequestContextHolder, VEILEDER_ID);
     }
