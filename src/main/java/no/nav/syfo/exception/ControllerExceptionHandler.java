@@ -1,7 +1,7 @@
 package no.nav.syfo.exception;
 
 import lombok.extern.slf4j.Slf4j;
-import no.nav.security.spring.oidc.validation.interceptor.OIDCUnauthorizedException;
+import no.nav.security.token.support.core.exceptions.JwtTokenInvalidClaimException;
 import no.nav.syfo.metric.Metric;
 import org.springframework.http.*;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -33,8 +33,8 @@ public class ControllerExceptionHandler {
     public final ResponseEntity<ApiError> handleException(Exception ex, WebRequest request) {
         HttpHeaders headers = new HttpHeaders();
 
-        if (ex instanceof OIDCUnauthorizedException) {
-            OIDCUnauthorizedException notAuthorizedException = (OIDCUnauthorizedException) ex;
+        if (ex instanceof JwtTokenInvalidClaimException) {
+            JwtTokenInvalidClaimException notAuthorizedException = (JwtTokenInvalidClaimException ) ex;
 
             return handleOIDCUnauthorizedException(notAuthorizedException, headers, request);
         } else if (ex instanceof IllegalArgumentException) {
@@ -48,7 +48,7 @@ public class ControllerExceptionHandler {
         }
     }
 
-    private ResponseEntity<ApiError> handleOIDCUnauthorizedException(OIDCUnauthorizedException ex, HttpHeaders headers, WebRequest request) {
+    private ResponseEntity<ApiError> handleOIDCUnauthorizedException(JwtTokenInvalidClaimException  ex, HttpHeaders headers, WebRequest request) {
         HttpStatus status = HttpStatus.UNAUTHORIZED;
         return handleExceptionInternal(ex, new ApiError(status.value(), UNAUTHORIZED_MSG), headers, status, request);
     }

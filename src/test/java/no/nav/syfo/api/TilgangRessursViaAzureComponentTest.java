@@ -1,6 +1,6 @@
 package no.nav.syfo.api;
 
-import no.nav.security.oidc.context.OIDCRequestContextHolder;
+import no.nav.security.token.support.core.context.TokenValidationContextHolder;
 import no.nav.syfo.LocalApplication;
 import no.nav.syfo.axsys.AxsysConsumer;
 import no.nav.syfo.axsys.AxsysEnhet;
@@ -47,7 +47,7 @@ public class TilgangRessursViaAzureComponentTest {
     @MockBean
     private AxsysConsumer axsysConsumer;
     @Autowired
-    private OIDCRequestContextHolder oidcRequestContextHolder;
+    private TokenValidationContextHolder oidcRequestContextHolder;
 
     @Autowired
     private LdapService ldapServiceMock; // TODO Forsøk å mocke selve ldap med f.eks spring.security.test

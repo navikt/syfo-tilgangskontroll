@@ -1,6 +1,6 @@
 package no.nav.syfo.api;
 
-import no.nav.security.oidc.context.OIDCRequestContextHolder;
+import no.nav.security.token.support.core.context.TokenValidationContextHolder;
 import no.nav.syfo.LocalApplication;
 import no.nav.syfo.axsys.AxsysConsumer;
 import no.nav.syfo.axsys.AxsysEnhet;
@@ -47,7 +47,7 @@ public class AccessToRessursViaAzure2ComponentTest {
     private TokenConsumer tokenConsumer;
 
     @Autowired
-    private OIDCRequestContextHolder oidcRequestContextHolder;
+    private TokenValidationContextHolder oidcRequestContextHolder;
 
     @Autowired
     private LdapService ldapServiceMock;
@@ -68,7 +68,7 @@ public class AccessToRessursViaAzure2ComponentTest {
                                 NAV_ENHET_NAVN
                         ))
         );
-        when(tokenConsumer.getSubjectFromMsGraph(any(OIDCRequestContextHolder.class))).thenReturn(
+        when(tokenConsumer.getSubjectFromMsGraph(any(TokenValidationContextHolder.class))).thenReturn(
             VEILEDER_ID
         );
         logInVeilederWithAzure2(oidcRequestContextHolder, VEILEDER_ID);

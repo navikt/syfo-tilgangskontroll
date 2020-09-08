@@ -1,8 +1,8 @@
 package no.nav.syfo.api;
 
 import lombok.extern.slf4j.Slf4j;
-import no.nav.security.oidc.api.ProtectedWithClaims;
-import no.nav.security.oidc.context.OIDCRequestContextHolder;
+import no.nav.security.token.support.core.api.ProtectedWithClaims;
+import no.nav.security.token.support.core.context.TokenValidationContextHolder;
 import no.nav.syfo.domain.Tilgang;
 import no.nav.syfo.metric.Metric;
 import no.nav.syfo.services.TilgangService;
@@ -29,7 +29,7 @@ import static no.nav.syfo.security.OIDCUtil.getSubjectFromAzureOIDCToken;
 @RequestMapping(value = "/api/tilgang")
 public class TilgangRessurs {
 
-    private OIDCRequestContextHolder contextHolder;
+    private TokenValidationContextHolder contextHolder;
 
     private Metric metric;
 
@@ -39,7 +39,7 @@ public class TilgangRessurs {
 
     @Autowired
     public TilgangRessurs(
-            OIDCRequestContextHolder contextHolder,
+            TokenValidationContextHolder contextHolder,
             Metric metric,
             TilgangService tilgangService,
             TokenConsumer tokenConsumer
