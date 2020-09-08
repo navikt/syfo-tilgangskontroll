@@ -38,12 +38,13 @@ spec:
     - "https://app-q1.adeo.no/syfo-tilgangskontroll"
   vault:
     enabled: true
-    sidecar: true
     paths:
-      - kvPath: "serviceuser/data/dev/srvssolinux"
-        mountPath: "/secrets/ldap/ldap"
-      - kvPath: "/kv/preprod/fss/syfo-tilgangskontroll/default"
-        mountPath: "/var/run/secrets/nais.io/vault"
+      - kvPath: /azuread/data/dev/creds/syfo-tilgangskontroll
+        mountPath: /var/run/secrets/nais.io/azuread
+      - kvPath: serviceuser/data/dev/srvssolinux
+        mountPath: /secrets/ldap/ldap
+      - kvPath: /kv/preprod/fss/syfo-tilgangskontroll/default
+        mountPath: /var/run/secrets/nais.io/vault
   env:
     - name: APP_NAME
       value: "syfo-tilgangskontroll"
@@ -53,6 +54,8 @@ spec:
       value: "443"
     - name: APPDYNAMICS_CONTROLLER_SSL_ENABLED
       value: "true"
+    - name: AAD_TENANT_ID
+      value: 966ac572-f5b7-4bbe-aa88-c76419c0f851
     - name: NO_NAV_SECURITY_OIDC_ISSUER_VEILEDER_DISCOVERYURL
       value: https://login.microsoftonline.com/966ac572-f5b7-4bbe-aa88-c76419c0f851/.well-known/openid-configuration
     - name: NO_NAV_SECURITY_OIDC_ISSUER_VEILEDER_ACCEPTEDAUDIENCE
@@ -60,7 +63,7 @@ spec:
     - name: NO_NAV_SECURITY_OIDC_ISSUER_VEILEDERAAD_DISCOVERYURL
       value: https://login.microsoftonline.com/966ac572-f5b7-4bbe-aa88-c76419c0f851/v2.0/.well-known/openid-configuration
     - name: NO_NAV_SECURITY_OIDC_ISSUER_VEILEDERAAD_ACCEPTEDAUDIENCE
-      value: ddde7aee-5015-4d01-8fd3-dab1c8763bd9,6e2c2c7d-9bc1-45f9-a76c-9d32b489268a
+      value: 32e36aa5-1d12-452a-9b1e-9f3f557cbb4d
     - name: SECURITYTOKENSERVICE_URL
       value: https://sts-q1.preprod.local/SecurityTokenServiceProvider/
     - name: EGENANSATT_V1_URL
