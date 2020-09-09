@@ -19,7 +19,7 @@ public class OidcTestHelper {
     }
 
     public static void logInVeilederWithAzure2(OIDCRequestContextHolder oidcRequestContextHolder, String veilederIdent) throws ParseException {
-        JWTClaimsSet claimsSet = JWTClaimsSet.parse("{\"NAVident\":\"" + veilederIdent + "\"}");
+        JWTClaimsSet claimsSet = JWTClaimsSet.parse("{ }");
         SignedJWT jwt = JwtTokenGenerator.createSignedJWT(claimsSet);
         settOIDCValidationContext(oidcRequestContextHolder, jwt, VEILEDERAZURE);
     }
