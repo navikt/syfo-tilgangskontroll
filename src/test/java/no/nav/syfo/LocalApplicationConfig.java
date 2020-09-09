@@ -1,6 +1,6 @@
 package no.nav.syfo;
 
-import no.nav.security.oidc.test.support.spring.TokenGeneratorConfiguration;
+import no.nav.security.token.support.test.spring.TokenGeneratorConfiguration;
 import no.nav.syfo.mocks.*;
 import no.nav.tjeneste.pip.egen.ansatt.v1.EgenAnsattV1;
 import no.nav.tjeneste.virksomhet.organisasjonenhet.v2.OrganisasjonEnhetV2;

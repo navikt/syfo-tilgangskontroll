@@ -5,17 +5,17 @@ spring:
     host: syfo-tilgangskontroll-redis
     port: 6379
 
-no.nav.security.oidc:
+no.nav.security.jwt:
   issuers: veileder,veilederaad
   issuer:
     veileder:
-      discoveryurl: <syfonais>
-      accepted_audience: <syfonais>
-      cookie_name: isso-idtoken
+      discoveryurl: <nais-manifest>
+      accepted_audience: <nais-manifest>
+      cookiename: isso-idtoken
     veilederaad:
-      discoveryurl: <syfonais>
-      accepted_audience: <syfonais>
-      cookie_name: ID_token
+      discoveryurl: <nais-manifest>
+      accepted_audience: <nais-manifest>
+      cookiename: ID_token
 
 logging.config: classpath:logback-spring.xml
 

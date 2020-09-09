@@ -10,7 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.retry.annotation.*;
 import org.springframework.stereotype.Service;
-
 import javax.xml.ws.soap.SOAPFaultException;
 
 import static java.util.Optional.ofNullable;

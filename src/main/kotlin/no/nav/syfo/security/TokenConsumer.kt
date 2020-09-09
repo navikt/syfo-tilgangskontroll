@@ -1,8 +1,6 @@
 package no.nav.syfo.security
 
-import no.nav.security.oidc.OIDCConstants
-import no.nav.security.oidc.context.OIDCRequestContextHolder
-import no.nav.security.oidc.context.OIDCValidationContext
+import no.nav.security.token.support.core.context.TokenValidationContextHolder
 import no.nav.syfo.security.OIDCIssuer.VEILEDERAZURE
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpEntity
@@ -24,12 +22,10 @@ class TokenConsumer @Autowired constructor(private val restTemplate: RestTemplat
         private const val graphApiAccountNameQuery = "https://graph.microsoft.com/v1.0/me/?\$select=onPremisesSamAccountName"
     }
 
-    fun getSubjectFromMsGraph(contextHolder: OIDCRequestContextHolder): String {
+    fun getSubjectFromMsGraph(contextHolder: TokenValidationContextHolder): String {
         return try {
-            val context = contextHolder
-                    .getRequestAttribute(OIDCConstants.OIDC_VALIDATION_CONTEXT) as OIDCValidationContext
-            val OIDCTokenContext = context.getToken(VEILEDERAZURE)
-            val accessToken = OIDCTokenContext.idToken
+            val context = contextHolder.tokenValidationContext
+            val accessToken = context.getJwtToken(VEILEDERAZURE).tokenAsString
             val oboToken = exchangeAccessTokenForOnBehalfOfToken(accessToken)
             callMsGraphApi(oboToken)
         } catch (e: Exception) {

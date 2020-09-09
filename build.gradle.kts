@@ -7,7 +7,7 @@ group = "no.nav.syfo"
 version = "1.0.0"
 
 val cxfVersion = "3.3.4"
-val oidcSpringSupportVersion = "0.2.18"
+val tokenValidationSpringSupportVersion = "1.3.0"
 val egenAnsattV1Version = "1.2019.09.25-00.21-49b69f0625e0"
 val organisasjonenhetV2Version = "1.2019.09.25-00.21-49b69f0625e0"
 val personV3Version = "1.2019.07.11-06.47-b55f47790a9d"
@@ -16,13 +16,11 @@ val springRetryVersion = "1.2.4.RELEASE"
 val kotlinLibVersion = "1.3.50"
 val kotlinJacksonVersion = "2.10.0"
 val logbackVersion = "6.3"
-val nimbusOauth2Version = "7.0.3"
 
 plugins {
     kotlin("jvm") version "1.3.50"
     id("org.jetbrains.kotlin.plugin.allopen") version "1.3.50"
     id("com.github.johnrengelman.shadow") version "4.0.3"
-    id("java")
 }
 
 buildscript {
@@ -62,6 +60,9 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-data-redis:$springBootVersion")
     implementation("org.springframework.boot:spring-boot-starter-aop:$springBootVersion")
 
+    implementation("com.sun.xml.ws:jaxws-ri:2.3.2")
+    implementation("com.sun.activation:javax.activation:1.2.0")
+
     implementation("org.springframework.retry:spring-retry:$springRetryVersion")
 
     implementation("org.projectlombok:lombok:1.16.22")
@@ -71,8 +72,8 @@ dependencies {
     implementation("org.glassfish.jersey.core:jersey-common:2.26")
     implementation("org.slf4j:slf4j-api:1.7.25")
     implementation("net.logstash.logback:logstash-logback-encoder:$logbackVersion")
-    implementation("no.nav.security:oidc-spring-support:$oidcSpringSupportVersion")
-    implementation("com.nimbusds:oauth2-oidc-sdk:$nimbusOauth2Version")
+    implementation("no.nav.security:token-validation-spring:$tokenValidationSpringSupportVersion")
+
     implementation("io.micrometer:micrometer-registry-prometheus:1.0.6")
 
     implementation("org.apache.cxf:cxf-rt-features-logging:$cxfVersion")
@@ -80,13 +81,19 @@ dependencies {
     implementation("org.apache.cxf:cxf-rt-ws-policy:$cxfVersion")
     implementation("org.apache.cxf:cxf-rt-transports-http:$cxfVersion")
     implementation("org.apache.cxf:cxf-rt-frontend-jaxws:$cxfVersion")
+    implementation("org.apache.cxf:cxf-core:$cxfVersion")
 
     implementation("no.nav.tjenestespesifikasjoner:egenansatt-v1-tjenestespesifikasjon:$egenAnsattV1Version")
     implementation("no.nav.tjenestespesifikasjoner:organisasjonenhet-v2-tjenestespesifikasjon:$organisasjonenhetV2Version")
     implementation("no.nav.tjenestespesifikasjoner:person-v3-tjenestespesifikasjon:$personV3Version")
 
     testImplementation("org.springframework.boot:spring-boot-starter-test:$springBootVersion")
-    testImplementation("no.nav.security:oidc-test-support:$oidcSpringSupportVersion")
+    testImplementation("no.nav.security:token-validation-test-support:$tokenValidationSpringSupportVersion")
+}
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_11
+    targetCompatibility = JavaVersion.VERSION_11
 }
 
 tasks {
@@ -113,10 +120,10 @@ tasks {
     }
 
     named<KotlinCompile>("compileKotlin") {
-        kotlinOptions.jvmTarget = "1.8"
+        kotlinOptions.jvmTarget = "11"
     }
 
     named<KotlinCompile>("compileTestKotlin") {
-        kotlinOptions.jvmTarget = "1.8"
+        kotlinOptions.jvmTarget = "11"
     }
 }

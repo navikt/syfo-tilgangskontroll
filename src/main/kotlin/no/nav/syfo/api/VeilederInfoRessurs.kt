@@ -1,7 +1,7 @@
 package no.nav.syfo.api
 
-import no.nav.security.oidc.api.ProtectedWithClaims
-import no.nav.security.oidc.context.OIDCRequestContextHolder
+import no.nav.security.token.support.core.api.ProtectedWithClaims
+import no.nav.security.token.support.core.context.TokenValidationContextHolder
 import no.nav.syfo.domain.VeilederInfo
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
@@ -15,7 +15,7 @@ import javax.inject.Inject
 @RequestMapping(value = ["/api/veilederinfo"])
 class VeilederInfoRessurs @Inject constructor(
         private val tokenConsumer: TokenConsumer,
-        private val contextHolder: OIDCRequestContextHolder
+        private val contextHolder: TokenValidationContextHolder
 ) {
     @GetMapping(path = ["/ident"])
     @ProtectedWithClaims(issuer = VEILEDERAZURE)
