@@ -16,6 +16,7 @@ val springRetryVersion = "1.2.4.RELEASE"
 val kotlinLibVersion = "1.3.50"
 val kotlinJacksonVersion = "2.10.0"
 val logbackVersion = "6.3"
+val nimbusOauth2Version = "7.0.3"
 
 plugins {
     kotlin("jvm") version "1.3.50"
@@ -71,6 +72,7 @@ dependencies {
     implementation("org.slf4j:slf4j-api:1.7.25")
     implementation("net.logstash.logback:logstash-logback-encoder:$logbackVersion")
     implementation("no.nav.security:oidc-spring-support:$oidcSpringSupportVersion")
+    implementation("com.nimbusds:oauth2-oidc-sdk:$nimbusOauth2Version")
     implementation("io.micrometer:micrometer-registry-prometheus:1.0.6")
 
     implementation("org.apache.cxf:cxf-rt-features-logging:$cxfVersion")
