@@ -33,7 +33,7 @@ class TokenConsumer @Autowired constructor(private val restTemplate: RestTemplat
             val oboToken = exchangeAccessTokenForOnBehalfOfToken(accessToken)
             callMsGraphApi(oboToken)
         } catch (e: Exception) {
-            throw RuntimeException("Klarte ikke hente veileder-ident fra Azure AD access token")
+            throw RuntimeException("Klarte ikke hente veileder-ident fra Azure AD access token: ${e.message}")
         }
     }
 
