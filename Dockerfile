@@ -1,4 +1,4 @@
-FROM navikt/java:11
+FROM navikt/java:11-appdynamics
 ENV APPD_ENABLED=true
 
 COPY init.sh /init-scripts/init.sh
