@@ -7,6 +7,7 @@ import no.nav.syfo.axsys.AxsysEnhet;
 import no.nav.syfo.domain.Tilgang;
 import no.nav.syfo.security.TokenConsumer;
 import no.nav.syfo.services.LdapService;
+import no.nav.syfo.skjermedepersoner.SkjermedePersonerPipConsumer;
 import org.junit.*;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,6 +45,9 @@ public class AccessToRessursViaAzure2ComponentTest {
     private AxsysConsumer axsysConsumer;
 
     @MockBean
+    private SkjermedePersonerPipConsumer skjermedePersonerPipConsumer;
+
+    @MockBean
     private TokenConsumer tokenConsumer;
 
     @Autowired
@@ -68,6 +72,10 @@ public class AccessToRessursViaAzure2ComponentTest {
                                 NAV_ENHET_NAVN
                         ))
         );
+        when(skjermedePersonerPipConsumer.erSkjermet(BJARNE_BRUKER)).thenReturn(false);
+        when(skjermedePersonerPipConsumer.erSkjermet(BENGT_KODE6_BRUKER)).thenReturn(false);
+        when(skjermedePersonerPipConsumer.erSkjermet(BIRTE_KODE7_BRUKER)).thenReturn(false);
+        when(skjermedePersonerPipConsumer.erSkjermet(ERIK_EGENANSATT_BRUKER)).thenReturn(true);
         when(tokenConsumer.getSubjectFromMsGraph(any(TokenValidationContextHolder.class))).thenReturn(
             VEILEDER_ID
         );

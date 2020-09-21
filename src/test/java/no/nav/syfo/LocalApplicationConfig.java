@@ -2,7 +2,6 @@ package no.nav.syfo;
 
 import no.nav.security.token.support.test.spring.TokenGeneratorConfiguration;
 import no.nav.syfo.mocks.*;
-import no.nav.tjeneste.pip.egen.ansatt.v1.EgenAnsattV1;
 import no.nav.tjeneste.virksomhet.organisasjonenhet.v2.OrganisasjonEnhetV2;
 import no.nav.tjeneste.virksomhet.person.v3.binding.PersonV3;
 import org.springframework.context.annotation.*;
@@ -26,11 +25,6 @@ public class LocalApplicationConfig {
     @Bean
     public OrganisasjonEnhetV2 organisasjonEnhetV2Mock() {
         return new OrganisasjonEnhetMock();
-    }
-
-    @Bean
-    public EgenAnsattV1 egenAnsattV1Mock() {
-        return new EgenansattMock();
     }
 
     @Bean
