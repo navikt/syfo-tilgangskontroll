@@ -1,7 +1,6 @@
 package no.nav.syfo;
 
 import no.nav.syfo.ws.*;
-import no.nav.tjeneste.pip.egen.ansatt.v1.EgenAnsattV1;
 import no.nav.tjeneste.virksomhet.organisasjonenhet.v2.OrganisasjonEnhetV2;
 import no.nav.tjeneste.virksomhet.person.v3.binding.PersonV3;
 import org.springframework.beans.factory.annotation.Value;
@@ -29,14 +28,6 @@ public class ApplicationConfig {
     @Primary
     public OrganisasjonEnhetV2 organisasjonEnhetV2(@Value("${organisasjonEnhet.v2.url}") String serviceUrl) {
         OrganisasjonEnhetV2 port = new WsClient<OrganisasjonEnhetV2>().createPort(serviceUrl, OrganisasjonEnhetV2.class, singletonList(new LogErrorHandler()));
-        STSClientConfig.configureRequestSamlToken(port);
-        return port;
-    }
-
-    @Bean
-    @Primary
-    public EgenAnsattV1 egenAnsattV1(@Value("${egenansatt.v1.url}") String serviceUrl) {
-        EgenAnsattV1 port = new WsClient<EgenAnsattV1>().createPort(serviceUrl, EgenAnsattV1.class, singletonList(new LogErrorHandler()));
         STSClientConfig.configureRequestSamlToken(port);
         return port;
     }

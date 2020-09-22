@@ -3,6 +3,7 @@ package no.nav.syfo.services;
 import no.nav.syfo.axsys.AxsysConsumer;
 import no.nav.syfo.domain.PersonInfo;
 import no.nav.syfo.domain.Tilgang;
+import no.nav.syfo.skjermedepersoner.SkjermedePersonerPipConsumer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
@@ -17,7 +18,7 @@ public class TilgangService {
 
     private final AxsysConsumer axsysConsumer;
     private final LdapService ldapService;
-    private final EgenAnsattService egenAnsattService;
+    private final SkjermedePersonerPipConsumer skjermedePersonerPipConsumer;
     private final GeografiskTilgangService geografiskTilgangService;
     private final PersonService personService;
 
@@ -29,12 +30,12 @@ public class TilgangService {
     public TilgangService(
             AxsysConsumer axsysConsumer,
             LdapService ldapService,
-            EgenAnsattService egenAnsattService,
+            SkjermedePersonerPipConsumer skjermedePersonerPipConsumer,
             GeografiskTilgangService geografiskTilgangService,
             PersonService personService
     ) {
         this.ldapService = ldapService;
-        this.egenAnsattService = egenAnsattService;
+        this.skjermedePersonerPipConsumer = skjermedePersonerPipConsumer;
         this.geografiskTilgangService = geografiskTilgangService;
         this.axsysConsumer = axsysConsumer;
         this.personService = personService;
@@ -62,7 +63,7 @@ public class TilgangService {
             return new Tilgang().withHarTilgang(false).withBegrunnelse(KODE7.name());
         }
 
-        if (egenAnsattService.erEgenAnsatt(brukerFnr) && !harTilgangTilEgenAnsatt(veilederId)) {
+        if (skjermedePersonerPipConsumer.erSkjermet(brukerFnr) && !harTilgangTilEgenAnsatt(veilederId)) {
             return new Tilgang().withHarTilgang(false).withBegrunnelse(EGEN_ANSATT.name());
         }
 

@@ -8,7 +8,6 @@ version = "1.0.0"
 
 val cxfVersion = "3.3.4"
 val tokenValidationSpringSupportVersion = "1.3.0"
-val egenAnsattV1Version = "1.2019.09.25-00.21-49b69f0625e0"
 val organisasjonenhetV2Version = "1.2019.09.25-00.21-49b69f0625e0"
 val personV3Version = "1.2019.07.11-06.47-b55f47790a9d"
 val springBootVersion = "2.2.0.RELEASE"
@@ -83,7 +82,6 @@ dependencies {
     implementation("org.apache.cxf:cxf-rt-frontend-jaxws:$cxfVersion")
     implementation("org.apache.cxf:cxf-core:$cxfVersion")
 
-    implementation("no.nav.tjenestespesifikasjoner:egenansatt-v1-tjenestespesifikasjon:$egenAnsattV1Version")
     implementation("no.nav.tjenestespesifikasjoner:organisasjonenhet-v2-tjenestespesifikasjon:$organisasjonenhetV2Version")
     implementation("no.nav.tjenestespesifikasjoner:person-v3-tjenestespesifikasjon:$personV3Version")
 

@@ -6,6 +6,7 @@ import no.nav.syfo.axsys.AxsysConsumer;
 import no.nav.syfo.axsys.AxsysEnhet;
 import no.nav.syfo.domain.Tilgang;
 import no.nav.syfo.services.LdapService;
+import no.nav.syfo.skjermedepersoner.SkjermedePersonerPipConsumer;
 import org.junit.*;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,6 +47,8 @@ public class TilgangRessursViaAzureComponentTest {
 
     @MockBean
     private AxsysConsumer axsysConsumer;
+    @MockBean
+    private SkjermedePersonerPipConsumer skjermedePersonerPipConsumer;
     @Autowired
     private TokenValidationContextHolder oidcRequestContextHolder;
 
@@ -68,6 +71,10 @@ public class TilgangRessursViaAzureComponentTest {
                                 NAV_ENHET_NAVN
                         ))
         );
+        when(skjermedePersonerPipConsumer.erSkjermet(BJARNE_BRUKER)).thenReturn(false);
+        when(skjermedePersonerPipConsumer.erSkjermet(BENGT_KODE6_BRUKER)).thenReturn(false);
+        when(skjermedePersonerPipConsumer.erSkjermet(BIRTE_KODE7_BRUKER)).thenReturn(false);
+        when(skjermedePersonerPipConsumer.erSkjermet(ERIK_EGENANSATT_BRUKER)).thenReturn(true);
         loggInnVeilederMedAzure(oidcRequestContextHolder, VEILEDER_ID);
     }
 
