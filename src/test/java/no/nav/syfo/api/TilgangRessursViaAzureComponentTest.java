@@ -5,6 +5,7 @@ import no.nav.syfo.LocalApplication;
 import no.nav.syfo.axsys.AxsysConsumer;
 import no.nav.syfo.axsys.AxsysEnhet;
 import no.nav.syfo.domain.Tilgang;
+import no.nav.syfo.norg2.NorgConsumer;
 import no.nav.syfo.services.LdapService;
 import no.nav.syfo.skjermedepersoner.SkjermedePersonerPipConsumer;
 import org.junit.*;
@@ -22,6 +23,7 @@ import static java.util.Arrays.asList;
 import static java.util.Collections.singletonList;
 import static no.nav.syfo.domain.AdRoller.*;
 import static no.nav.syfo.mocks.PersonMock.*;
+import static no.nav.syfo.testhelper.Norg2MockKt.generateNorgEnhet;
 import static no.nav.syfo.testhelper.UserConstants.*;
 import static no.nav.syfo.util.LdapUtil.mockRoller;
 import static no.nav.syfo.util.OidcTestHelper.loggInnVeilederMedAzure;
@@ -48,6 +50,8 @@ public class TilgangRessursViaAzureComponentTest {
     @MockBean
     private AxsysConsumer axsysConsumer;
     @MockBean
+    private NorgConsumer norgConsumer;
+    @MockBean
     private SkjermedePersonerPipConsumer skjermedePersonerPipConsumer;
     @Autowired
     private TokenValidationContextHolder oidcRequestContextHolder;
@@ -70,6 +74,9 @@ public class TilgangRessursViaAzureComponentTest {
                                 NAV_ENHETID_2,
                                 NAV_ENHET_NAVN
                         ))
+        );
+        when(norgConsumer.getNAVKontorForGT(__0330.getGeografiskTilknytning())).thenReturn(
+                generateNorgEnhet(NAV_ENHETID_1)
         );
         when(skjermedePersonerPipConsumer.erSkjermet(BJARNE_BRUKER)).thenReturn(false);
         when(skjermedePersonerPipConsumer.erSkjermet(BENGT_KODE6_BRUKER)).thenReturn(false);

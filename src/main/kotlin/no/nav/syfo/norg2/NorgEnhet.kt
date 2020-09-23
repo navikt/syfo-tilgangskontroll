@@ -1,0 +1,30 @@
+package no.nav.syfo.norg2
+
+import java.io.Serializable
+
+data class NorgEnhet(
+        var aktiveringsdato: String?,
+        var antallRessurser: String?,
+        var enhetId: String?,
+        var enhetNr: String,
+        var kanalstrategi: String?,
+        var navn: String,
+        var nedleggelsesdato: String?,
+        var oppgavebehandler: String?,
+        var orgNivaa: String?,
+        var orgNrTilKommunaltNavKontor: String?,
+        var organisasjonsnummer: String?,
+        var sosialeTjenester: String?,
+        var status: String,
+        var type: String?,
+        var underAvviklingDato: String?,
+        var underEtableringDato: String?,
+        var versjon: String?
+) : Serializable
+
+enum class Enhetsstatus(val formattedName: String) {
+    UNDER_ETABLERING("Under etablering"),
+    AKTIV("Aktiv"),
+    UNDER_AVVIKLING("Under avvikling"),
+    NEDLAGT("Nedlagt");
+}

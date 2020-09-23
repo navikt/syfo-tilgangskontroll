@@ -19,3 +19,5 @@ ldap:
 server:
   servlet:
     context-path: /syfo-tilgangskontroll
+
+norg2.url: http://norg2/norg2
