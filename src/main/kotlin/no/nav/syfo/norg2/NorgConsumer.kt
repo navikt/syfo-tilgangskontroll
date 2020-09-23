@@ -21,7 +21,7 @@ constructor(
     private val restTemplate: RestTemplate
 ) {
     @Cacheable(cacheNames = [CacheConfig.CACHENAME_GEOGRAFISK_TILHORIGHET_ENHETER], key = "#geografiskTilknytning", condition = "#geografiskTilknytning != null")
-    fun getNAVKontorForGT(geografiskTilknytning: String): NorgEnhet {
+    fun getNAVKontorForGT(geografiskTilknytning: String): String {
         try {
             val result = restTemplate.exchange(
                 getNAVKontorForGTUrl(geografiskTilknytning),
@@ -31,7 +31,7 @@ constructor(
             )
             val enhet = result.body!!
             metric.countEvent("call_norg2_getnavkontorforgt_success")
-            return enhet
+            return enhet.enhetNr
         } catch (e: RestClientResponseException) {
             metric.countEvent("call_norg2_getnavkontorforgt_fail")
             log.error("Call to NORG2-NAVkontorForGT failed with status HTTP-${e.rawStatusCode} for GeografiskTilknytning $geografiskTilknytning")

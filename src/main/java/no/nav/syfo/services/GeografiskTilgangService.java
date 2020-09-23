@@ -38,8 +38,7 @@ public class GeografiskTilgangService {
         if (harNasjonalTilgang(veilederId)) {
             return true;
         }
-        final String navKontorForGT = norgConsumer.getNAVKontorForGT(personInfo.getGeografiskTilknytning())
-                .getEnhetNr();
+        final String navKontorForGT = norgConsumer.getNAVKontorForGT(personInfo.getGeografiskTilknytning());
         final List<String> veiledersEnheter = axsysConsumer.enheter(veilederId)
                 .stream()
                 .map(AxsysEnhet::getEnhetId)

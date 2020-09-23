@@ -78,7 +78,7 @@ public class AccessToRessursViaAzure2ComponentTest {
                         ))
         );
         when(norgConsumer.getNAVKontorForGT(__0330.getGeografiskTilknytning())).thenReturn(
-                generateNorgEnhet(NAV_ENHETID_1)
+                NAV_ENHETID_1
         );
         when(skjermedePersonerPipConsumer.erSkjermet(BJARNE_BRUKER)).thenReturn(false);
         when(skjermedePersonerPipConsumer.erSkjermet(BENGT_KODE6_BRUKER)).thenReturn(false);

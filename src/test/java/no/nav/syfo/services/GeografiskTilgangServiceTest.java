@@ -15,7 +15,6 @@ import org.mockito.junit.MockitoJUnitRunner;
 import static java.util.Arrays.asList;
 import static java.util.Collections.singletonList;
 import static no.nav.syfo.domain.AdRoller.REGIONAL;
-import static no.nav.syfo.testhelper.Norg2MockKt.generateNorgEnhet;
 import static no.nav.syfo.testhelper.UserConstants.NAV_ENHET_NAVN;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
@@ -46,7 +45,7 @@ public class GeografiskTilgangServiceTest {
     public void setup() {
         when(ldapService.harTilgang(anyString(), any())).thenReturn(false);
         when(norgConsumer.getNAVKontorForGT(PERSON_INFO.getGeografiskTilknytning())).thenReturn(
-                generateNorgEnhet(BRUKERS_ENHET)
+                BRUKERS_ENHET
         );
     }
 
