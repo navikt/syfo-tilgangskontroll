@@ -74,3 +74,5 @@ spec:
       value: ldaps://ldapgw.adeo.no
     - name: LDAP_BASEDN
       value: dc=adeo,dc=no
+    - name: NORG2_URL
+      value: https://app.adeo.no/norg2

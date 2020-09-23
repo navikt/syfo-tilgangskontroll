@@ -4,6 +4,7 @@ import no.nav.syfo.axsys.AxsysConsumer;
 import no.nav.syfo.axsys.AxsysEnhet;
 import no.nav.syfo.domain.AdRoller;
 import no.nav.syfo.domain.PersonInfo;
+import no.nav.syfo.norg2.NorgConsumer;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -14,6 +15,7 @@ import org.mockito.junit.MockitoJUnitRunner;
 import static java.util.Arrays.asList;
 import static java.util.Collections.singletonList;
 import static no.nav.syfo.domain.AdRoller.REGIONAL;
+import static no.nav.syfo.testhelper.Norg2MockKt.generateNorgEnhet;
 import static no.nav.syfo.testhelper.UserConstants.NAV_ENHET_NAVN;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
@@ -34,6 +36,8 @@ public class GeografiskTilgangServiceTest {
     @Mock
     private LdapService ldapService;
     @Mock
+    private NorgConsumer norgConsumer;
+    @Mock
     private OrganisasjonEnhetService organisasjonEnhetService;
     @InjectMocks
     private GeografiskTilgangService geografiskTilgangService;
@@ -41,7 +45,9 @@ public class GeografiskTilgangServiceTest {
     @Before
     public void setup() {
         when(ldapService.harTilgang(anyString(), any())).thenReturn(false);
-        when(organisasjonEnhetService.finnNAVKontorForGT(PERSON_INFO.getGeografiskTilknytning())).thenReturn(asList(BRUKERS_ENHET, "enAnnenEnhet"));
+        when(norgConsumer.getNAVKontorForGT(PERSON_INFO.getGeografiskTilknytning())).thenReturn(
+                generateNorgEnhet(BRUKERS_ENHET)
+        );
     }
 
     @Test

@@ -74,3 +74,5 @@ spec:
       value: ldaps://ldapgw.preprod.local
     - name: LDAP_BASEDN
       value: dc=preprod,dc=local
+    - name: NORG2_URL
+      value: https://app-q1.adeo.no/norg2

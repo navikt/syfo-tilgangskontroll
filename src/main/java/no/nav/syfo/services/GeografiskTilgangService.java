@@ -4,6 +4,7 @@ import no.nav.syfo.axsys.AxsysConsumer;
 import no.nav.syfo.axsys.AxsysEnhet;
 import no.nav.syfo.domain.AdRoller;
 import no.nav.syfo.domain.PersonInfo;
+import no.nav.syfo.norg2.NorgConsumer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -17,16 +18,19 @@ public class GeografiskTilgangService {
 
     private final AxsysConsumer axsysConsumer;
     private final LdapService ldapService;
+    private final NorgConsumer norgConsumer;
     private final OrganisasjonEnhetService organisasjonEnhetService;
 
     @Autowired
     public GeografiskTilgangService(
             AxsysConsumer axsysConsumer,
             LdapService ldapService,
+            NorgConsumer norgConsumer,
             OrganisasjonEnhetService organisasjonEnhetService
     ) {
         this.axsysConsumer = axsysConsumer;
         this.ldapService = ldapService;
+        this.norgConsumer = norgConsumer;
         this.organisasjonEnhetService = organisasjonEnhetService;
     }
 
@@ -34,14 +38,15 @@ public class GeografiskTilgangService {
         if (harNasjonalTilgang(veilederId)) {
             return true;
         }
-        final List<String> navKontorerForGT = organisasjonEnhetService.finnNAVKontorForGT(personInfo.getGeografiskTilknytning());
+        final String navKontorForGT = norgConsumer.getNAVKontorForGT(personInfo.getGeografiskTilknytning())
+                .getEnhetNr();
         final List<String> veiledersEnheter = axsysConsumer.enheter(veilederId)
                 .stream()
                 .map(AxsysEnhet::getEnhetId)
                 .collect(toList());
 
-        return harLokalTilgangTilBrukersEnhet(navKontorerForGT, veiledersEnheter)
-                || harRegionalTilgangTilBrukersEnhet(navKontorerForGT, veiledersEnheter, veilederId);
+        return harLokalTilgangTilBrukersEnhet(navKontorForGT, veiledersEnheter)
+                || harRegionalTilgangTilBrukersEnhet(navKontorForGT, veiledersEnheter, veilederId);
     }
 
     private boolean harNasjonalTilgang(String veilederId) {
@@ -49,8 +54,8 @@ public class GeografiskTilgangService {
                 || ldapService.harTilgang(veilederId, AdRoller.UTVIDBAR_TIL_NASJONAL.rolle);
     }
 
-    private boolean harLokalTilgangTilBrukersEnhet(List<String> navKontorerForGT, List<String> veiledersEnheter) {
-        return navKontorerForGT.stream().anyMatch(veiledersEnheter::contains);
+    private boolean harLokalTilgangTilBrukersEnhet(String navKontorForGT, List<String> veiledersEnheter) {
+        return veiledersEnheter.contains(navKontorForGT);
     }
 
     private boolean harRegionalTilgang(String veilederId) {
@@ -58,15 +63,14 @@ public class GeografiskTilgangService {
                 || ldapService.harTilgang(veilederId, AdRoller.UTVIDBAR_TIL_REGIONAL.rolle);
     }
 
-    private boolean harRegionalTilgangTilBrukersEnhet(List<String> navKontorerForGT, List<String> veiledersEnheter, String veilederId) {
+    private boolean harRegionalTilgangTilBrukersEnhet(String navKontorForGT, List<String> veiledersEnheter, String veilederId) {
         List<String> veiledersOverordnedeEnheter = veiledersEnheter.stream()
                 .map(organisasjonEnhetService::hentOverordnetEnhetForNAVKontor)
                 .flatMap(Collection::stream)
                 .collect(toList());
 
-        return harRegionalTilgang(veilederId) && navKontorerForGT.stream()
-                .map(organisasjonEnhetService::hentOverordnetEnhetForNAVKontor)
-                .flatMap(Collection::stream)
+        return harRegionalTilgang(veilederId) && organisasjonEnhetService.hentOverordnetEnhetForNAVKontor(navKontorForGT)
+                .stream()
                 .anyMatch(veiledersOverordnedeEnheter::contains);
     }
 }

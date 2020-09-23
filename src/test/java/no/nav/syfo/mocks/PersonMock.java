@@ -11,7 +11,7 @@ public class PersonMock implements PersonV3 {
     public static final String BIRTE_KODE7_BRUKER = "12345678977";
     public static final String ERIK_EGENANSATT_BRUKER = "12345670330";
 
-    private static final Kommune __0330 = new Kommune().withGeografiskTilknytning("0330");
+    public static final Kommune __0330 = new Kommune().withGeografiskTilknytning("0330");
     private static final Diskresjonskoder KODE_6 = new Diskresjonskoder().withValue("SPSF");
     private static final Diskresjonskoder KODE_7 = new Diskresjonskoder().withValue("SPFO");
 
