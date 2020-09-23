@@ -20,7 +20,7 @@ constructor(
     private val metric: Metric,
     private val restTemplate: RestTemplate
 ) {
-    @Cacheable(cacheNames = [CacheConfig.CACHENAME_GEOGRAFISK_TILHORIGHET_ENHETER], key = "#geografiskTilknytning", condition = "#geografiskTilknytning != null")
+    @Cacheable(cacheNames = [CacheConfig.CACHENAME_GEOGRAFISK_TILHORIGHET_ENHET], key = "#geografiskTilknytning", condition = "#geografiskTilknytning != null")
     fun getNAVKontorForGT(geografiskTilknytning: String): String {
         try {
             val result = restTemplate.exchange(

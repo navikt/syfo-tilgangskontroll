@@ -22,7 +22,7 @@ public class CacheConfig {
     public static final String CACHENAME_AXSYS_ENHETER = "axsysenheter";
     public static final String CACHENAME_EGENANSATT = "egenansatt";
     public static final String CACHENAME_ENHET_OVERORDNET_ENHETER = "enhetoverordnetenheter";
-    public static final String CACHENAME_GEOGRAFISK_TILHORIGHET_ENHETER = "geografisktilhorighetenheter";
+    public static final String CACHENAME_GEOGRAFISK_TILHORIGHET_ENHET = "geografisktilhorighetenhet";
     public static final String CACHENAME_VEILEDER_ENHETER = "veilederenhet";
     public static final String CACHENAME_VEILEDER_LDAP = "ldapveilederrolle";
     public static final String CACHENAME_PERSON_INFO = "personinfo";
@@ -41,7 +41,7 @@ public class CacheConfig {
         cacheConfigurations.put(CACHENAME_AXSYS_ENHETER, defaultConfig);
         cacheConfigurations.put(CACHENAME_EGENANSATT, defaultConfig);
         cacheConfigurations.put(CACHENAME_ENHET_OVERORDNET_ENHETER, defaultConfig);
-        cacheConfigurations.put(CACHENAME_GEOGRAFISK_TILHORIGHET_ENHETER, defaultConfig);
+        cacheConfigurations.put(CACHENAME_GEOGRAFISK_TILHORIGHET_ENHET, defaultConfig);
         cacheConfigurations.put(CACHENAME_VEILEDER_ENHETER, defaultConfig);
         cacheConfigurations.put(CACHENAME_VEILEDER_LDAP, defaultConfig);
         cacheConfigurations.put(CACHENAME_PERSON_INFO, defaultConfig);
