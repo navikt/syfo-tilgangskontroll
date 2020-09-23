@@ -66,8 +66,6 @@ spec:
       value: dfaa2699-7390-4459-9cfc-2e8de64dfaf9
     - name: SECURITYTOKENSERVICE_URL
       value: https://sts.adeo.no/SecurityTokenServiceProvider/
-    - name: ORGANISASJONENHET_V2_URL
-      value: https://app.adeo.no/norg2/ws/OrganisasjonEnhet/v2
     - name: PERSON_V3_URL
       value: https://wasapp.adeo.no/tpsws/ws/Person/v3
     - name: LDAP_URL

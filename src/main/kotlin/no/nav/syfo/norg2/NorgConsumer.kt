@@ -7,6 +7,7 @@ import no.nav.syfo.util.createCallId
 import org.slf4j.LoggerFactory.getLogger
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.cache.annotation.Cacheable
+import org.springframework.core.ParameterizedTypeReference
 import org.springframework.http.*
 import org.springframework.stereotype.Service
 import org.springframework.web.client.RestClientResponseException
@@ -43,6 +44,31 @@ constructor(
         return "$norg2BaseUrl/api/v1/enhet/navkontor/$geografiskTilknytning"
     }
 
+    @Cacheable(cacheNames = [CacheConfig.CACHENAME_ENHET_OVERORDNET_ENHETER], key = "#enhetNr", condition = "#enhetNr != null")
+    fun getOverordnetEnhetListForNAVKontor(enhetNr: String): List<String> {
+        try {
+            val result = restTemplate.exchange(
+                getOverordnetEnhetForNAVKontorUrl(enhetNr),
+                HttpMethod.GET,
+                entity(),
+                object : ParameterizedTypeReference<List<NorgEnhet>>() {}
+            )
+            val enhetList = result.body!!
+            metric.countEvent("call_norg2_getoverordnetenhetforenhet_success")
+            return enhetList.map {
+                it.enhetNr
+            }
+        } catch (e: RestClientResponseException) {
+            metric.countEvent("call_norg2_getoverordnetenhetforenhet_fail")
+            log.error("Call to NORG2-OverordnetEnhetForNAVKontor failed with status HTTP-${e.rawStatusCode} for enhetNr $enhetNr")
+            throw e
+        }
+    }
+
+    private fun getOverordnetEnhetForNAVKontorUrl(enhetNr: String): String {
+        return "$norg2BaseUrl/api/v1/enhet/$enhetNr/overordnet?organiseringsType=$organiseringsType"
+    }
+
     private fun entity(): HttpEntity<String>? {
         val headers = HttpHeaders()
         headers.contentType = MediaType.APPLICATION_JSON
@@ -52,5 +78,7 @@ constructor(
 
     companion object {
         private val log = getLogger(NorgConsumer::class.java)
+
+        private const val organiseringsType = "FYLKE"
     }
 }

@@ -36,8 +36,6 @@ public class GeografiskTilgangServiceTest {
     private LdapService ldapService;
     @Mock
     private NorgConsumer norgConsumer;
-    @Mock
-    private OrganisasjonEnhetService organisasjonEnhetService;
     @InjectMocks
     private GeografiskTilgangService geografiskTilgangService;
 
@@ -97,8 +95,8 @@ public class GeografiskTilgangServiceTest {
                         NAV_ENHET_NAVN
                 ))
         );
-        when(organisasjonEnhetService.hentOverordnetEnhetForNAVKontor(VEILEDERS_ENHET)).thenReturn(singletonList(OVERORDNET_ENHET));
-        when(organisasjonEnhetService.hentOverordnetEnhetForNAVKontor(BRUKERS_ENHET)).thenReturn(singletonList(OVERORDNET_ENHET));
+        when(norgConsumer.getOverordnetEnhetListForNAVKontor(VEILEDERS_ENHET)).thenReturn(singletonList(OVERORDNET_ENHET));
+        when(norgConsumer.getOverordnetEnhetListForNAVKontor(BRUKERS_ENHET)).thenReturn(singletonList(OVERORDNET_ENHET));
         assertThat(geografiskTilgangService.harGeografiskTilgang(VEILEDER_UID, PERSON_INFO)).isTrue();
     }
 
