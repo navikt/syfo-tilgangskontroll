@@ -1,7 +1,6 @@
 package no.nav.syfo;
 
 import no.nav.syfo.ws.*;
-import no.nav.tjeneste.virksomhet.organisasjonenhet.v2.OrganisasjonEnhetV2;
 import no.nav.tjeneste.virksomhet.person.v3.binding.PersonV3;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.*;
@@ -23,14 +22,6 @@ public class ApplicationConfig {
     }
 
     /* Web service clients */
-
-    @Bean
-    @Primary
-    public OrganisasjonEnhetV2 organisasjonEnhetV2(@Value("${organisasjonEnhet.v2.url}") String serviceUrl) {
-        OrganisasjonEnhetV2 port = new WsClient<OrganisasjonEnhetV2>().createPort(serviceUrl, OrganisasjonEnhetV2.class, singletonList(new LogErrorHandler()));
-        STSClientConfig.configureRequestSamlToken(port);
-        return port;
-    }
 
     @Bean
     @Primary

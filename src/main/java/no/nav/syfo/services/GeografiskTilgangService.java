@@ -19,19 +19,16 @@ public class GeografiskTilgangService {
     private final AxsysConsumer axsysConsumer;
     private final LdapService ldapService;
     private final NorgConsumer norgConsumer;
-    private final OrganisasjonEnhetService organisasjonEnhetService;
 
     @Autowired
     public GeografiskTilgangService(
             AxsysConsumer axsysConsumer,
             LdapService ldapService,
-            NorgConsumer norgConsumer,
-            OrganisasjonEnhetService organisasjonEnhetService
+            NorgConsumer norgConsumer
     ) {
         this.axsysConsumer = axsysConsumer;
         this.ldapService = ldapService;
         this.norgConsumer = norgConsumer;
-        this.organisasjonEnhetService = organisasjonEnhetService;
     }
 
     public boolean harGeografiskTilgang(String veilederId, PersonInfo personInfo) {
@@ -64,11 +61,11 @@ public class GeografiskTilgangService {
 
     private boolean harRegionalTilgangTilBrukersEnhet(String navKontorForGT, List<String> veiledersEnheter, String veilederId) {
         List<String> veiledersOverordnedeEnheter = veiledersEnheter.stream()
-                .map(organisasjonEnhetService::hentOverordnetEnhetForNAVKontor)
+                .map(norgConsumer::getOverordnetEnhetListForNAVKontor)
                 .flatMap(Collection::stream)
                 .collect(toList());
 
-        return harRegionalTilgang(veilederId) && organisasjonEnhetService.hentOverordnetEnhetForNAVKontor(navKontorForGT)
+        return harRegionalTilgang(veilederId) && norgConsumer.getOverordnetEnhetListForNAVKontor(navKontorForGT)
                 .stream()
                 .anyMatch(veiledersOverordnedeEnheter::contains);
     }
