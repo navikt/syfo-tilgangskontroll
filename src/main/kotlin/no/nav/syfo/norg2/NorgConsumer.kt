@@ -59,9 +59,16 @@ constructor(
                 it.enhetNr
             }
         } catch (e: RestClientResponseException) {
-            metric.countEvent("call_norg2_getoverordnetenhetforenhet_fail")
-            log.error("Call to NORG2-OverordnetEnhetForNAVKontor failed with status HTTP-${e.rawStatusCode} for enhetNr $enhetNr")
-            throw e
+            val message = "Call to NORG2-OverordnetEnhetForNAVKontor failed with status HTTP-${e.rawStatusCode} for enhetNr $enhetNr"
+            if (e.rawStatusCode == 404) {
+                log.warn(message)
+                metric.countEvent("call_norg2_getoverordnetenhetforenhet_notfound")
+                return emptyList()
+            } else {
+                log.error(message)
+                metric.countEvent("call_norg2_getoverordnetenhetforenhet_fail")
+                throw e
+            }
         }
     }
 
