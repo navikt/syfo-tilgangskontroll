@@ -31,11 +31,11 @@ public class GeografiskTilgangService {
         this.norgConsumer = norgConsumer;
     }
 
-    public boolean harGeografiskTilgang(String veilederId, PersonInfo personInfo) {
+    public boolean harGeografiskTilgang(String veilederId, String geografiskTilknytning) {
         if (harNasjonalTilgang(veilederId)) {
             return true;
         }
-        final String navKontorForGT = norgConsumer.getNAVKontorForGT(personInfo.getGeografiskTilknytning());
+        final String navKontorForGT = norgConsumer.getNAVKontorForGT(geografiskTilknytning);
         final List<String> veiledersEnheter = axsysConsumer.enheter(veilederId)
                 .stream()
                 .map(AxsysEnhet::getEnhetId)
