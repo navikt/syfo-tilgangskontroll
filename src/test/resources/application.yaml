@@ -20,4 +20,10 @@ server:
   servlet:
     context-path: /syfo-tilgangskontroll
 
+srv:
+  username: "username"
+  password: "password"
+
 norg2.url: http://norg2/norg2
+security.token.service.rest.url: "http://security-token-service"
+syfobehandlendeenhet.url: "http://syfobehandlendeenhet"

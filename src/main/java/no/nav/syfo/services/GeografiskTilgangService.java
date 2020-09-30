@@ -2,8 +2,8 @@ package no.nav.syfo.services;
 
 import no.nav.syfo.axsys.AxsysConsumer;
 import no.nav.syfo.axsys.AxsysEnhet;
+import no.nav.syfo.behandlendeenhet.BehandlendeEnhetConsumer;
 import no.nav.syfo.domain.AdRoller;
-import no.nav.syfo.domain.PersonInfo;
 import no.nav.syfo.norg2.NorgConsumer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,25 +17,28 @@ import static java.util.stream.Collectors.toList;
 public class GeografiskTilgangService {
 
     private final AxsysConsumer axsysConsumer;
+    private final BehandlendeEnhetConsumer behandlendeEnhetConsumer;
     private final LdapService ldapService;
     private final NorgConsumer norgConsumer;
 
     @Autowired
     public GeografiskTilgangService(
             AxsysConsumer axsysConsumer,
+            BehandlendeEnhetConsumer behandlendeEnhetConsumer,
             LdapService ldapService,
             NorgConsumer norgConsumer
     ) {
         this.axsysConsumer = axsysConsumer;
+        this.behandlendeEnhetConsumer = behandlendeEnhetConsumer;
         this.ldapService = ldapService;
         this.norgConsumer = norgConsumer;
     }
 
-    public boolean harGeografiskTilgang(String veilederId, String geografiskTilknytning) {
+    public boolean harGeografiskTilgang(String veilederId, String personFnr, String geografiskTilknytning) {
         if (harNasjonalTilgang(veilederId)) {
             return true;
         }
-        final String navKontorForGT = norgConsumer.getNAVKontorForGT(geografiskTilknytning);
+        final String navKontorForGT = getNavKontorForGT(personFnr, geografiskTilknytning);
         final List<String> veiledersEnheter = axsysConsumer.enheter(veilederId)
                 .stream()
                 .map(AxsysEnhet::getEnhetId)
@@ -68,5 +71,15 @@ public class GeografiskTilgangService {
         return harRegionalTilgang(veilederId) && norgConsumer.getOverordnetEnhetListForNAVKontor(navKontorForGT)
                 .stream()
                 .anyMatch(veiledersOverordnedeEnheter::contains);
+    }
+
+    private String getNavKontorForGT(String personFnr, String geografiskTilknytning) {
+        return isGeografiskTilknytningUtland(geografiskTilknytning)
+                ? behandlendeEnhetConsumer.getBehandlendeEnhet(personFnr, null).getEnhetId()
+                : norgConsumer.getNAVKontorForGT(geografiskTilknytning);
+    }
+
+    private boolean isGeografiskTilknytningUtland(String geografiskTilknytning) {
+        return geografiskTilknytning.matches("[a-zA-Z]{3}");
     }
 }

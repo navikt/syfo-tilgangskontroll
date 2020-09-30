@@ -52,7 +52,7 @@ public class TilgangService {
             return new Tilgang().withHarTilgang(false).withBegrunnelse(SYFO.name());
         }
 
-        if (!geografiskTilgangService.harGeografiskTilgang(veilederId, personInfo.getGeografiskTilknytning())) {
+        if (!geografiskTilgangService.harGeografiskTilgang(veilederId, brukerFnr, personInfo.getGeografiskTilknytning())) {
             return new Tilgang().withHarTilgang(false).withBegrunnelse(GEOGRAFISK);
         }
 
