@@ -7,4 +7,6 @@ object UserConstants {
     const val NAV_ENHETID_1 = "0330"
     const val NAV_ENHETID_2 = "1814"
     const val NAV_ENHETID_3 = "0215"
+
+    const val PERSON_FNR = "12345678910"
 }

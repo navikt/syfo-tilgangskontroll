@@ -7,3 +7,5 @@ const val APP_CONSUMER_ID = "syfo-tilgangskontroll"
 const val NAV_CALL_ID_HEADER = "Nav-Call-Id"
 
 fun createCallId(): String = UUID.randomUUID().toString()
+
+fun getOrCreateCallId(callId: String?): String = callId ?: UUID.randomUUID().toString()

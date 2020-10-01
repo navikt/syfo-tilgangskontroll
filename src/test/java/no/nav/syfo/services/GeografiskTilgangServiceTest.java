@@ -2,6 +2,8 @@ package no.nav.syfo.services;
 
 import no.nav.syfo.axsys.AxsysConsumer;
 import no.nav.syfo.axsys.AxsysEnhet;
+import no.nav.syfo.behandlendeenhet.BehandlendeEnhet;
+import no.nav.syfo.behandlendeenhet.BehandlendeEnhetConsumer;
 import no.nav.syfo.domain.AdRoller;
 import no.nav.syfo.norg2.NorgConsumer;
 import org.junit.Before;
@@ -14,7 +16,9 @@ import org.mockito.junit.MockitoJUnitRunner;
 import static java.util.Arrays.asList;
 import static java.util.Collections.singletonList;
 import static no.nav.syfo.domain.AdRoller.REGIONAL;
+import static no.nav.syfo.testhelper.BehandlendeenhetMockKt.generateBehandlendeEnhet;
 import static no.nav.syfo.testhelper.UserConstants.NAV_ENHET_NAVN;
+import static no.nav.syfo.testhelper.UserConstants.PERSON_FNR;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
@@ -28,9 +32,12 @@ public class GeografiskTilgangServiceTest {
     private static final String VEILEDERS_ENHET = "veiledersEnhet";
     private static final String OVERORDNET_ENHET = "fylkeskontor";
     private static final String GEOGRAFISK_TILKNYTNING = "brukersPostnummer";
+    private static final String GEOGRAFISK_TILKNYTNING_UTLAND = "SWE";
 
     @Mock
     private AxsysConsumer axsysConsumer;
+    @Mock
+    private BehandlendeEnhetConsumer behandlendeEnhetConsumer;
     @Mock
     private LdapService ldapService;
     @Mock
@@ -49,13 +56,13 @@ public class GeografiskTilgangServiceTest {
     @Test
     public void nasjonalTilgangGirTilgang() {
         when(ldapService.harTilgang(VEILEDER_UID, AdRoller.NASJONAL.rolle)).thenReturn(true);
-        assertThat(geografiskTilgangService.harGeografiskTilgang(VEILEDER_UID, GEOGRAFISK_TILKNYTNING)).isTrue();
+        assertThat(geografiskTilgangService.harGeografiskTilgang(VEILEDER_UID, PERSON_FNR, GEOGRAFISK_TILKNYTNING)).isTrue();
     }
 
     @Test
     public void utvidetTilNasjonalTilgangGirTilgang() {
         when(ldapService.harTilgang(VEILEDER_UID, AdRoller.UTVIDBAR_TIL_NASJONAL.rolle)).thenReturn(true);
-        assertThat(geografiskTilgangService.harGeografiskTilgang(VEILEDER_UID, GEOGRAFISK_TILKNYTNING)).isTrue();
+        assertThat(geografiskTilgangService.harGeografiskTilgang(VEILEDER_UID, PERSON_FNR, GEOGRAFISK_TILKNYTNING)).isTrue();
     }
 
     @Test
@@ -71,7 +78,40 @@ public class GeografiskTilgangServiceTest {
                                 NAV_ENHET_NAVN
                         ))
         );
-        assertThat(geografiskTilgangService.harGeografiskTilgang(VEILEDER_UID, GEOGRAFISK_TILKNYTNING)).isTrue();
+        assertThat(geografiskTilgangService.harGeografiskTilgang(VEILEDER_UID, PERSON_FNR, GEOGRAFISK_TILKNYTNING)).isTrue();
+    }
+
+    @Test
+    public void harTilgangHvisVeilederHarTilgangTilSammeEnhetSomBrukerUtland() {
+        BehandlendeEnhet behandlendeEnhet = generateBehandlendeEnhet(BRUKERS_ENHET);
+        when(behandlendeEnhetConsumer.getBehandlendeEnhet(PERSON_FNR, null)).thenReturn(behandlendeEnhet);
+
+        when(axsysConsumer.enheter(VEILEDER_UID)).thenReturn(
+                asList(
+                        new AxsysEnhet(
+                                BRUKERS_ENHET,
+                                NAV_ENHET_NAVN
+                        ),
+                        new AxsysEnhet(
+                                "enHeltAnnenEnhet",
+                                NAV_ENHET_NAVN
+                        ))
+        );
+        assertThat(geografiskTilgangService.harGeografiskTilgang(VEILEDER_UID, PERSON_FNR, GEOGRAFISK_TILKNYTNING_UTLAND)).isTrue();
+    }
+
+    @Test
+    public void harIkkeTilgangHvisVeilederIkkeHarTilgangTilSammeEnhetSomBrukerUtland() {
+        BehandlendeEnhet behandlendeEnhet = generateBehandlendeEnhet(BRUKERS_ENHET);
+        when(behandlendeEnhetConsumer.getBehandlendeEnhet(PERSON_FNR, null)).thenReturn(behandlendeEnhet);
+
+        when(axsysConsumer.enheter(VEILEDER_UID)).thenReturn(
+                singletonList(new AxsysEnhet(
+                        "enHeltAnnenEnhet",
+                        NAV_ENHET_NAVN
+                ))
+        );
+        assertThat(geografiskTilgangService.harGeografiskTilgang(VEILEDER_UID, PERSON_FNR, GEOGRAFISK_TILKNYTNING_UTLAND)).isFalse();
     }
 
     @Test
@@ -82,7 +122,7 @@ public class GeografiskTilgangServiceTest {
                         NAV_ENHET_NAVN
                 ))
         );
-        assertThat(geografiskTilgangService.harGeografiskTilgang(VEILEDER_UID, GEOGRAFISK_TILKNYTNING)).isFalse();
+        assertThat(geografiskTilgangService.harGeografiskTilgang(VEILEDER_UID, PERSON_FNR, GEOGRAFISK_TILKNYTNING)).isFalse();
     }
 
     @Test
@@ -96,7 +136,7 @@ public class GeografiskTilgangServiceTest {
         );
         when(norgConsumer.getOverordnetEnhetListForNAVKontor(VEILEDERS_ENHET)).thenReturn(singletonList(OVERORDNET_ENHET));
         when(norgConsumer.getOverordnetEnhetListForNAVKontor(BRUKERS_ENHET)).thenReturn(singletonList(OVERORDNET_ENHET));
-        assertThat(geografiskTilgangService.harGeografiskTilgang(VEILEDER_UID, GEOGRAFISK_TILKNYTNING)).isTrue();
+        assertThat(geografiskTilgangService.harGeografiskTilgang(VEILEDER_UID, PERSON_FNR, GEOGRAFISK_TILKNYTNING)).isTrue();
     }
 
     @Test
@@ -107,6 +147,6 @@ public class GeografiskTilgangServiceTest {
                         NAV_ENHET_NAVN
                 ))
         );
-        assertThat(geografiskTilgangService.harGeografiskTilgang(VEILEDER_UID, GEOGRAFISK_TILKNYTNING)).isFalse();
+        assertThat(geografiskTilgangService.harGeografiskTilgang(VEILEDER_UID, PERSON_FNR, GEOGRAFISK_TILKNYTNING)).isFalse();
     }
 }
