@@ -9,7 +9,6 @@ version = "1.0.0"
 val cxfVersion = "3.3.4"
 val tokenValidationSpringSupportVersion = "1.3.0"
 val personV3Version = "1.2019.07.11-06.47-b55f47790a9d"
-val springBootVersion = "2.2.0.RELEASE"
 val springRetryVersion = "1.2.4.RELEASE"
 val kotlinJacksonVersion = "2.10.0"
 val logbackVersion = "6.3"
@@ -17,6 +16,8 @@ val logbackVersion = "6.3"
 plugins {
     kotlin("jvm") version "1.4.10"
     id("org.jetbrains.kotlin.plugin.allopen") version "1.4.10"
+    id("org.springframework.boot") version "2.2.0.RELEASE"
+    id("io.spring.dependency-management") version "1.0.10.RELEASE"
     id("com.github.johnrengelman.shadow") version "6.0.0"
 }
 
@@ -50,19 +51,19 @@ dependencies {
     implementation(kotlin("reflect"))
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin:$kotlinJacksonVersion")
 
-    implementation("org.springframework.boot:spring-boot-starter-web:$springBootVersion")
-    implementation("org.springframework.boot:spring-boot-starter-actuator:$springBootVersion")
-    implementation("org.springframework.boot:spring-boot-starter-logging:$springBootVersion")
-    implementation("org.springframework.boot:spring-boot-starter-data-redis:$springBootVersion")
-    implementation("org.springframework.boot:spring-boot-starter-aop:$springBootVersion")
+    implementation("org.springframework.boot:spring-boot-starter-web")
+    implementation("org.springframework.boot:spring-boot-starter-actuator")
+    implementation("org.springframework.boot:spring-boot-starter-logging")
+    implementation("org.springframework.boot:spring-boot-starter-data-redis")
+    implementation("org.springframework.boot:spring-boot-starter-aop")
 
     implementation("com.sun.xml.ws:jaxws-ri:2.3.2")
     implementation("com.sun.activation:javax.activation:1.2.0")
 
     implementation("org.springframework.retry:spring-retry:$springRetryVersion")
 
-    implementation("org.projectlombok:lombok:1.16.22")
-    annotationProcessor("org.projectlombok:lombok:1.18.6")
+    implementation("org.projectlombok:lombok")
+    annotationProcessor("org.projectlombok:lombok")
 
     implementation("javax.ws.rs:javax.ws.rs-api:2.0.1")
     implementation("org.glassfish.jersey.core:jersey-common:2.26")
@@ -81,7 +82,7 @@ dependencies {
 
     implementation("no.nav.tjenestespesifikasjoner:person-v3-tjenestespesifikasjon:$personV3Version")
 
-    testImplementation("org.springframework.boot:spring-boot-starter-test:$springBootVersion")
+    testImplementation("org.springframework.boot:spring-boot-starter-test")
     testImplementation("no.nav.security:token-validation-test-support:$tokenValidationSpringSupportVersion")
 }
 
