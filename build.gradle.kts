@@ -15,8 +15,8 @@ val kotlinJacksonVersion = "2.10.0"
 val logbackVersion = "6.3"
 
 plugins {
-    kotlin("jvm") version "1.3.50"
-    id("org.jetbrains.kotlin.plugin.allopen") version "1.3.50"
+    kotlin("jvm") version "1.4.10"
+    id("org.jetbrains.kotlin.plugin.allopen") version "1.4.10"
     id("com.github.johnrengelman.shadow") version "4.0.3"
 }
 
