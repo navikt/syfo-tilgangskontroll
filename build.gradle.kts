@@ -17,7 +17,7 @@ val logbackVersion = "6.3"
 plugins {
     kotlin("jvm") version "1.4.10"
     id("org.jetbrains.kotlin.plugin.allopen") version "1.4.10"
-    id("com.github.johnrengelman.shadow") version "4.0.3"
+    id("com.github.johnrengelman.shadow") version "6.0.0"
 }
 
 buildscript {
