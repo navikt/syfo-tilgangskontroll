@@ -49,8 +49,8 @@ public class STSClientConfig {
     protected static void configureStsWithPolicyForClient(STSClient stsClient, Client client, String policyReference,
                                                           boolean cacheTokenInEndpoint) {
         String location = System.getenv("SECURITYTOKENSERVICE_URL");
-        String username = System.getenv("srv_username");
-        String password = System.getenv("srv_password");
+        String username = System.getenv("SRV_USERNAME");
+        String password = System.getenv("SRV_PASSWORD");
 
         configureSTSClient(stsClient, location, username, password);
 
