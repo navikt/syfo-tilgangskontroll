@@ -41,6 +41,8 @@ spec:
     paths:
       - kvPath: /azuread/data/dev/creds/syfo-tilgangskontroll
         mountPath: /var/run/secrets/nais.io/azuread
+      - kvPath: "/serviceuser/data/dev/srvsyfo-tilgangskontroll"
+        mountPath: "/secrets/serviceuser/syfo-tilgangskontroll"
       - kvPath: serviceuser/data/dev/srvssolinux
         mountPath: /secrets/ldap/ldap
       - kvPath: /kv/preprod/fss/syfo-tilgangskontroll/default
