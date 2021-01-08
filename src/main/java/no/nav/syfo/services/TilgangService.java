@@ -3,6 +3,7 @@ package no.nav.syfo.services;
 import no.nav.syfo.axsys.AxsysConsumer;
 import no.nav.syfo.domain.PersonInfo;
 import no.nav.syfo.domain.Tilgang;
+import no.nav.syfo.geografisktilknytning.GeografiskTilgangService;
 import no.nav.syfo.skjermedepersoner.SkjermedePersonerPipConsumer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
@@ -52,7 +53,7 @@ public class TilgangService {
             return new Tilgang().withHarTilgang(false).withBegrunnelse(SYFO.name());
         }
 
-        if (!geografiskTilgangService.harGeografiskTilgang(veilederId, brukerFnr, personInfo.getGeografiskTilknytning())) {
+        if (!geografiskTilgangService.harGeografiskTilgang(veilederId, brukerFnr)) {
             return new Tilgang().withHarTilgang(false).withBegrunnelse(GEOGRAFISK);
         }
 

@@ -76,6 +76,8 @@ spec:
       value: dc=preprod,dc=local
     - name: NORG2_URL
       value: https://app-q1.adeo.no/norg2
+    - name: PDL_URL
+      value: https://pdl-api.nais.preprod.local/graphql
     - name: SECURITY_TOKEN_SERVICE_REST_URL
       value: https://security-token-service.nais.preprod.local
     - name: SYFOBEHANDLENDEENHET_URL
