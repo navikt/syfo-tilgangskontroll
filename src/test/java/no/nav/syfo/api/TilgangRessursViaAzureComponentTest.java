@@ -6,6 +6,7 @@ import no.nav.syfo.axsys.AxsysConsumer;
 import no.nav.syfo.axsys.AxsysEnhet;
 import no.nav.syfo.domain.Tilgang;
 import no.nav.syfo.norg2.NorgConsumer;
+import no.nav.syfo.pdl.PdlConsumer;
 import no.nav.syfo.services.LdapService;
 import no.nav.syfo.skjermedepersoner.SkjermedePersonerPipConsumer;
 import org.junit.*;
@@ -23,18 +24,13 @@ import static java.util.Arrays.asList;
 import static java.util.Collections.singletonList;
 import static no.nav.syfo.domain.AdRoller.*;
 import static no.nav.syfo.mocks.PersonMock.*;
-import static no.nav.syfo.testhelper.Norg2MockKt.generateNorgEnhet;
 import static no.nav.syfo.testhelper.UserConstants.*;
 import static no.nav.syfo.util.LdapUtil.mockRoller;
 import static no.nav.syfo.util.OidcTestHelper.loggInnVeilederMedAzure;
 import static no.nav.syfo.util.OidcTestHelper.loggUtAlle;
 import static org.junit.Assert.*;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
-
-/**
- * Komponent / blackbox test av møtebehovsfunskjonaliteten (med Azure innlogging) - test at endepunktet (controlleren, for enkelhets skyld)
- * gir riktig svar utifra hva web-servicene returnerer
- */
 
 @ActiveProfiles("test")
 @RunWith(SpringRunner.class)
@@ -51,6 +47,8 @@ public class TilgangRessursViaAzureComponentTest {
     private AxsysConsumer axsysConsumer;
     @MockBean
     private NorgConsumer norgConsumer;
+    @MockBean
+    private PdlConsumer pdlConsumer;
     @MockBean
     private SkjermedePersonerPipConsumer skjermedePersonerPipConsumer;
     @Autowired
@@ -78,6 +76,7 @@ public class TilgangRessursViaAzureComponentTest {
         when(norgConsumer.getNAVKontorForGT(__0330.getGeografiskTilknytning())).thenReturn(
                 NAV_ENHETID_1
         );
+        when(pdlConsumer.geografiskTilknytning(anyString())).thenReturn("0330");
         when(skjermedePersonerPipConsumer.erSkjermet(BJARNE_BRUKER)).thenReturn(false);
         when(skjermedePersonerPipConsumer.erSkjermet(BENGT_KODE6_BRUKER)).thenReturn(false);
         when(skjermedePersonerPipConsumer.erSkjermet(BIRTE_KODE7_BRUKER)).thenReturn(false);

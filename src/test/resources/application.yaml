@@ -25,5 +25,6 @@ srv:
   password: "password"
 
 norg2.url: http://norg2/norg2
+pdl.url: "http://pdl"
 security.token.service.rest.url: "http://security-token-service"
 syfobehandlendeenhet.url: "http://syfobehandlendeenhet"

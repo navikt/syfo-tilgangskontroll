@@ -6,6 +6,7 @@ import no.nav.syfo.axsys.AxsysConsumer;
 import no.nav.syfo.axsys.AxsysEnhet;
 import no.nav.syfo.domain.Tilgang;
 import no.nav.syfo.norg2.NorgConsumer;
+import no.nav.syfo.pdl.PdlConsumer;
 import no.nav.syfo.security.TokenConsumer;
 import no.nav.syfo.services.LdapService;
 import no.nav.syfo.skjermedepersoner.SkjermedePersonerPipConsumer;
@@ -23,14 +24,14 @@ import java.text.ParseException;
 import static java.util.Arrays.asList;
 import static no.nav.syfo.domain.AdRoller.*;
 import static no.nav.syfo.mocks.PersonMock.*;
-import static no.nav.syfo.testhelper.Norg2MockKt.generateNorgEnhet;
 import static no.nav.syfo.testhelper.UserConstants.*;
 import static no.nav.syfo.util.LdapUtil.mockRoller;
 import static no.nav.syfo.util.OidcTestHelper.logInVeilederWithAzure2;
 import static no.nav.syfo.util.OidcTestHelper.loggUtAlle;
 import static org.junit.Assert.*;
-import static org.mockito.Mockito.when;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.when;
 
 @ActiveProfiles("test")
 @RunWith(SpringRunner.class)
@@ -48,6 +49,9 @@ public class AccessToRessursViaAzure2ComponentTest {
 
     @MockBean
     private NorgConsumer norgConsumer;
+
+    @MockBean
+    private PdlConsumer pdlConsumer;
 
     @MockBean
     private SkjermedePersonerPipConsumer skjermedePersonerPipConsumer;
@@ -80,6 +84,7 @@ public class AccessToRessursViaAzure2ComponentTest {
         when(norgConsumer.getNAVKontorForGT(__0330.getGeografiskTilknytning())).thenReturn(
                 NAV_ENHETID_1
         );
+        when(pdlConsumer.geografiskTilknytning(anyString())).thenReturn("0330");
         when(skjermedePersonerPipConsumer.erSkjermet(BJARNE_BRUKER)).thenReturn(false);
         when(skjermedePersonerPipConsumer.erSkjermet(BENGT_KODE6_BRUKER)).thenReturn(false);
         when(skjermedePersonerPipConsumer.erSkjermet(BIRTE_KODE7_BRUKER)).thenReturn(false);
