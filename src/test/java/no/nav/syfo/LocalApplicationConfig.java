@@ -1,8 +1,6 @@
 package no.nav.syfo;
 
 import no.nav.security.token.support.test.spring.TokenGeneratorConfiguration;
-import no.nav.syfo.mocks.PersonMock;
-import no.nav.tjeneste.virksomhet.person.v3.binding.PersonV3;
 import org.springframework.context.annotation.*;
 import org.springframework.http.client.ClientHttpRequestInterceptor;
 import org.springframework.web.client.RestTemplate;
@@ -20,10 +18,4 @@ public class LocalApplicationConfig {
         template.setInterceptors(asList(interceptors));
         return template;
     }
-
-    @Bean
-    public PersonV3 personV3Mock() {
-        return new PersonMock();
-    }
-
 }

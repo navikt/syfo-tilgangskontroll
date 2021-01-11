@@ -23,7 +23,6 @@ import java.text.ParseException;
 
 import static java.util.Arrays.asList;
 import static no.nav.syfo.domain.AdRoller.*;
-import static no.nav.syfo.mocks.PersonMock.*;
 import static no.nav.syfo.testhelper.UserConstants.*;
 import static no.nav.syfo.util.LdapUtil.mockRoller;
 import static no.nav.syfo.util.OidcTestHelper.logInVeilederWithAzure2;
@@ -81,7 +80,7 @@ public class AccessToRessursViaAzure2ComponentTest {
                                 NAV_ENHET_NAVN
                         ))
         );
-        when(norgConsumer.getNAVKontorForGT(__0330.getGeografiskTilknytning())).thenReturn(
+        when(norgConsumer.getNAVKontorForGT(NAV_ENHETID_1)).thenReturn(
                 NAV_ENHETID_1
         );
         when(pdlConsumer.geografiskTilknytning(anyString())).thenReturn("0330");
@@ -90,7 +89,7 @@ public class AccessToRessursViaAzure2ComponentTest {
         when(skjermedePersonerPipConsumer.erSkjermet(BIRTE_KODE7_BRUKER)).thenReturn(false);
         when(skjermedePersonerPipConsumer.erSkjermet(ERIK_EGENANSATT_BRUKER)).thenReturn(true);
         when(tokenConsumer.getSubjectFromMsGraph(any(TokenValidationContextHolder.class))).thenReturn(
-            VEILEDER_ID
+                VEILEDER_ID
         );
         logInVeilederWithAzure2(oidcRequestContextHolder, VEILEDER_ID);
     }
@@ -111,6 +110,7 @@ public class AccessToRessursViaAzure2ComponentTest {
     @Test
     public void accessToKode6PersonDenied() {
         mockRoller(ldapServiceMock, VEILEDER_ID, INNVILG, SYFO);
+        when(pdlConsumer.isKode6(any())).thenReturn(true);
 
         ResponseEntity response = tilgangRessurs.accessToPersonViaAzure(BENGT_KODE6_BRUKER);
         assertAccessDenied(response, KODE6.name());
@@ -119,6 +119,7 @@ public class AccessToRessursViaAzure2ComponentTest {
     @Test
     public void accessToKode6PersonAlwaysDenied() {
         mockRoller(ldapServiceMock, VEILEDER_ID, INNVILG, SYFO, KODE6);
+        when(pdlConsumer.isKode6(any())).thenReturn(true);
 
         ResponseEntity response = tilgangRessurs.accessToPersonViaAzure(BENGT_KODE6_BRUKER);
         assertAccessDenied(response, KODE6.name());
@@ -127,6 +128,7 @@ public class AccessToRessursViaAzure2ComponentTest {
     @Test
     public void accessToKode7PersonDenied() {
         mockRoller(ldapServiceMock, VEILEDER_ID, INNVILG, SYFO);
+        when(pdlConsumer.isKode7(any())).thenReturn(true);
 
         ResponseEntity response = tilgangRessurs.accessToPersonViaAzure(BIRTE_KODE7_BRUKER);
         assertAccessDenied(response, KODE7.name());
