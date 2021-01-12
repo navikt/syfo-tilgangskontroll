@@ -23,7 +23,7 @@ import no.nav.syfo.testhelper.UserConstants.VEILEDER_ID
 import no.nav.syfo.testhelper.generateAdressebeskyttelse
 import no.nav.syfo.testhelper.generatePdlHentPerson
 import no.nav.syfo.util.LdapUtil
-import no.nav.syfo.util.OidcTestHelper
+import no.nav.syfo.testhelper.OidcTestHelper
 import org.junit.After
 import org.junit.Assert
 import org.junit.Before
