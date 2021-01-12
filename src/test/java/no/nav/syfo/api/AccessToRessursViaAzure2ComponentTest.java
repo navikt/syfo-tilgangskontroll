@@ -24,7 +24,7 @@ import java.text.ParseException;
 import static java.util.Arrays.asList;
 import static no.nav.syfo.domain.AdRoller.*;
 import static no.nav.syfo.testhelper.UserConstants.*;
-import static no.nav.syfo.util.LdapUtil.mockRoller;
+import static no.nav.syfo.testhelper.LdapUtil.mockRoller;
 import static no.nav.syfo.testhelper.OidcTestHelper.logInVeilederWithAzure2;
 import static no.nav.syfo.testhelper.OidcTestHelper.loggUtAlle;
 import static org.junit.Assert.*;
