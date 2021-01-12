@@ -5,7 +5,7 @@ import no.nav.syfo.LocalApplication
 import no.nav.syfo.axsys.AxsysConsumer
 import no.nav.syfo.axsys.AxsysEnhet
 import no.nav.syfo.domain.AdRoller
-import no.nav.syfo.domain.Tilgang
+import no.nav.syfo.tilgang.Tilgang
 import no.nav.syfo.norg2.NorgConsumer
 import no.nav.syfo.pdl.Gradering
 import no.nav.syfo.pdl.PdlConsumer
@@ -24,6 +24,7 @@ import no.nav.syfo.testhelper.generateAdressebeskyttelse
 import no.nav.syfo.testhelper.generatePdlHentPerson
 import no.nav.syfo.testhelper.LdapUtil
 import no.nav.syfo.testhelper.OidcTestHelper
+import no.nav.syfo.tilgang.TilgangController
 import org.junit.After
 import org.junit.Assert
 import org.junit.Before
@@ -42,7 +43,7 @@ import java.text.ParseException
 @ActiveProfiles("test")
 @RunWith(SpringRunner::class)
 @SpringBootTest(classes = [LocalApplication::class])
-class TilgangRessursViaAzureComponentTest {
+class TilgangControllerViaAzureComponentTest {
     @MockBean
     private lateinit var axsysConsumer: AxsysConsumer
 
@@ -63,7 +64,7 @@ class TilgangRessursViaAzureComponentTest {
         : LdapService
 
     @Autowired
-    lateinit var tilgangRessurs: TilgangRessurs
+    lateinit var tilgangController: TilgangController
 
     @Before
     @Throws(ParseException::class)
@@ -98,19 +99,19 @@ class TilgangRessursViaAzureComponentTest {
     @Test
     fun tilgangTilTjenestenInnvilget() {
         LdapUtil.mockRoller(ldapServiceMock, VEILEDER_ID, INNVILG, AdRoller.SYFO)
-        Assert.assertEquals(HTTP_STATUS_OK.toLong(), tilgangRessurs.tilgangTilTjenestenViaAzure().statusCodeValue.toLong())
+        Assert.assertEquals(HTTP_STATUS_OK.toLong(), tilgangController.tilgangTilTjenestenViaAzure().statusCodeValue.toLong())
     }
 
     @Test
     fun tilgangTilTjenestenNektet() {
         LdapUtil.mockRoller(ldapServiceMock, VEILEDER_ID, NEKT, AdRoller.SYFO)
-        Assert.assertEquals(HTTP_STATUS_FORBIDDEN.toLong(), tilgangRessurs.tilgangTilTjenestenViaAzure().statusCodeValue.toLong())
+        Assert.assertEquals(HTTP_STATUS_FORBIDDEN.toLong(), tilgangController.tilgangTilTjenestenViaAzure().statusCodeValue.toLong())
     }
 
     @Test
     fun tilgangTilBrukerInnvilget() {
         LdapUtil.mockRoller(ldapServiceMock, VEILEDER_ID, INNVILG, AdRoller.SYFO)
-        val response = tilgangRessurs.tilgangTilBrukerViaAzure(BJARNE_BRUKER)
+        val response = tilgangController.tilgangTilBrukerViaAzure(BJARNE_BRUKER)
         assertTilgangOK(response)
     }
 
@@ -118,7 +119,7 @@ class TilgangRessursViaAzureComponentTest {
     fun tilgangTilKode6BrukerNektet() {
         LdapUtil.mockRoller(ldapServiceMock, VEILEDER_ID, INNVILG, AdRoller.SYFO)
         Mockito.`when`(pdlConsumer.isKode6(ArgumentMatchers.any())).thenReturn(true)
-        val response = tilgangRessurs.tilgangTilBrukerViaAzure(BENGT_KODE6_BRUKER)
+        val response = tilgangController.tilgangTilBrukerViaAzure(BENGT_KODE6_BRUKER)
         assertTilgangNektet(response, AdRoller.KODE6.name)
     }
 
@@ -126,7 +127,7 @@ class TilgangRessursViaAzureComponentTest {
     fun tilgangTilKode6BrukerNektesAlltid() {
         LdapUtil.mockRoller(ldapServiceMock, VEILEDER_ID, INNVILG, AdRoller.SYFO, AdRoller.KODE6)
         Mockito.`when`(pdlConsumer.isKode6(ArgumentMatchers.any())).thenReturn(true)
-        val response = tilgangRessurs.tilgangTilBrukerViaAzure(BENGT_KODE6_BRUKER)
+        val response = tilgangController.tilgangTilBrukerViaAzure(BENGT_KODE6_BRUKER)
         assertTilgangNektet(response, AdRoller.KODE6.name)
     }
 
@@ -134,14 +135,14 @@ class TilgangRessursViaAzureComponentTest {
     fun tilgangTilKode7BrukerNektet() {
         LdapUtil.mockRoller(ldapServiceMock, VEILEDER_ID, INNVILG, AdRoller.SYFO)
         Mockito.`when`(pdlConsumer.isKode7(ArgumentMatchers.any())).thenReturn(true)
-        val response = tilgangRessurs.tilgangTilBrukerViaAzure(BIRTE_KODE7_BRUKER)
+        val response = tilgangController.tilgangTilBrukerViaAzure(BIRTE_KODE7_BRUKER)
         assertTilgangNektet(response, AdRoller.KODE7.name)
     }
 
     @Test
     fun tilgangTilKode7BrukerInnvilget() {
         LdapUtil.mockRoller(ldapServiceMock, VEILEDER_ID, INNVILG, AdRoller.SYFO, AdRoller.KODE7)
-        val response = tilgangRessurs.tilgangTilBrukerViaAzure(BIRTE_KODE7_BRUKER)
+        val response = tilgangController.tilgangTilBrukerViaAzure(BIRTE_KODE7_BRUKER)
         assertTilgangOK(response)
     }
 
@@ -171,7 +172,7 @@ class TilgangRessursViaAzureComponentTest {
         Mockito.`when`(pdlConsumer.person(BIRTE_KODE7_BRUKER))
             .thenReturn(generatePdlHentPerson(generateAdressebeskyttelse(Gradering.FORTROLIG)))
 
-        val response = tilgangRessurs.tilgangTilBrukereViaAzure(listOf(
+        val response = tilgangController.tilgangTilBrukereViaAzure(listOf(
             BJARNE_BRUKER,
             BENGT_KODE6_BRUKER,
             BIRTE_KODE7_BRUKER,
@@ -184,14 +185,14 @@ class TilgangRessursViaAzureComponentTest {
     @Test
     fun tilgangTilEgenAnsattBrukerNektet() {
         LdapUtil.mockRoller(ldapServiceMock, VEILEDER_ID, INNVILG, AdRoller.SYFO)
-        val response = tilgangRessurs.tilgangTilBrukerViaAzure(ERIK_EGENANSATT_BRUKER)
+        val response = tilgangController.tilgangTilBrukerViaAzure(ERIK_EGENANSATT_BRUKER)
         assertTilgangNektet(response, AdRoller.EGEN_ANSATT.name)
     }
 
     @Test
     fun tilgangTilEgenAnsattBrukerInnvilget() {
         LdapUtil.mockRoller(ldapServiceMock, VEILEDER_ID, INNVILG, AdRoller.SYFO, AdRoller.EGEN_ANSATT)
-        val response = tilgangRessurs.tilgangTilBrukerViaAzure(ERIK_EGENANSATT_BRUKER)
+        val response = tilgangController.tilgangTilBrukerViaAzure(ERIK_EGENANSATT_BRUKER)
         assertTilgangOK(response)
     }
 
@@ -204,13 +205,13 @@ class TilgangRessursViaAzureComponentTest {
                 NAV_ENHET_NAVN
             )
         ))
-        Assert.assertEquals(HTTP_STATUS_OK.toLong(), tilgangRessurs.tilgangTilEnhet(NAV_ENHETID_1).statusCodeValue.toLong())
+        Assert.assertEquals(HTTP_STATUS_OK.toLong(), tilgangController.tilgangTilEnhet(NAV_ENHETID_1).statusCodeValue.toLong())
     }
 
     @Test
     fun tilgangTilEnhetNektet() {
         LdapUtil.mockRoller(ldapServiceMock, VEILEDER_ID, INNVILG, AdRoller.SYFO)
-        Assert.assertEquals(HTTP_STATUS_FORBIDDEN.toLong(), tilgangRessurs.tilgangTilEnhet(NAV_ENHETID_3).statusCodeValue.toLong())
+        Assert.assertEquals(HTTP_STATUS_FORBIDDEN.toLong(), tilgangController.tilgangTilEnhet(NAV_ENHETID_3).statusCodeValue.toLong())
     }
 
     private fun assertTilgangOK(response: ResponseEntity<*>) {

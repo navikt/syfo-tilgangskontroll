@@ -4,7 +4,6 @@ import no.nav.syfo.axsys.AxsysConsumer
 import no.nav.syfo.cache.CacheConfig
 import no.nav.syfo.domain.AdRoller
 import no.nav.syfo.domain.PersonIdentNumber
-import no.nav.syfo.domain.Tilgang
 import no.nav.syfo.geografisktilknytning.GeografiskTilgangService
 import no.nav.syfo.pdl.PdlConsumer
 import no.nav.syfo.services.LdapService
