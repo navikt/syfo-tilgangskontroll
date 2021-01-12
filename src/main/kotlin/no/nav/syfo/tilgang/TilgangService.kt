@@ -1,7 +1,7 @@
 package no.nav.syfo.tilgang
 
 import no.nav.syfo.axsys.AxsysConsumer
-import no.nav.syfo.config.CacheConfig
+import no.nav.syfo.cache.CacheConfig
 import no.nav.syfo.domain.AdRoller
 import no.nav.syfo.domain.PersonIdentNumber
 import no.nav.syfo.domain.Tilgang

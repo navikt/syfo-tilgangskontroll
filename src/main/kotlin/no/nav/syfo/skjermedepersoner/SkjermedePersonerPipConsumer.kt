@@ -1,6 +1,6 @@
 package no.nav.syfo.skjermedepersoner
 
-import no.nav.syfo.config.CacheConfig
+import no.nav.syfo.cache.CacheConfig
 import no.nav.syfo.metric.Metric
 import no.nav.syfo.util.*
 import org.slf4j.LoggerFactory

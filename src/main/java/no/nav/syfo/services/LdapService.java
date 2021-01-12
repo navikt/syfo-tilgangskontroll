@@ -13,7 +13,7 @@ import javax.naming.ldap.LdapContext;
 import java.util.Hashtable;
 import java.util.Optional;
 
-import static no.nav.syfo.config.CacheConfig.CACHENAME_VEILEDER_LDAP;
+import static no.nav.syfo.cache.CacheConfig.CACHENAME_VEILEDER_LDAP;
 import static org.apache.commons.lang3.StringUtils.substringBetween;
 import static org.slf4j.LoggerFactory.getLogger;
 

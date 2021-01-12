@@ -1,6 +1,6 @@
 package no.nav.syfo.norg2
 
-import no.nav.syfo.config.CacheConfig
+import no.nav.syfo.cache.CacheConfig
 import no.nav.syfo.metric.Metric
 import no.nav.syfo.util.NAV_CALL_ID_HEADER
 import no.nav.syfo.util.createCallId
