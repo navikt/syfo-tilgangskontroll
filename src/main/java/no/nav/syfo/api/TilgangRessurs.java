@@ -17,6 +17,7 @@ import java.util.stream.Collectors;
 import static no.nav.syfo.security.OIDCClaim.NAVIDENT;
 import static no.nav.syfo.security.OIDCIssuer.AZURE;
 import static no.nav.syfo.security.OIDCIssuer.VEILEDERAZURE;
+import static no.nav.syfo.security.OIDCUtil.getTokenFromAzureOIDCToken;
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
 import static org.springframework.http.HttpStatus.FORBIDDEN;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
@@ -85,7 +86,7 @@ public class TilgangRessurs {
     @GetMapping(path = "/navident/bruker/{fnr}")
     @ProtectedWithClaims(issuer = VEILEDERAZURE)
     public ResponseEntity accessToPersonViaAzure(@PathVariable String fnr) {
-        String veilederId = tokenConsumer.getSubjectFromMsGraph(contextHolder);
+        String veilederId = tokenConsumer.getSubjectFromMsGraph(getTokenFromAzureOIDCToken(contextHolder));
         return sjekktilgangTilBruker(veilederId, fnr);
     }
 

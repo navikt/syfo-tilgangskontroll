@@ -8,4 +8,9 @@ object OIDCUtil {
         val context = contextHolder.tokenValidationContext
         return context.getClaims(issuerName).getStringClaim(claimName)
     }
+
+    @JvmStatic
+    fun getTokenFromAzureOIDCToken(contextHolder: TokenValidationContextHolder): String {
+        return contextHolder.tokenValidationContext.getJwtToken(OIDCIssuer.VEILEDERAZURE).tokenAsString
+    }
 }

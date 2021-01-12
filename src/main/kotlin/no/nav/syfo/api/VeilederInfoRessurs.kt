@@ -6,6 +6,7 @@ import no.nav.syfo.domain.VeilederInfo
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 import no.nav.syfo.security.OIDCIssuer.VEILEDERAZURE
+import no.nav.syfo.security.OIDCUtil
 import org.springframework.http.MediaType.APPLICATION_JSON
 import org.springframework.http.ResponseEntity.ok
 import no.nav.syfo.security.TokenConsumer
@@ -20,7 +21,7 @@ class VeilederInfoRessurs @Inject constructor(
     @GetMapping(path = ["/ident"])
     @ProtectedWithClaims(issuer = VEILEDERAZURE)
     fun hentVeilederIdentFraToken() : ResponseEntity<VeilederInfo> {
-        val veilederIdent = tokenConsumer.getSubjectFromMsGraph(contextHolder)
+        val veilederIdent = tokenConsumer.getSubjectFromMsGraph(OIDCUtil.getTokenFromAzureOIDCToken(contextHolder))
         return ok()
                 .contentType(APPLICATION_JSON)
                 .body(VeilederInfo(veilederIdent))

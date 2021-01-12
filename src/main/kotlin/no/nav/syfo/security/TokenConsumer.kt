@@ -1,7 +1,5 @@
 package no.nav.syfo.security
 
-import no.nav.security.token.support.core.context.TokenValidationContextHolder
-import no.nav.syfo.security.OIDCIssuer.VEILEDERAZURE
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpEntity
 import org.springframework.http.HttpHeaders
@@ -22,10 +20,8 @@ class TokenConsumer @Autowired constructor(private val restTemplate: RestTemplat
         private const val graphApiAccountNameQuery = "https://graph.microsoft.com/v1.0/me/?\$select=onPremisesSamAccountName"
     }
 
-    fun getSubjectFromMsGraph(contextHolder: TokenValidationContextHolder): String {
+    fun getSubjectFromMsGraph(accessToken: String): String {
         return try {
-            val context = contextHolder.tokenValidationContext
-            val accessToken = context.getJwtToken(VEILEDERAZURE).tokenAsString
             val oboToken = exchangeAccessTokenForOnBehalfOfToken(accessToken)
             callMsGraphApi(oboToken)
         } catch (e: Exception) {
@@ -35,25 +31,25 @@ class TokenConsumer @Autowired constructor(private val restTemplate: RestTemplat
 
     private fun exchangeAccessTokenForOnBehalfOfToken(token: String): String {
         val response = restTemplate.exchange(
-                AzureOauthTokenEndpoint,
-                HttpMethod.POST,
-                tokenEndpointEntity(token),
-                TokenResponse::class.java
+            AzureOauthTokenEndpoint,
+            HttpMethod.POST,
+            tokenEndpointEntity(token),
+            TokenResponse::class.java
         )
         return response.body!!.access_token
     }
 
     private fun callMsGraphApi(token: String): String {
         val response = restTemplate.exchange(
-                graphApiAccountNameQuery,
-                HttpMethod.GET,
-                graphEntity(token),
-                GraphResponse::class.java
+            graphApiAccountNameQuery,
+            HttpMethod.GET,
+            graphEntity(token),
+            GraphResponse::class.java
         )
         return response.body!!.onPremisesSamAccountName
     }
 
-    private fun tokenEndpointEntity(token: String): HttpEntity<MultiValueMap<String,String>> {
+    private fun tokenEndpointEntity(token: String): HttpEntity<MultiValueMap<String, String>> {
         val headers = HttpHeaders()
         headers.contentType = MediaType.MULTIPART_FORM_DATA
         val body: MultiValueMap<String, String> = LinkedMultiValueMap()
@@ -63,7 +59,7 @@ class TokenConsumer @Autowired constructor(private val restTemplate: RestTemplat
         body.add("assertion", token)
         body.add("scope", "https://graph.microsoft.com/.default")
         body.add("requested_token_use", "on_behalf_of")
-        return HttpEntity<MultiValueMap<String,String>>(body, headers)
+        return HttpEntity<MultiValueMap<String, String>>(body, headers)
     }
 
     private fun graphEntity(token: String): HttpEntity<String> {
