@@ -1,5 +1,6 @@
 package no.nav.syfo.pdl
 
+import no.nav.syfo.domain.PersonIdentNumber
 import no.nav.syfo.metric.Metric
 import no.nav.syfo.sts.StsConsumer
 import no.nav.syfo.util.ALLE_TEMA_HEADERVERDI
@@ -14,6 +15,7 @@ import org.springframework.http.HttpHeaders.AUTHORIZATION
 import org.springframework.http.HttpMethod
 import org.springframework.http.MediaType
 import org.springframework.stereotype.Service
+import org.springframework.web.client.RestClientException
 import org.springframework.web.client.RestClientResponseException
 import org.springframework.web.client.RestTemplate
 
@@ -64,6 +66,50 @@ class PdlConsumer(
         }
     }
 
+    fun isKode6(pdlHentPerson: PdlHentPerson?): Boolean {
+        return pdlHentPerson?.isKode6() ?: throw PdlRequestFailedException()
+    }
+
+    fun isKode7(pdlHentPerson: PdlHentPerson?): Boolean {
+        return pdlHentPerson?.isKode7() ?: throw PdlRequestFailedException()
+    }
+
+    fun person(personIdentNumber: String): PdlHentPerson? {
+        val query = getPdlQuery("/pdl/hentPerson.graphql")
+        val request = PdlPersonRequest(
+            query = query,
+            variables = PdlPersonRequestVariables(personIdentNumber)
+        )
+        val entity = HttpEntity(
+            request,
+            createRequestHeaders()
+        )
+        try {
+            val pdlPerson = restTemplate.exchange(
+                pdlUrl,
+                HttpMethod.POST,
+                entity,
+                PdlPersonResponse::class.java
+            )
+
+            val pdlPersonReponse = pdlPerson.body!!
+            return if (pdlPersonReponse.errors != null && pdlPersonReponse.errors.isNotEmpty()) {
+                metric.countEvent(CALL_PDL_PERSON_FAIL)
+                pdlPersonReponse.errors.forEach {
+                    LOG.error("Error while requesting person from PersonDataLosningen: ${it.errorMessage()}")
+                }
+                null
+            } else {
+                metric.countEvent(CALL_PDL_PERSON_SUCCESS)
+                pdlPersonReponse.data
+            }
+        } catch (exception: RestClientException) {
+            metric.countEvent(CALL_PDL_PERSON_FAIL)
+            LOG.error("Error from PDL with request-url: $pdlUrl", exception)
+            throw exception
+        }
+    }
+
     private fun getPdlQuery(queryFilePath: String): String {
         return this::class.java.getResource(queryFilePath)
             .readText()
@@ -86,5 +132,7 @@ class PdlConsumer(
         private const val CALL_PDL_BASE = "call_pdl"
         const val CALL_PDL_GT_FAIL = "${CALL_PDL_BASE}_gt_fail"
         const val CALL_PDL_GT_SUCCESS = "${CALL_PDL_BASE}_gt_success"
+        const val CALL_PDL_PERSON_FAIL = "${CALL_PDL_BASE}_fail"
+        const val CALL_PDL_PERSON_SUCCESS = "${CALL_PDL_BASE}_success"
     }
 }

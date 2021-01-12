@@ -6,9 +6,7 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 group = "no.nav.syfo"
 version = "1.0.0"
 
-val cxfVersion = "3.3.4"
 val tokenValidationSpringSupportVersion = "1.3.0"
-val personV3Version = "1.2019.07.11-06.47-b55f47790a9d"
 val springRetryVersion = "1.2.4.RELEASE"
 val kotlinJacksonVersion = "2.10.0"
 val logbackVersion = "6.3"
@@ -21,17 +19,6 @@ plugins {
     id("com.github.johnrengelman.shadow") version "6.0.0"
 }
 
-buildscript {
-    dependencies {
-        classpath("javax.xml.bind:jaxb-api:2.4.0-b180830.0359")
-        classpath("org.glassfish.jaxb:jaxb-runtime:2.4.0-b180830.0438")
-        classpath("com.sun.activation:javax.activation:1.2.0")
-        classpath("com.sun.xml.ws:jaxws-tools:2.3.1") {
-            exclude(group = "com.sun.xml.ws", module = "policy")
-        }
-    }
-}
-
 allOpen {
     annotation("org.springframework.context.annotation.Configuration")
     annotation("org.springframework.stereotype.Service")
@@ -40,7 +27,6 @@ allOpen {
 
 repositories {
     mavenCentral()
-    maven(url = "https://repo1.maven.org/maven2/")
 }
 
 dependencies {
@@ -62,22 +48,12 @@ dependencies {
     implementation("org.projectlombok:lombok")
     annotationProcessor("org.projectlombok:lombok")
 
-    implementation("javax.ws.rs:javax.ws.rs-api:2.0.1")
     implementation("org.glassfish.jersey.core:jersey-common:2.26")
     implementation("org.slf4j:slf4j-api:1.7.25")
     implementation("net.logstash.logback:logstash-logback-encoder:$logbackVersion")
     implementation("no.nav.security:token-validation-spring:$tokenValidationSpringSupportVersion")
 
     implementation("io.micrometer:micrometer-registry-prometheus:1.0.6")
-
-    implementation("org.apache.cxf:cxf-rt-features-logging:$cxfVersion")
-    implementation("org.apache.cxf:cxf-rt-ws-security:$cxfVersion")
-    implementation("org.apache.cxf:cxf-rt-ws-policy:$cxfVersion")
-    implementation("org.apache.cxf:cxf-rt-transports-http:$cxfVersion")
-    implementation("org.apache.cxf:cxf-rt-frontend-jaxws:$cxfVersion")
-    implementation("org.apache.cxf:cxf-core:$cxfVersion")
-
-    implementation("no.nav.tjenestespesifikasjoner:person-v3-tjenestespesifikasjon:$personV3Version")
 
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     testImplementation("no.nav.security:token-validation-test-support:$tokenValidationSpringSupportVersion")

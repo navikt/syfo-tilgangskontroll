@@ -26,7 +26,6 @@ public class CacheConfig {
     public static final String CACHENAME_GEOGRAFISK_TILHORIGHET_ENHET = "geografisktilhorighetenhet";
     public static final String CACHENAME_VEILEDER_ENHETER = "veilederenhet";
     public static final String CACHENAME_VEILEDER_LDAP = "ldapveilederrolle";
-    public static final String CACHENAME_PERSON_INFO = "personinfo";
 
     @Bean
     public CacheManager cacheManager(RedisConnectionFactory redisConnectionFactory) {
@@ -46,7 +45,6 @@ public class CacheConfig {
         cacheConfigurations.put(CACHENAME_GEOGRAFISK_TILHORIGHET_ENHET, defaultConfig);
         cacheConfigurations.put(CACHENAME_VEILEDER_ENHETER, defaultConfig);
         cacheConfigurations.put(CACHENAME_VEILEDER_LDAP, defaultConfig);
-        cacheConfigurations.put(CACHENAME_PERSON_INFO, defaultConfig);
 
         return RedisCacheManager.builder(redisConnectionFactory)
                 .cacheDefaults(RedisCacheConfiguration.defaultCacheConfig())

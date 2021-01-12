@@ -5,7 +5,7 @@ import no.nav.security.token.support.core.api.ProtectedWithClaims;
 import no.nav.security.token.support.core.context.TokenValidationContextHolder;
 import no.nav.syfo.domain.Tilgang;
 import no.nav.syfo.metric.Metric;
-import no.nav.syfo.services.TilgangService;
+import no.nav.syfo.tilgang.TilgangService;
 import no.nav.syfo.security.TokenConsumer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
