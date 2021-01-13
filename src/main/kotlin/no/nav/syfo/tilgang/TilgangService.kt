@@ -6,7 +6,7 @@ import no.nav.syfo.domain.AdRoller
 import no.nav.syfo.domain.PersonIdentNumber
 import no.nav.syfo.geografisktilknytning.GeografiskTilgangService
 import no.nav.syfo.pdl.PdlConsumer
-import no.nav.syfo.services.LdapService
+import no.nav.syfo.ldap.LdapService
 import no.nav.syfo.skjermedepersoner.SkjermedePersonerPipConsumer
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.cache.annotation.Cacheable
@@ -45,7 +45,7 @@ class TilgangService @Autowired constructor(
     }
 
     @Cacheable(cacheNames = [CacheConfig.TILGANGTILTJENESTEN], key = "#veilederId", condition = "#veilederId != null")
-    fun sjekkTilgangTilTjenesten(veilederId: String?): Tilgang {
+    fun sjekkTilgangTilTjenesten(veilederId: String): Tilgang {
         return if (harTilgangTilTjenesten(veilederId)) Tilgang().withHarTilgang(true) else Tilgang().withHarTilgang(false).withBegrunnelse(AdRoller.SYFO.name)
     }
 
@@ -55,15 +55,15 @@ class TilgangService @Autowired constructor(
         return if (!harTilgangTilEnhet(veilederId, enhet)) Tilgang().withHarTilgang(false).withBegrunnelse(ENHET) else Tilgang().withHarTilgang(true)
     }
 
-    private fun harTilgangTilTjenesten(veilederId: String?): Boolean {
+    private fun harTilgangTilTjenesten(veilederId: String): Boolean {
         return harTilgangTilSykefravaersoppfoelging(veilederId)
     }
 
-    private fun harTilgangTilSykefravaersoppfoelging(veilederId: String?): Boolean {
+    private fun harTilgangTilSykefravaersoppfoelging(veilederId: String): Boolean {
         return ldapService.harTilgang(veilederId, AdRoller.SYFO.rolle)
     }
 
-    private fun harTilgangTilKode7(veilederId: String?): Boolean {
+    private fun harTilgangTilKode7(veilederId: String): Boolean {
         return ldapService.harTilgang(veilederId, AdRoller.KODE7.rolle)
     }
 

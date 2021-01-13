@@ -5,9 +5,9 @@ import no.nav.syfo.axsys.AxsysEnhet
 import no.nav.syfo.behandlendeenhet.BehandlendeEnhetConsumer
 import no.nav.syfo.domain.AdRoller
 import no.nav.syfo.geografisktilknytning.GeografiskTilgangService
+import no.nav.syfo.ldap.LdapService
 import no.nav.syfo.norg2.NorgConsumer
 import no.nav.syfo.pdl.PdlConsumer
-import no.nav.syfo.services.LdapService
 import no.nav.syfo.testhelper.UserConstants.NAV_ENHET_NAVN
 import no.nav.syfo.testhelper.UserConstants.PERSON_FNR
 import no.nav.syfo.testhelper.generateBehandlendeEnhet
@@ -15,7 +15,6 @@ import org.assertj.core.api.Assertions
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.mockito.ArgumentMatchers
 import org.mockito.InjectMocks
 import org.mockito.Mock
 import org.mockito.Mockito
@@ -43,7 +42,6 @@ class GeografiskTilgangServiceTest {
 
     @Before
     fun setup() {
-        Mockito.`when`(ldapService.harTilgang(ArgumentMatchers.anyString(), ArgumentMatchers.any())).thenReturn(false)
         Mockito.`when`(norgConsumer.getNAVKontorForGT(GEOGRAFISK_TILKNYTNING)).thenReturn(
             BRUKERS_ENHET
         )

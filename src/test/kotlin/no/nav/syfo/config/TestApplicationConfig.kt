@@ -1,7 +1,7 @@
 package no.nav.syfo.config
 
 import no.nav.syfo.LocalApplicationConfig
-import no.nav.syfo.services.LdapService
+import no.nav.syfo.ldap.LdapService
 import org.mockito.Mockito
 import org.springframework.context.annotation.*
 

@@ -9,7 +9,7 @@ import no.nav.syfo.tilgang.Tilgang
 import no.nav.syfo.norg2.NorgConsumer
 import no.nav.syfo.pdl.PdlConsumer
 import no.nav.syfo.security.TokenConsumer
-import no.nav.syfo.services.LdapService
+import no.nav.syfo.ldap.LdapService
 import no.nav.syfo.skjermedepersoner.SkjermedePersonerPipConsumer
 import no.nav.syfo.testhelper.LdapUtil.mockRoller
 import no.nav.syfo.testhelper.OidcTestHelper.logInVeilederWithAzure2
