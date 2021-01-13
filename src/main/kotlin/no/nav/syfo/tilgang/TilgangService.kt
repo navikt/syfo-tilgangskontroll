@@ -1,13 +1,13 @@
 package no.nav.syfo.tilgang
 
-import no.nav.syfo.axsys.AxsysConsumer
+import no.nav.syfo.consumer.axsys.AxsysConsumer
 import no.nav.syfo.cache.CacheConfig
 import no.nav.syfo.domain.AdRoller
 import no.nav.syfo.domain.PersonIdentNumber
 import no.nav.syfo.geografisktilknytning.GeografiskTilgangService
-import no.nav.syfo.pdl.PdlConsumer
-import no.nav.syfo.ldap.LdapService
-import no.nav.syfo.skjermedepersoner.SkjermedePersonerPipConsumer
+import no.nav.syfo.consumer.pdl.PdlConsumer
+import no.nav.syfo.consumer.ldap.LdapService
+import no.nav.syfo.consumer.skjermedepersoner.SkjermedePersonerPipConsumer
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.cache.annotation.Cacheable
 import org.springframework.stereotype.Service

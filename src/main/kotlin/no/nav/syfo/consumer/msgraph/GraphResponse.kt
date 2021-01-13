@@ -1,4 +1,4 @@
-package no.nav.syfo.security
+package no.nav.syfo.consumer.msgraph
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import java.io.Serializable

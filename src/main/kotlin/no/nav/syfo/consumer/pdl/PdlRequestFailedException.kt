@@ -1,4 +1,4 @@
-package no.nav.syfo.pdl
+package no.nav.syfo.consumer.pdl
 
 import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.ResponseStatus

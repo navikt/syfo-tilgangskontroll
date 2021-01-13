@@ -1,4 +1,4 @@
-package no.nav.syfo.pdl
+package no.nav.syfo.consumer.pdl
 
 data class PdlPersonRequest(
     val query: String,

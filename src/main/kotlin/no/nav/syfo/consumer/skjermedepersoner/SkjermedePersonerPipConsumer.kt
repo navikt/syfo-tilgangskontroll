@@ -1,4 +1,4 @@
-package no.nav.syfo.skjermedepersoner
+package no.nav.syfo.consumer.skjermedepersoner
 
 import no.nav.syfo.cache.CacheConfig
 import no.nav.syfo.metric.Metric

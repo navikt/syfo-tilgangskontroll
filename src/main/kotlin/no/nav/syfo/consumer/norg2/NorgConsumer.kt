@@ -1,4 +1,4 @@
-package no.nav.syfo.norg2
+package no.nav.syfo.consumer.norg2
 
 import no.nav.syfo.cache.CacheConfig
 import no.nav.syfo.metric.Metric

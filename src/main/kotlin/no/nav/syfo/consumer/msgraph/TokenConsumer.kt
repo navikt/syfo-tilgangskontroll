@@ -1,4 +1,4 @@
-package no.nav.syfo.security
+package no.nav.syfo.consumer.msgraph
 
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpEntity

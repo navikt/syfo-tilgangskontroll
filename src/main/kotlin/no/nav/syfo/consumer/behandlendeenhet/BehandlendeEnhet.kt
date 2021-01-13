@@ -1,4 +1,4 @@
-package no.nav.syfo.behandlendeenhet
+package no.nav.syfo.consumer.behandlendeenhet
 
 import java.io.Serializable
 

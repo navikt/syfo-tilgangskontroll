@@ -1,7 +1,7 @@
 package no.nav.syfo.testhelper
 
-import no.nav.syfo.norg2.Enhetsstatus
-import no.nav.syfo.norg2.NorgEnhet
+import no.nav.syfo.consumer.norg2.Enhetsstatus
+import no.nav.syfo.consumer.norg2.NorgEnhet
 
 const val ENHET_NR = "0101"
 const val ENHET_NAVN = "Enhet"

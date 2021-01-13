@@ -1,13 +1,13 @@
 package no.nav.syfo.geografisktilknyntning
 
-import no.nav.syfo.axsys.AxsysConsumer
-import no.nav.syfo.axsys.AxsysEnhet
-import no.nav.syfo.behandlendeenhet.BehandlendeEnhetConsumer
+import no.nav.syfo.consumer.axsys.AxsysConsumer
+import no.nav.syfo.consumer.axsys.AxsysEnhet
+import no.nav.syfo.consumer.behandlendeenhet.BehandlendeEnhetConsumer
 import no.nav.syfo.domain.AdRoller
 import no.nav.syfo.geografisktilknytning.GeografiskTilgangService
-import no.nav.syfo.ldap.LdapService
-import no.nav.syfo.norg2.NorgConsumer
-import no.nav.syfo.pdl.PdlConsumer
+import no.nav.syfo.consumer.ldap.LdapService
+import no.nav.syfo.consumer.norg2.NorgConsumer
+import no.nav.syfo.consumer.pdl.PdlConsumer
 import no.nav.syfo.testhelper.UserConstants.NAV_ENHET_NAVN
 import no.nav.syfo.testhelper.UserConstants.PERSON_FNR
 import no.nav.syfo.testhelper.generateBehandlendeEnhet

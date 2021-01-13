@@ -1,8 +1,8 @@
-package no.nav.syfo.behandlendeenhet
+package no.nav.syfo.consumer.behandlendeenhet
 
 import no.nav.syfo.cache.CacheConfig
 import no.nav.syfo.metric.Metric
-import no.nav.syfo.sts.StsConsumer
+import no.nav.syfo.consumer.sts.StsConsumer
 import no.nav.syfo.util.*
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Value

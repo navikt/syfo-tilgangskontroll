@@ -1,4 +1,4 @@
-package no.nav.syfo.axsys
+package no.nav.syfo.consumer.axsys
 
 import no.nav.syfo.cache.CacheConfig
 import no.nav.syfo.metric.Metric

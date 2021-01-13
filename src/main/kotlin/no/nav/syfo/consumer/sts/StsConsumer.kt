@@ -1,4 +1,4 @@
-package no.nav.syfo.sts
+package no.nav.syfo.consumer.sts
 
 import no.nav.syfo.metric.Metric
 import no.nav.syfo.util.basicCredentials

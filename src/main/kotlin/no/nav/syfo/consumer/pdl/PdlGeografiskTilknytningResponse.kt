@@ -1,4 +1,4 @@
-package no.nav.syfo.pdl
+package no.nav.syfo.consumer.pdl
 
 import java.io.Serializable
 

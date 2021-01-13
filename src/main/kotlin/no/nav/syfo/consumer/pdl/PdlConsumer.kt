@@ -1,8 +1,7 @@
-package no.nav.syfo.pdl
+package no.nav.syfo.consumer.pdl
 
-import no.nav.syfo.domain.PersonIdentNumber
 import no.nav.syfo.metric.Metric
-import no.nav.syfo.sts.StsConsumer
+import no.nav.syfo.consumer.sts.StsConsumer
 import no.nav.syfo.util.ALLE_TEMA_HEADERVERDI
 import no.nav.syfo.util.NAV_CONSUMER_TOKEN_HEADER
 import no.nav.syfo.util.TEMA_HEADER

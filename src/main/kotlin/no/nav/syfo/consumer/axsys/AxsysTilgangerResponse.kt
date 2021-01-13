@@ -1,4 +1,4 @@
-package no.nav.syfo.axsys
+package no.nav.syfo.consumer.axsys
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import java.io.Serializable

@@ -6,8 +6,8 @@ import no.nav.security.token.support.core.context.TokenValidationContext
 import no.nav.security.token.support.core.context.TokenValidationContextHolder
 import no.nav.security.token.support.core.jwt.JwtToken
 import no.nav.security.token.support.test.JwtTokenGenerator
-import no.nav.syfo.security.OIDCIssuer.AZURE
-import no.nav.syfo.security.OIDCIssuer.VEILEDERAZURE
+import no.nav.syfo.api.auth.OIDCIssuer.AZURE
+import no.nav.syfo.api.auth.OIDCIssuer.VEILEDERAZURE
 import java.text.ParseException
 import java.util.*
 

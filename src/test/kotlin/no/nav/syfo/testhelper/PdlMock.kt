@@ -1,9 +1,9 @@
 package no.nav.syfo.testhelper
 
-import no.nav.syfo.pdl.Adressebeskyttelse
-import no.nav.syfo.pdl.Gradering
-import no.nav.syfo.pdl.PdlHentPerson
-import no.nav.syfo.pdl.PdlPerson
+import no.nav.syfo.consumer.pdl.Adressebeskyttelse
+import no.nav.syfo.consumer.pdl.Gradering
+import no.nav.syfo.consumer.pdl.PdlHentPerson
+import no.nav.syfo.consumer.pdl.PdlPerson
 
 fun generateAdressebeskyttelse(
     gradering: Gradering = Gradering.UGRADERT

@@ -1,4 +1,4 @@
-package no.nav.syfo.norg2
+package no.nav.syfo.consumer.norg2
 
 import java.io.Serializable
 

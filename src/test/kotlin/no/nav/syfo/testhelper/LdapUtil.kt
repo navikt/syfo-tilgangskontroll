@@ -1,7 +1,7 @@
 package no.nav.syfo.testhelper
 
 import no.nav.syfo.domain.AdRoller
-import no.nav.syfo.ldap.LdapService
+import no.nav.syfo.consumer.ldap.LdapService
 import org.mockito.Mockito
 
 object LdapUtil {

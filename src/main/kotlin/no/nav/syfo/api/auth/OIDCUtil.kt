@@ -1,4 +1,4 @@
-package no.nav.syfo.security
+package no.nav.syfo.api.auth
 
 import no.nav.security.token.support.core.context.TokenValidationContextHolder
 

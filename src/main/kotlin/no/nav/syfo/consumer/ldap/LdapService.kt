@@ -1,4 +1,4 @@
-package no.nav.syfo.ldap
+package no.nav.syfo.consumer.ldap
 
 import no.nav.syfo.cache.CacheConfig
 import org.apache.commons.lang3.StringUtils
