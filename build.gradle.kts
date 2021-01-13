@@ -36,6 +36,7 @@ dependencies {
 
     implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("org.springframework.boot:spring-boot-starter-actuator")
+    implementation("org.springframework.boot:spring-boot-starter-jersey")
     implementation("org.springframework.boot:spring-boot-starter-logging")
     implementation("org.springframework.boot:spring-boot-starter-data-redis")
     implementation("org.springframework.boot:spring-boot-starter-aop")
@@ -45,10 +46,6 @@ dependencies {
 
     implementation("org.springframework.retry:spring-retry:$springRetryVersion")
 
-    implementation("org.projectlombok:lombok")
-    annotationProcessor("org.projectlombok:lombok")
-
-    implementation("org.glassfish.jersey.core:jersey-common:2.26")
     implementation("org.slf4j:slf4j-api:1.7.25")
     implementation("net.logstash.logback:logstash-logback-encoder:$logbackVersion")
     implementation("no.nav.security:token-validation-spring:$tokenValidationSpringSupportVersion")

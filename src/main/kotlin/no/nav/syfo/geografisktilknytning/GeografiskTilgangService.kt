@@ -6,7 +6,7 @@ import no.nav.syfo.behandlendeenhet.BehandlendeEnhetConsumer
 import no.nav.syfo.domain.AdRoller
 import no.nav.syfo.norg2.NorgConsumer
 import no.nav.syfo.pdl.PdlConsumer
-import no.nav.syfo.services.LdapService
+import no.nav.syfo.ldap.LdapService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 import java.util.stream.Collectors

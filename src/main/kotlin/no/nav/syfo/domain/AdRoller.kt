@@ -1,6 +1,8 @@
-package no.nav.syfo.domain;
+package no.nav.syfo.domain
 
-public enum AdRoller {
+enum class AdRoller(
+    var rolle: String
+) {
     KODE6("0000-GA-GOSYS_KODE6"),
     KODE7("0000-GA-GOSYS_KODE7"),
     SYFO("0000-GA-SYFO-SENSITIV"),
@@ -9,12 +11,4 @@ public enum AdRoller {
     UTVIDBAR_TIL_NASJONAL("0000-GA-GOSYS_UTVIDBAR_TIL_NASJONAL"),
     REGIONAL("0000-GA-GOSYS_REGIONAL"),
     UTVIDBAR_TIL_REGIONAL("0000-GA-GOSYS_UTVIDBAR_TIL_REGIONAL");
-
-
-    public String rolle;
-
-
-    AdRoller (String rolle) {
-        this.rolle = rolle;
-    }
 }

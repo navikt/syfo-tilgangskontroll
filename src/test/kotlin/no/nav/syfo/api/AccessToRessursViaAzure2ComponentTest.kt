@@ -5,11 +5,11 @@ import no.nav.syfo.LocalApplication
 import no.nav.syfo.axsys.AxsysConsumer
 import no.nav.syfo.axsys.AxsysEnhet
 import no.nav.syfo.domain.AdRoller
-import no.nav.syfo.domain.Tilgang
+import no.nav.syfo.tilgang.Tilgang
 import no.nav.syfo.norg2.NorgConsumer
 import no.nav.syfo.pdl.PdlConsumer
 import no.nav.syfo.security.TokenConsumer
-import no.nav.syfo.services.LdapService
+import no.nav.syfo.ldap.LdapService
 import no.nav.syfo.skjermedepersoner.SkjermedePersonerPipConsumer
 import no.nav.syfo.testhelper.LdapUtil.mockRoller
 import no.nav.syfo.testhelper.OidcTestHelper.logInVeilederWithAzure2
@@ -22,6 +22,7 @@ import no.nav.syfo.testhelper.UserConstants.NAV_ENHETID_1
 import no.nav.syfo.testhelper.UserConstants.NAV_ENHETID_2
 import no.nav.syfo.testhelper.UserConstants.NAV_ENHET_NAVN
 import no.nav.syfo.testhelper.UserConstants.VEILEDER_ID
+import no.nav.syfo.tilgang.TilgangController
 import org.junit.After
 import org.junit.Assert
 import org.junit.Before
@@ -63,7 +64,7 @@ class AccessToRessursViaAzure2ComponentTest {
     private lateinit var ldapServiceMock: LdapService
 
     @Autowired
-    lateinit var tilgangRessurs: TilgangRessurs
+    lateinit var tilgangController: TilgangController
 
     @Before
     @Throws(ParseException::class)
@@ -101,7 +102,7 @@ class AccessToRessursViaAzure2ComponentTest {
     @Test
     fun accessToBrukerGranted() {
         mockRoller(ldapServiceMock, VEILEDER_ID, INNVILG, AdRoller.SYFO)
-        val response = tilgangRessurs.accessToPersonViaAzure(BJARNE_BRUKER)
+        val response = tilgangController.accessToPersonViaAzure(BJARNE_BRUKER)
         assertAccessOk(response)
     }
 
@@ -109,7 +110,7 @@ class AccessToRessursViaAzure2ComponentTest {
     fun accessToKode6PersonDenied() {
         mockRoller(ldapServiceMock, VEILEDER_ID, INNVILG, AdRoller.SYFO)
         Mockito.`when`(pdlConsumer.isKode6(ArgumentMatchers.any())).thenReturn(true)
-        val response = tilgangRessurs.accessToPersonViaAzure(BENGT_KODE6_BRUKER)
+        val response = tilgangController.accessToPersonViaAzure(BENGT_KODE6_BRUKER)
         assertAccessDenied(response, AdRoller.KODE6.name)
     }
 
@@ -117,7 +118,7 @@ class AccessToRessursViaAzure2ComponentTest {
     fun accessToKode6PersonAlwaysDenied() {
         mockRoller(ldapServiceMock, VEILEDER_ID, INNVILG, AdRoller.SYFO, AdRoller.KODE6)
         Mockito.`when`(pdlConsumer.isKode6(ArgumentMatchers.any())).thenReturn(true)
-        val response = tilgangRessurs.accessToPersonViaAzure(BENGT_KODE6_BRUKER)
+        val response = tilgangController.accessToPersonViaAzure(BENGT_KODE6_BRUKER)
         assertAccessDenied(response, AdRoller.KODE6.name)
     }
 
@@ -125,28 +126,28 @@ class AccessToRessursViaAzure2ComponentTest {
     fun accessToKode7PersonDenied() {
         mockRoller(ldapServiceMock, VEILEDER_ID, INNVILG, AdRoller.SYFO)
         Mockito.`when`(pdlConsumer.isKode7(ArgumentMatchers.any())).thenReturn(true)
-        val response = tilgangRessurs.accessToPersonViaAzure(BIRTE_KODE7_BRUKER)
+        val response = tilgangController.accessToPersonViaAzure(BIRTE_KODE7_BRUKER)
         assertAccessDenied(response, AdRoller.KODE7.name)
     }
 
     @Test
     fun accessToKode7PersonGranted() {
         mockRoller(ldapServiceMock, VEILEDER_ID, INNVILG, AdRoller.SYFO, AdRoller.KODE7)
-        val response = tilgangRessurs.accessToPersonViaAzure(BIRTE_KODE7_BRUKER)
+        val response = tilgangController.accessToPersonViaAzure(BIRTE_KODE7_BRUKER)
         assertAccessOk(response)
     }
 
     @Test
     fun accessToEgenAnsattPersonDenied() {
         mockRoller(ldapServiceMock, VEILEDER_ID, INNVILG, AdRoller.SYFO)
-        val response = tilgangRessurs.accessToPersonViaAzure(ERIK_EGENANSATT_BRUKER)
+        val response = tilgangController.accessToPersonViaAzure(ERIK_EGENANSATT_BRUKER)
         assertAccessDenied(response, AdRoller.EGEN_ANSATT.name)
     }
 
     @Test
     fun accessToEgenAnsattPersonGranted() {
         mockRoller(ldapServiceMock, VEILEDER_ID, INNVILG, AdRoller.SYFO, AdRoller.EGEN_ANSATT)
-        val response = tilgangRessurs.accessToPersonViaAzure(ERIK_EGENANSATT_BRUKER)
+        val response = tilgangController.accessToPersonViaAzure(ERIK_EGENANSATT_BRUKER)
         assertAccessOk(response)
     }
 
