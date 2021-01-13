@@ -217,13 +217,13 @@ class TilgangControllerViaAzureComponentTest {
     private fun assertTilgangOK(response: ResponseEntity<*>) {
         Assert.assertEquals(HTTP_STATUS_OK.toLong(), response.statusCodeValue.toLong())
         val tilgang = response.body as Tilgang
-        Assert.assertTrue(tilgang.isHarTilgang)
+        Assert.assertTrue(tilgang.harTilgang)
     }
 
     private fun assertTilgangNektet(response: ResponseEntity<*>, begrunnelse: String) {
         Assert.assertEquals(HTTP_STATUS_FORBIDDEN.toLong(), response.statusCodeValue.toLong())
         val tilgang = response.body as Tilgang
-        Assert.assertFalse(tilgang.isHarTilgang)
+        Assert.assertFalse(tilgang.harTilgang)
         Assert.assertEquals(begrunnelse, tilgang.begrunnelse)
     }
 

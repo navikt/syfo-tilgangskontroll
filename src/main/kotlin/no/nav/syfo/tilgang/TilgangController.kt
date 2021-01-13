@@ -74,7 +74,7 @@ class TilgangController @Autowired constructor(
 
     private fun trySjekkTilgangTilBruker(veilederId: String, fnr: String): Boolean {
         return try {
-            tilgangService.sjekkTilgangTilBruker(veilederId, fnr).isHarTilgang
+            tilgangService.sjekkTilgangTilBruker(veilederId, fnr).harTilgang
         } catch (e: RuntimeException) {
             log.error("Uventet feil ved sjekk av tilgang til bruker i liste: {} : {}", e.toString(), e.message, e)
             metric.countEvent("access_persons_person_error")
@@ -93,7 +93,7 @@ class TilgangController @Autowired constructor(
     }
 
     private fun lagRespons(tilgang: Tilgang): ResponseEntity<*> {
-        return if (tilgang.isHarTilgang) ResponseEntity.ok()
+        return if (tilgang.harTilgang) ResponseEntity.ok()
             .contentType(MediaType.APPLICATION_JSON)
             .body(tilgang) else ResponseEntity.status(HttpStatus.FORBIDDEN)
             .contentType(MediaType.APPLICATION_JSON)

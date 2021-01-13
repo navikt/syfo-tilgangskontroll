@@ -27,32 +27,60 @@ class TilgangService @Autowired constructor(
     @Cacheable(cacheNames = [CacheConfig.TILGANGTILBRUKER], key = "#veilederId.concat(#brukerFnr)", condition = "#brukerFnr != null && #veilederId != null")
     fun sjekkTilgang(brukerFnr: String, veilederId: String): Tilgang {
         if (!harTilgangTilTjenesten(veilederId)) {
-            return Tilgang().withHarTilgang(false).withBegrunnelse(AdRoller.SYFO.name)
+            return Tilgang(
+                harTilgang = false,
+                begrunnelse = AdRoller.SYFO.name
+            )
         }
         if (!geografiskTilgangService.harGeografiskTilgang(veilederId, brukerFnr)) {
-            return Tilgang().withHarTilgang(false).withBegrunnelse(GEOGRAFISK)
+            return Tilgang(
+                harTilgang = false,
+                begrunnelse = GEOGRAFISK
+            )
         }
         val personIdentNumber = PersonIdentNumber(brukerFnr)
         val pdlPerson = pdlConsumer.person(personIdentNumber.value)
         if (pdlConsumer.isKode6(pdlPerson)) {
-            return Tilgang().withHarTilgang(false).withBegrunnelse(AdRoller.KODE6.name)
+            return Tilgang(
+                harTilgang = false,
+                begrunnelse = AdRoller.KODE6.name
+            )
         } else if (pdlConsumer.isKode7(pdlPerson) && !harTilgangTilKode7(veilederId)) {
-            return Tilgang().withHarTilgang(false).withBegrunnelse(AdRoller.KODE7.name)
+            return Tilgang(
+                harTilgang = false,
+                begrunnelse = AdRoller.KODE7.name
+            )
         }
         return if (skjermedePersonerPipConsumer.erSkjermet(brukerFnr) && !harTilgangTilEgenAnsatt(veilederId)) {
-            Tilgang().withHarTilgang(false).withBegrunnelse(AdRoller.EGEN_ANSATT.name)
-        } else Tilgang().withHarTilgang(true)
+            return Tilgang(
+                harTilgang = false,
+                begrunnelse = AdRoller.EGEN_ANSATT.name
+            )
+        } else Tilgang(harTilgang = true)
     }
 
     @Cacheable(cacheNames = [CacheConfig.TILGANGTILTJENESTEN], key = "#veilederId", condition = "#veilederId != null")
     fun sjekkTilgangTilTjenesten(veilederId: String): Tilgang {
-        return if (harTilgangTilTjenesten(veilederId)) Tilgang().withHarTilgang(true) else Tilgang().withHarTilgang(false).withBegrunnelse(AdRoller.SYFO.name)
+        return if (harTilgangTilTjenesten(veilederId)) Tilgang(
+            harTilgang = true
+        ) else Tilgang(
+            harTilgang = false,
+            begrunnelse = AdRoller.SYFO.name
+        )
     }
 
     @Cacheable(cacheNames = [CacheConfig.TILGANGTILENHET], key = "#veilederId.concat(#enhet)", condition = "#enhet != null && #veilederId != null")
     fun sjekkTilgangTilEnhet(veilederId: String, enhet: String): Tilgang {
-        if (!harTilgangTilSykefravaersoppfoelging(veilederId)) return Tilgang().withHarTilgang(false).withBegrunnelse(AdRoller.SYFO.name)
-        return if (!harTilgangTilEnhet(veilederId, enhet)) Tilgang().withHarTilgang(false).withBegrunnelse(ENHET) else Tilgang().withHarTilgang(true)
+        if (!harTilgangTilSykefravaersoppfoelging(veilederId)) return Tilgang(
+            harTilgang = false,
+            begrunnelse = AdRoller.SYFO.name
+        )
+        return if (!harTilgangTilEnhet(veilederId, enhet)) Tilgang(
+            harTilgang = false,
+            begrunnelse = ENHET
+        ) else Tilgang(
+            harTilgang = true
+        )
     }
 
     private fun harTilgangTilTjenesten(veilederId: String): Boolean {

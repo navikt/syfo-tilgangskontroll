@@ -40,9 +40,9 @@ class CacheConfig {
     }
 
     companion object {
-        const val TILGANGTILBRUKER = "tilgangtilbruker"
-        const val TILGANGTILTJENESTEN = "tilgangtiltjenesten"
-        const val TILGANGTILENHET = "tilgangtilenhet"
+        const val TILGANGTILBRUKER = "tilgangbruker"
+        const val TILGANGTILTJENESTEN = "tilgangtjenesten"
+        const val TILGANGTILENHET = "tilgangenhet"
         const val CACHENAME_AXSYS_ENHETER = "axsysenheter"
         const val CACHENAME_BEHANDLENDEENHET_FNR = "behandlendeenhetfnr"
         const val CACHENAME_EGENANSATT = "egenansatt"
