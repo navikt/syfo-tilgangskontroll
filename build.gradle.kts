@@ -10,11 +10,12 @@ val tokenValidationSpringSupportVersion = "1.3.0"
 val springRetryVersion = "1.2.4.RELEASE"
 val kotlinJacksonVersion = "2.10.0"
 val logbackVersion = "6.3"
+val prometheusVersion = "1.5.5"
 
 plugins {
     kotlin("jvm") version "1.4.10"
     id("org.jetbrains.kotlin.plugin.allopen") version "1.4.10"
-    id("org.springframework.boot") version "2.2.0.RELEASE"
+    id("org.springframework.boot") version "2.3.7.RELEASE"
     id("io.spring.dependency-management") version "1.0.10.RELEASE"
     id("com.github.johnrengelman.shadow") version "6.0.0"
 }
@@ -50,7 +51,7 @@ dependencies {
     implementation("net.logstash.logback:logstash-logback-encoder:$logbackVersion")
     implementation("no.nav.security:token-validation-spring:$tokenValidationSpringSupportVersion")
 
-    implementation("io.micrometer:micrometer-registry-prometheus:1.0.6")
+    implementation("io.micrometer:micrometer-registry-prometheus:$prometheusVersion")
 
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     testImplementation("no.nav.security:token-validation-test-support:$tokenValidationSpringSupportVersion")
