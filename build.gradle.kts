@@ -6,11 +6,13 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 group = "no.nav.syfo"
 version = "1.0.0"
 
-val tokenValidationSpringSupportVersion = "1.3.0"
-val springRetryVersion = "1.2.4.RELEASE"
+val javaxActivationVersion = "1.2.0"
+val jaxRiVersion = "2.3.2"
 val kotlinJacksonVersion = "2.10.0"
 val logbackVersion = "6.3"
 val prometheusVersion = "1.5.5"
+val slf4jVersion = "1.7.25"
+val tokenValidationSpringSupportVersion = "1.3.0"
 
 plugins {
     kotlin("jvm") version "1.4.10"
@@ -35,31 +37,24 @@ dependencies {
     implementation(kotlin("reflect"))
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin:$kotlinJacksonVersion")
 
-    implementation("org.springframework.boot:spring-boot-starter-web")
+    implementation("com.sun.xml.ws:jaxws-ri:$jaxRiVersion")
+    implementation("com.sun.activation:javax.activation:$javaxActivationVersion")
+
     implementation("org.springframework.boot:spring-boot-starter-actuator")
+    implementation("org.springframework.boot:spring-boot-starter-aop")
+    implementation("org.springframework.boot:spring-boot-starter-data-redis")
     implementation("org.springframework.boot:spring-boot-starter-jersey")
     implementation("org.springframework.boot:spring-boot-starter-logging")
-    implementation("org.springframework.boot:spring-boot-starter-data-redis")
-    implementation("org.springframework.boot:spring-boot-starter-aop")
+    implementation("org.springframework.boot:spring-boot-starter-web")
 
-    implementation("com.sun.xml.ws:jaxws-ri:2.3.2")
-    implementation("com.sun.activation:javax.activation:1.2.0")
-
-    implementation("org.springframework.retry:spring-retry:$springRetryVersion")
-
-    implementation("org.slf4j:slf4j-api:1.7.25")
-    implementation("net.logstash.logback:logstash-logback-encoder:$logbackVersion")
     implementation("no.nav.security:token-validation-spring:$tokenValidationSpringSupportVersion")
 
+    implementation("org.slf4j:slf4j-api:$slf4jVersion")
+    implementation("net.logstash.logback:logstash-logback-encoder:$logbackVersion")
     implementation("io.micrometer:micrometer-registry-prometheus:$prometheusVersion")
 
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     testImplementation("no.nav.security:token-validation-test-support:$tokenValidationSpringSupportVersion")
-}
-
-java {
-    sourceCompatibility = JavaVersion.VERSION_11
-    targetCompatibility = JavaVersion.VERSION_11
 }
 
 tasks {
@@ -74,10 +69,6 @@ tasks {
     }
 
     withType<ShadowJar> {
-        transform(ServiceFileTransformer::class.java) {
-            setPath("META-INF/cxf")
-            include("bus-extensions.txt")
-        }
         transform(PropertiesFileTransformer::class.java) {
             paths = listOf("META-INF/spring.factories")
             mergeStrategy = "append"
