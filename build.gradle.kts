@@ -7,7 +7,7 @@ version = "1.0.0"
 
 val javaxActivationVersion = "1.2.0"
 val jaxRiVersion = "2.3.2"
-val kotlinJacksonVersion = "2.10.0"
+val kotlinJacksonVersion = "2.11.3"
 val logbackVersion = "6.3"
 val prometheusVersion = "1.5.5"
 val slf4jVersion = "1.7.25"
