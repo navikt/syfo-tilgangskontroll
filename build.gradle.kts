@@ -6,7 +6,7 @@ group = "no.nav.syfo"
 version = "1.0.0"
 
 val javaxActivationVersion = "1.2.0"
-val jaxRiVersion = "2.3.2"
+val jaxRiVersion = "2.3.3"
 val kotlinJacksonVersion = "2.11.3"
 val logbackVersion = "6.3"
 val prometheusVersion = "1.6.3"
