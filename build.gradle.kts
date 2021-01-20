@@ -10,7 +10,7 @@ val jaxRiVersion = "2.3.2"
 val kotlinJacksonVersion = "2.11.3"
 val logbackVersion = "6.3"
 val prometheusVersion = "1.5.5"
-val slf4jVersion = "1.7.25"
+val slf4jVersion = "1.7.30"
 val tokenValidationSpringSupportVersion = "1.3.2"
 
 plugins {
