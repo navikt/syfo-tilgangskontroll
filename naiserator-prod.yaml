@@ -36,6 +36,7 @@ spec:
   ingresses:
     - "https://syfo-tilgangskontroll.nais.adeo.no"
     - "https://app.adeo.no/syfo-tilgangskontroll"
+    - "https://syfo-tilgangskontroll.prod-fss-pub.nais.io"
   vault:
     enabled: true
     paths:
