@@ -1,6 +1,7 @@
 package no.nav.syfo.consumer.norg2
 
 import no.nav.syfo.cache.CacheConfig
+import no.nav.syfo.consumer.pdl.GeografiskTilknytning
 import no.nav.syfo.metric.Metric
 import no.nav.syfo.util.NAV_CALL_ID_HEADER
 import no.nav.syfo.util.createCallId
@@ -22,7 +23,7 @@ constructor(
     private val restTemplate: RestTemplate
 ) {
     @Cacheable(cacheNames = [CacheConfig.CACHENAME_GEOGRAFISK_TILHORIGHET_ENHET], key = "#geografiskTilknytning", condition = "#geografiskTilknytning != null")
-    fun getNAVKontorForGT(geografiskTilknytning: String): String {
+    fun getNAVKontorForGT(geografiskTilknytning: GeografiskTilknytning): String {
         try {
             val result = restTemplate.exchange(
                 getNAVKontorForGTUrl(geografiskTilknytning),
@@ -40,8 +41,8 @@ constructor(
         }
     }
 
-    private fun getNAVKontorForGTUrl(geografiskTilknytning: String): String {
-        return "$norg2BaseUrl/api/v1/enhet/navkontor/$geografiskTilknytning"
+    private fun getNAVKontorForGTUrl(geografiskTilknytning: GeografiskTilknytning): String {
+        return "$norg2BaseUrl/api/v1/enhet/navkontor/${geografiskTilknytning.value}"
     }
 
     @Cacheable(cacheNames = [CacheConfig.CACHENAME_ENHET_OVERORDNET_ENHETER], key = "#enhetNr", condition = "#enhetNr != null")
