@@ -7,7 +7,7 @@ import no.nav.syfo.domain.AdRoller
 import no.nav.syfo.geografisktilknytning.GeografiskTilgangService
 import no.nav.syfo.consumer.ldap.LdapService
 import no.nav.syfo.consumer.norg2.NorgConsumer
-import no.nav.syfo.consumer.pdl.PdlConsumer
+import no.nav.syfo.consumer.pdl.*
 import no.nav.syfo.testhelper.UserConstants.NAV_ENHET_NAVN
 import no.nav.syfo.testhelper.UserConstants.PERSON_FNR
 import no.nav.syfo.testhelper.generateBehandlendeEnhet
@@ -159,7 +159,15 @@ class GeografiskTilgangServiceTest {
         private const val BRUKERS_ENHET = "brukersEnhet"
         private const val VEILEDERS_ENHET = "veiledersEnhet"
         private const val OVERORDNET_ENHET = "fylkeskontor"
-        private const val GEOGRAFISK_TILKNYTNING = "brukersPostnummer"
-        private const val GEOGRAFISK_TILKNYTNING_UTLAND = "SWE"
+        private val GEOGRAFISK_TILKNYTNING =
+            GeografiskTilknytning(
+                type = GeografiskTilknytningType.KOMMUNE,
+                value = "brukersPostnummer",
+            )
+
+        private val GEOGRAFISK_TILKNYTNING_UTLAND = GeografiskTilknytning(
+            type = GeografiskTilknytningType.UTLAND,
+            value = "SWE",
+        )
     }
 }

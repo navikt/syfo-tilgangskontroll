@@ -4,13 +4,12 @@ import no.nav.security.token.support.core.context.TokenValidationContextHolder
 import no.nav.syfo.LocalApplication
 import no.nav.syfo.consumer.axsys.AxsysConsumer
 import no.nav.syfo.consumer.axsys.AxsysEnhet
-import no.nav.syfo.domain.AdRoller
-import no.nav.syfo.tilgang.Tilgang
-import no.nav.syfo.consumer.norg2.NorgConsumer
-import no.nav.syfo.consumer.pdl.Gradering
-import no.nav.syfo.consumer.pdl.PdlConsumer
 import no.nav.syfo.consumer.ldap.LdapService
+import no.nav.syfo.consumer.norg2.NorgConsumer
+import no.nav.syfo.consumer.pdl.*
 import no.nav.syfo.consumer.skjermedepersoner.SkjermedePersonerPipConsumer
+import no.nav.syfo.domain.AdRoller
+import no.nav.syfo.testhelper.*
 import no.nav.syfo.testhelper.UserConstants.BENGT_KODE6_BRUKER
 import no.nav.syfo.testhelper.UserConstants.BIRTE_KODE7_BRUKER
 import no.nav.syfo.testhelper.UserConstants.BJARNE_BRUKER
@@ -20,15 +19,9 @@ import no.nav.syfo.testhelper.UserConstants.NAV_ENHETID_2
 import no.nav.syfo.testhelper.UserConstants.NAV_ENHETID_3
 import no.nav.syfo.testhelper.UserConstants.NAV_ENHET_NAVN
 import no.nav.syfo.testhelper.UserConstants.VEILEDER_ID
-import no.nav.syfo.testhelper.generateAdressebeskyttelse
-import no.nav.syfo.testhelper.generatePdlHentPerson
-import no.nav.syfo.testhelper.LdapUtil
-import no.nav.syfo.testhelper.OidcTestHelper
+import no.nav.syfo.tilgang.Tilgang
 import no.nav.syfo.tilgang.TilgangController
-import org.junit.After
-import org.junit.Assert
-import org.junit.Before
-import org.junit.Test
+import org.junit.*
 import org.junit.runner.RunWith
 import org.mockito.ArgumentMatchers
 import org.mockito.Mockito
@@ -80,10 +73,18 @@ class TilgangControllerViaAzureComponentTest {
                     NAV_ENHET_NAVN
                 ))
         )
-        Mockito.`when`(norgConsumer.getNAVKontorForGT(NAV_ENHETID_1)).thenReturn(
+        Mockito.`when`(norgConsumer.getNAVKontorForGT(
+            GeografiskTilknytning(
+                type = GeografiskTilknytningType.KOMMUNE,
+                value = NAV_ENHETID_1,
+            )
+        )).thenReturn(
             NAV_ENHETID_1
         )
-        Mockito.`when`(pdlConsumer.geografiskTilknytning(ArgumentMatchers.anyString())).thenReturn("0330")
+        Mockito.`when`(pdlConsumer.geografiskTilknytning(ArgumentMatchers.anyString())).thenReturn(GeografiskTilknytning(
+            type = GeografiskTilknytningType.KOMMUNE,
+            value = "0330",
+        ))
         Mockito.`when`(skjermedePersonerPipConsumer.erSkjermet(BJARNE_BRUKER)).thenReturn(false)
         Mockito.`when`(skjermedePersonerPipConsumer.erSkjermet(BENGT_KODE6_BRUKER)).thenReturn(false)
         Mockito.`when`(skjermedePersonerPipConsumer.erSkjermet(BIRTE_KODE7_BRUKER)).thenReturn(false)

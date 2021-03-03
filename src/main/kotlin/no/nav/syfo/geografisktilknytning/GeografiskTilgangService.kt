@@ -3,10 +3,10 @@ package no.nav.syfo.geografisktilknytning
 import no.nav.syfo.consumer.axsys.AxsysConsumer
 import no.nav.syfo.consumer.axsys.AxsysEnhet
 import no.nav.syfo.consumer.behandlendeenhet.BehandlendeEnhetConsumer
-import no.nav.syfo.domain.AdRoller
-import no.nav.syfo.consumer.norg2.NorgConsumer
-import no.nav.syfo.consumer.pdl.PdlConsumer
 import no.nav.syfo.consumer.ldap.LdapService
+import no.nav.syfo.consumer.norg2.NorgConsumer
+import no.nav.syfo.consumer.pdl.*
+import no.nav.syfo.domain.AdRoller
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 import java.util.stream.Collectors
@@ -56,11 +56,11 @@ class GeografiskTilgangService @Autowired constructor(
             .any { overordnetEnhet: String -> veiledersOverordnedeEnheter.contains(overordnetEnhet) }
     }
 
-    private fun getNavKontorForGT(personFnr: String, geografiskTilknytning: String): String {
-        return if (isGeografiskTilknytningUtland(geografiskTilknytning)) behandlendeEnhetConsumer.getBehandlendeEnhet(personFnr, null).enhetId else norgConsumer.getNAVKontorForGT(geografiskTilknytning)
+    private fun getNavKontorForGT(personFnr: String, geografiskTilknytning: GeografiskTilknytning): String {
+        return if (isGeografiskTilknytningUtlandOrNorgeWithoutGT(geografiskTilknytning)) behandlendeEnhetConsumer.getBehandlendeEnhet(personFnr, null).enhetId else norgConsumer.getNAVKontorForGT(geografiskTilknytning)
     }
 
-    private fun isGeografiskTilknytningUtland(geografiskTilknytning: String): Boolean {
-        return geografiskTilknytning.matches(Regex("[a-zA-Z]{3}"))
+    private fun isGeografiskTilknytningUtlandOrNorgeWithoutGT(geografiskTilknytning: GeografiskTilknytning): Boolean {
+        return geografiskTilknytning.type == GeografiskTilknytningType.UTLAND || geografiskTilknytning.value == null
     }
 }
