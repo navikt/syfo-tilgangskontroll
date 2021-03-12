@@ -22,12 +22,16 @@ class CacheConfig {
             .defaultCacheConfig()
             .entryTtl(Duration.ofHours(12L))
 
+        val shortConfig = RedisCacheConfiguration
+            .defaultCacheConfig()
+            .entryTtl(Duration.ofHours(1L))
+
         cacheConfigurations[TILGANGTILBRUKER] = defaultConfig
         cacheConfigurations[TILGANGTILTJENESTEN] = defaultConfig
         cacheConfigurations[TILGANGTILENHET] = defaultConfig
         cacheConfigurations[CACHENAME_AXSYS_ENHETER] = defaultConfig
         cacheConfigurations[CACHENAME_BEHANDLENDEENHET_FNR] = defaultConfig
-        cacheConfigurations[CACHENAME_EGENANSATT] = defaultConfig
+        cacheConfigurations[CACHENAME_EGENANSATT] = shortConfig
         cacheConfigurations[CACHENAME_ENHET_OVERORDNET_ENHETER] = defaultConfig
         cacheConfigurations[CACHENAME_GEOGRAFISK_TILHORIGHET_ENHET] = defaultConfig
         cacheConfigurations[CACHENAME_VEILEDER_ENHETER] = defaultConfig
