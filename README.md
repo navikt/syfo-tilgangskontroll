@@ -25,4 +25,4 @@ at den er god nok.
 **Redis Cache**
 
 Syfo-tilgangskontroll bruker redis for cache.
-Redis pod må startes manuelt ved å kjøre følgdende kommando: `kubectl apply -f redis-config.yaml`.
+Redis pod må startes manuelt ved å kjøre følgdende kommando: `kubectl apply -f .nais/redis-config.yaml`.
