@@ -105,6 +105,20 @@ class AccessToRessursViaAzure2ComponentTest {
     }
 
     @Test
+    fun accessToSYFOGranted() {
+        mockRoller(ldapServiceMock, VEILEDER_ID, INNVILG, AdRoller.SYFO)
+        val response = tilgangController.accessToSYFOViaAzure()
+        assertAccessOk(response)
+    }
+
+    @Test
+    fun accessToSYFODenied() {
+        mockRoller(ldapServiceMock, VEILEDER_ID, NEKT, AdRoller.SYFO)
+        val response = tilgangController.accessToSYFOViaAzure()
+        assertAccessDenied(response, AdRoller.SYFO.name)
+    }
+
+    @Test
     fun accessToBrukerGranted() {
         mockRoller(ldapServiceMock, VEILEDER_ID, INNVILG, AdRoller.SYFO)
         val response = tilgangController.accessToPersonViaAzure(BJARNE_BRUKER)

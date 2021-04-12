@@ -37,6 +37,7 @@ spec:
     - "https://syfo-tilgangskontroll.nais.preprod.local"
     - "https://app-q1.adeo.no/syfo-tilgangskontroll"
     - "https://syfo-tilgangskontroll.dev-fss-pub.nais.io"
+    - "https://syfo-tilgangskontroll.dev.intern.nav.no"
   vault:
     enabled: true
     paths:
