@@ -55,6 +55,13 @@ class TilgangController @Autowired constructor(
         return lagRespons(tilgang)
     }
 
+    @GetMapping(path = ["/navident/syfo"])
+    @ProtectedWithClaims(issuer = VEILEDERAZURE)
+    fun accessToSYFOViaAzure(): ResponseEntity<*> {
+        val veilederId = tokenConsumer.getSubjectFromMsGraph(getTokenFromAzureOIDCToken(contextHolder))
+        return sjekkTilgangTilTjenesten(veilederId)
+    }
+
     @GetMapping(path = ["/navident/bruker/{fnr}"])
     @ProtectedWithClaims(issuer = VEILEDERAZURE)
     fun accessToPersonViaAzure(@PathVariable fnr: String): ResponseEntity<*> {
