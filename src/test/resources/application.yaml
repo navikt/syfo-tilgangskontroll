@@ -24,6 +24,8 @@ srv:
   username: "username"
   password: "password"
 
+smregistrering.client.id: "smregistrering"
+
 norg2.url: http://norg2/norg2
 pdl.url: "http://pdl"
 security.token.service.rest.url: "http://security-token-service"

@@ -1,13 +1,13 @@
 package no.nav.syfo.tilgang
 
-import no.nav.syfo.consumer.axsys.AxsysConsumer
 import no.nav.syfo.cache.CacheConfig
+import no.nav.syfo.consumer.axsys.AxsysConsumer
+import no.nav.syfo.consumer.ldap.LdapService
+import no.nav.syfo.consumer.pdl.PdlConsumer
+import no.nav.syfo.consumer.skjermedepersoner.SkjermedePersonerPipConsumer
 import no.nav.syfo.domain.AdRoller
 import no.nav.syfo.domain.PersonIdentNumber
 import no.nav.syfo.geografisktilknytning.GeografiskTilgangService
-import no.nav.syfo.consumer.pdl.PdlConsumer
-import no.nav.syfo.consumer.ldap.LdapService
-import no.nav.syfo.consumer.skjermedepersoner.SkjermedePersonerPipConsumer
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.cache.annotation.Cacheable
 import org.springframework.stereotype.Service
@@ -15,17 +15,26 @@ import org.springframework.stereotype.Service
 @Service
 class TilgangService @Autowired constructor(
     private val axsysConsumer: AxsysConsumer,
+    private val kode6TilgangService: Kode6TilgangService,
     private val ldapService: LdapService,
     private val skjermedePersonerPipConsumer: SkjermedePersonerPipConsumer,
     private val geografiskTilgangService: GeografiskTilgangService,
     private val pdlConsumer: PdlConsumer
 ) {
-    fun sjekkTilgangTilBruker(veilederId: String, fnr: String): Tilgang {
-        return sjekkTilgang(fnr, veilederId)
+    fun sjekkTilgangTilBruker(
+        veilederId: String,
+        fnr: String,
+        consumerClientId: String = ""
+    ): Tilgang {
+        return sjekkTilgang(fnr, veilederId, consumerClientId)
     }
 
     @Cacheable(cacheNames = [CacheConfig.TILGANGTILBRUKER], key = "#veilederId.concat(#brukerFnr)", condition = "#brukerFnr != null && #veilederId != null")
-    fun sjekkTilgang(brukerFnr: String, veilederId: String): Tilgang {
+    fun sjekkTilgang(
+        brukerFnr: String,
+        veilederId: String,
+        consumerClientId: String
+    ): Tilgang {
         if (!harTilgangTilTjenesten(veilederId)) {
             return Tilgang(
                 harTilgang = false,
@@ -40,7 +49,13 @@ class TilgangService @Autowired constructor(
         }
         val personIdentNumber = PersonIdentNumber(brukerFnr)
         val pdlPerson = pdlConsumer.person(personIdentNumber.value)
-        if (pdlConsumer.isKode6(pdlPerson)) {
+        if (
+            pdlConsumer.isKode6(pdlPerson)
+            && !kode6TilgangService.harTilgang(
+                consumerClientId = consumerClientId,
+                veilederId = veilederId
+            )
+        ) {
             return Tilgang(
                 harTilgang = false,
                 begrunnelse = AdRoller.KODE6.name
