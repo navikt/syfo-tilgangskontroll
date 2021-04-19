@@ -6,6 +6,7 @@ import no.nav.syfo.metric.Metric
 import no.nav.syfo.api.auth.OIDCClaim.NAVIDENT
 import no.nav.syfo.api.auth.OIDCIssuer.AZURE
 import no.nav.syfo.api.auth.OIDCIssuer.VEILEDERAZURE
+import no.nav.syfo.api.auth.OIDCUtil.getConsumerClientId
 import no.nav.syfo.api.auth.OIDCUtil.getSubjectFromAzureOIDCToken
 import no.nav.syfo.api.auth.OIDCUtil.getTokenFromAzureOIDCToken
 import no.nav.syfo.consumer.msgraph.TokenConsumer
@@ -66,7 +67,8 @@ class TilgangController @Autowired constructor(
     @ProtectedWithClaims(issuer = VEILEDERAZURE)
     fun accessToPersonViaAzure(@PathVariable fnr: String): ResponseEntity<*> {
         val veilederId = tokenConsumer.getSubjectFromMsGraph(getTokenFromAzureOIDCToken(contextHolder))
-        return sjekktilgangTilBruker(veilederId, fnr)
+        val consumerClientId = getConsumerClientId(contextHolder)
+        return sjekktilgangTilBruker(veilederId, fnr, consumerClientId)
     }
 
     private fun sjekkTilgangTilTjenesten(veilederId: String): ResponseEntity<*> {
@@ -74,8 +76,12 @@ class TilgangController @Autowired constructor(
         return lagRespons(tilgang)
     }
 
-    private fun sjekktilgangTilBruker(veilederId: String, fnr: String): ResponseEntity<*> {
-        val tilgang = tilgangService.sjekkTilgangTilBruker(veilederId, fnr)
+    private fun sjekktilgangTilBruker(
+        veilederId: String,
+        fnr: String,
+        consumerClientId: String = ""
+    ): ResponseEntity<*> {
+        val tilgang = tilgangService.sjekkTilgangTilBruker(veilederId, fnr, consumerClientId)
         return lagRespons(tilgang)
     }
 

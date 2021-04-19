@@ -28,6 +28,7 @@ import org.junit.runner.RunWith
 import org.mockito.ArgumentMatchers
 import org.mockito.Mockito
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.beans.factory.annotation.Value
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.http.ResponseEntity
@@ -59,6 +60,9 @@ class AccessToRessursViaAzure2ComponentTest {
 
     @Autowired
     private lateinit var ldapServiceMock: LdapService
+
+    @Value("\${smregistrering.client.id}")
+    private lateinit var smregistreringClientId: String
 
     @Autowired
     lateinit var tilgangController: TilgangController
@@ -96,7 +100,7 @@ class AccessToRessursViaAzure2ComponentTest {
         Mockito.`when`(tokenConsumer.getSubjectFromMsGraph(ArgumentMatchers.anyString())).thenReturn(
             VEILEDER_ID
         )
-        logInVeilederWithAzure2(oidcRequestContextHolder, VEILEDER_ID)
+        logInVeilederWithAzure2(oidcRequestContextHolder, "", VEILEDER_ID)
     }
 
     @After
@@ -134,11 +138,22 @@ class AccessToRessursViaAzure2ComponentTest {
     }
 
     @Test
-    fun accessToKode6PersonAlwaysDenied() {
+    fun `access to Kode6-person always denied by default`() {
         mockRoller(ldapServiceMock, VEILEDER_ID, INNVILG, AdRoller.SYFO, AdRoller.KODE6)
         Mockito.`when`(pdlConsumer.isKode6(ArgumentMatchers.any())).thenReturn(true)
         val response = tilgangController.accessToPersonViaAzure(BENGT_KODE6_BRUKER)
         assertAccessDenied(response, AdRoller.KODE6.name)
+    }
+
+    @Test
+    fun `access to Kode6-person granted for smregistrering and NAVIdent with Kode6 access`() {
+        loggUtAlle(oidcRequestContextHolder)
+        logInVeilederWithAzure2(oidcRequestContextHolder, smregistreringClientId, VEILEDER_ID)
+
+        mockRoller(ldapServiceMock, VEILEDER_ID, INNVILG, AdRoller.SYFO, AdRoller.KODE6)
+        Mockito.`when`(pdlConsumer.isKode6(ArgumentMatchers.any())).thenReturn(true)
+        val response = tilgangController.accessToPersonViaAzure(BENGT_KODE6_BRUKER)
+        assertAccessOk(response)
     }
 
     @Test
