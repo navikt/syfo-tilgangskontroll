@@ -3,24 +3,22 @@ package no.nav.syfo.geografisktilknyntning
 import no.nav.syfo.consumer.axsys.AxsysConsumer
 import no.nav.syfo.consumer.axsys.AxsysEnhet
 import no.nav.syfo.consumer.behandlendeenhet.BehandlendeEnhetConsumer
-import no.nav.syfo.domain.AdRoller
-import no.nav.syfo.geografisktilknytning.GeografiskTilgangService
 import no.nav.syfo.consumer.ldap.LdapService
 import no.nav.syfo.consumer.norg2.NorgConsumer
 import no.nav.syfo.consumer.pdl.*
+import no.nav.syfo.domain.AdRoller
+import no.nav.syfo.geografisktilknytning.GeografiskTilgangService
 import no.nav.syfo.testhelper.UserConstants.NAV_ENHET_NAVN
 import no.nav.syfo.testhelper.UserConstants.PERSON_FNR
 import no.nav.syfo.testhelper.generateBehandlendeEnhet
 import org.assertj.core.api.Assertions
-import org.junit.Before
-import org.junit.Test
-import org.junit.runner.RunWith
-import org.mockito.InjectMocks
-import org.mockito.Mock
-import org.mockito.Mockito
-import org.mockito.junit.MockitoJUnitRunner
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.extension.ExtendWith
+import org.mockito.*
+import org.springframework.test.context.junit.jupiter.SpringExtension
 
-@RunWith(MockitoJUnitRunner::class)
+@ExtendWith(SpringExtension::class)
 class GeografiskTilgangServiceTest {
     @Mock
     private lateinit var axsysConsumer: AxsysConsumer
@@ -40,7 +38,7 @@ class GeografiskTilgangServiceTest {
     @InjectMocks
     private lateinit var geografiskTilgangService: GeografiskTilgangService
 
-    @Before
+    @BeforeEach
     fun setup() {
         Mockito.`when`(norgConsumer.getNAVKontorForGT(GEOGRAFISK_TILKNYTNING)).thenReturn(
             BRUKERS_ENHET

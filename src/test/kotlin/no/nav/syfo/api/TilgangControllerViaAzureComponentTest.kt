@@ -21,8 +21,9 @@ import no.nav.syfo.testhelper.UserConstants.NAV_ENHET_NAVN
 import no.nav.syfo.testhelper.UserConstants.VEILEDER_ID
 import no.nav.syfo.tilgang.Tilgang
 import no.nav.syfo.tilgang.TilgangController
-import org.junit.*
-import org.junit.runner.RunWith
+import org.junit.jupiter.api.*
+import org.junit.jupiter.api.Assertions.*
+import org.junit.jupiter.api.extension.ExtendWith
 import org.mockito.ArgumentMatchers
 import org.mockito.Mockito
 import org.springframework.beans.factory.annotation.Autowired
@@ -30,11 +31,11 @@ import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.http.ResponseEntity
 import org.springframework.test.context.ActiveProfiles
-import org.springframework.test.context.junit4.SpringRunner
+import org.springframework.test.context.junit.jupiter.SpringExtension
 import java.text.ParseException
 
 @ActiveProfiles("test")
-@RunWith(SpringRunner::class)
+@ExtendWith(SpringExtension::class)
 @SpringBootTest(classes = [LocalApplication::class])
 class TilgangControllerViaAzureComponentTest {
     @MockBean
@@ -59,7 +60,7 @@ class TilgangControllerViaAzureComponentTest {
     @Autowired
     lateinit var tilgangController: TilgangController
 
-    @Before
+    @BeforeEach
     @Throws(ParseException::class)
     fun setup() {
         Mockito.`when`(axsysConsumer.enheter(VEILEDER_ID)).thenReturn(
@@ -92,7 +93,7 @@ class TilgangControllerViaAzureComponentTest {
         OidcTestHelper.loggInnVeilederMedAzure(oidcRequestContextHolder, VEILEDER_ID)
     }
 
-    @After
+    @AfterEach
     fun tearDown() {
         OidcTestHelper.loggUtAlle(oidcRequestContextHolder)
     }
@@ -100,13 +101,13 @@ class TilgangControllerViaAzureComponentTest {
     @Test
     fun tilgangTilTjenestenInnvilget() {
         LdapUtil.mockRoller(ldapServiceMock, VEILEDER_ID, INNVILG, AdRoller.SYFO)
-        Assert.assertEquals(HTTP_STATUS_OK.toLong(), tilgangController.tilgangTilTjenestenViaAzure().statusCodeValue.toLong())
+        assertEquals(HTTP_STATUS_OK.toLong(), tilgangController.tilgangTilTjenestenViaAzure().statusCodeValue.toLong())
     }
 
     @Test
     fun tilgangTilTjenestenNektet() {
         LdapUtil.mockRoller(ldapServiceMock, VEILEDER_ID, NEKT, AdRoller.SYFO)
-        Assert.assertEquals(HTTP_STATUS_FORBIDDEN.toLong(), tilgangController.tilgangTilTjenestenViaAzure().statusCodeValue.toLong())
+        assertEquals(HTTP_STATUS_FORBIDDEN.toLong(), tilgangController.tilgangTilTjenestenViaAzure().statusCodeValue.toLong())
     }
 
     @Test
@@ -179,8 +180,8 @@ class TilgangControllerViaAzureComponentTest {
             BIRTE_KODE7_BRUKER,
             ERIK_EGENANSATT_BRUKER
         ))
-        Assert.assertEquals(200, response.statusCodeValue.toLong())
-        Assert.assertEquals(listOf(BJARNE_BRUKER), response.body)
+        assertEquals(200, response.statusCodeValue.toLong())
+        assertEquals(listOf(BJARNE_BRUKER), response.body)
     }
 
     @Test
@@ -206,26 +207,26 @@ class TilgangControllerViaAzureComponentTest {
                 NAV_ENHET_NAVN
             )
         ))
-        Assert.assertEquals(HTTP_STATUS_OK.toLong(), tilgangController.tilgangTilEnhet(NAV_ENHETID_1).statusCodeValue.toLong())
+        assertEquals(HTTP_STATUS_OK.toLong(), tilgangController.tilgangTilEnhet(NAV_ENHETID_1).statusCodeValue.toLong())
     }
 
     @Test
     fun tilgangTilEnhetNektet() {
         LdapUtil.mockRoller(ldapServiceMock, VEILEDER_ID, INNVILG, AdRoller.SYFO)
-        Assert.assertEquals(HTTP_STATUS_FORBIDDEN.toLong(), tilgangController.tilgangTilEnhet(NAV_ENHETID_3).statusCodeValue.toLong())
+        assertEquals(HTTP_STATUS_FORBIDDEN.toLong(), tilgangController.tilgangTilEnhet(NAV_ENHETID_3).statusCodeValue.toLong())
     }
 
     private fun assertTilgangOK(response: ResponseEntity<*>) {
-        Assert.assertEquals(HTTP_STATUS_OK.toLong(), response.statusCodeValue.toLong())
+        assertEquals(HTTP_STATUS_OK.toLong(), response.statusCodeValue.toLong())
         val tilgang = response.body as Tilgang
-        Assert.assertTrue(tilgang.harTilgang)
+        assertTrue(tilgang.harTilgang)
     }
 
     private fun assertTilgangNektet(response: ResponseEntity<*>, begrunnelse: String) {
-        Assert.assertEquals(HTTP_STATUS_FORBIDDEN.toLong(), response.statusCodeValue.toLong())
+        assertEquals(HTTP_STATUS_FORBIDDEN.toLong(), response.statusCodeValue.toLong())
         val tilgang = response.body as Tilgang
-        Assert.assertFalse(tilgang.harTilgang)
-        Assert.assertEquals(begrunnelse, tilgang.begrunnelse)
+        assertFalse(tilgang.harTilgang)
+        assertEquals(begrunnelse, tilgang.begrunnelse)
     }
 
     companion object {
