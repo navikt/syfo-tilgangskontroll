@@ -67,6 +67,10 @@ tasks {
         }
     }
 
+    test {
+        useJUnitPlatform()
+    }
+
     withType<ShadowJar> {
         transform(PropertiesFileTransformer::class.java) {
             paths = listOf("META-INF/spring.factories")
