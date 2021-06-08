@@ -19,10 +19,14 @@ import no.nav.syfo.testhelper.UserConstants.BJARNE_BRUKER
 import no.nav.syfo.testhelper.UserConstants.ERIK_EGENANSATT_BRUKER
 import no.nav.syfo.testhelper.UserConstants.NAV_ENHETID_1
 import no.nav.syfo.testhelper.UserConstants.NAV_ENHETID_2
+import no.nav.syfo.testhelper.UserConstants.NAV_ENHETID_3
 import no.nav.syfo.testhelper.UserConstants.NAV_ENHET_NAVN
 import no.nav.syfo.testhelper.UserConstants.VEILEDER_ID
+import no.nav.syfo.testhelper.generateAdressebeskyttelse
+import no.nav.syfo.testhelper.generatePdlHentPerson
 import no.nav.syfo.tilgang.Tilgang
 import no.nav.syfo.tilgang.TilgangController
+import no.nav.syfo.tilgang.TilgangService.Companion.ENHET
 import org.junit.jupiter.api.*
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.extension.ExtendWith
@@ -184,6 +188,56 @@ class AccessToRessursViaAzure2ComponentTest {
         mockRoller(ldapServiceMock, VEILEDER_ID, INNVILG, AdRoller.SYFO, AdRoller.EGEN_ANSATT)
         val response = tilgangController.accessToPersonViaAzure(ERIK_EGENANSATT_BRUKER)
         assertAccessOk(response)
+    }
+
+    @Test
+    fun `access to enhet granted`() {
+        mockRoller(ldapServiceMock, VEILEDER_ID, INNVILG, AdRoller.SYFO)
+        val response = tilgangController.accessToEnhet(NAV_ENHETID_1)
+        assertAccessOk(response)
+    }
+
+    @Test
+    fun `access to enhet denied`() {
+        mockRoller(ldapServiceMock, VEILEDER_ID, INNVILG, AdRoller.SYFO)
+        val response = tilgangController.accessToEnhet(NAV_ENHETID_3)
+        assertAccessDenied(response, ENHET)
+    }
+
+    @Test
+    fun `access to person list`() {
+        mockRoller(ldapServiceMock, VEILEDER_ID, INNVILG, AdRoller.SYFO)
+        Mockito.`when`(pdlConsumer.isKode6(generatePdlHentPerson()))
+            .thenReturn(false)
+        Mockito.`when`(pdlConsumer.isKode6(generatePdlHentPerson(generateAdressebeskyttelse(Gradering.FORTROLIG))))
+            .thenReturn(false)
+        Mockito.`when`(pdlConsumer.isKode6(generatePdlHentPerson(generateAdressebeskyttelse(Gradering.STRENGT_FORTROLIG))))
+            .thenReturn(true)
+
+        Mockito.`when`(pdlConsumer.isKode7(generatePdlHentPerson()))
+            .thenReturn(false)
+        Mockito.`when`(pdlConsumer.isKode7(generatePdlHentPerson(generateAdressebeskyttelse(Gradering.STRENGT_FORTROLIG))))
+            .thenReturn(false)
+        Mockito.`when`(pdlConsumer.isKode7(generatePdlHentPerson(generateAdressebeskyttelse(Gradering.FORTROLIG))))
+            .thenReturn(true)
+
+        Mockito.`when`(pdlConsumer.person(BJARNE_BRUKER))
+            .thenReturn(generatePdlHentPerson())
+        Mockito.`when`(pdlConsumer.person(ERIK_EGENANSATT_BRUKER))
+            .thenReturn(generatePdlHentPerson())
+        Mockito.`when`(pdlConsumer.person(BENGT_KODE6_BRUKER))
+            .thenReturn(generatePdlHentPerson(generateAdressebeskyttelse(Gradering.STRENGT_FORTROLIG)))
+        Mockito.`when`(pdlConsumer.person(BIRTE_KODE7_BRUKER))
+            .thenReturn(generatePdlHentPerson(generateAdressebeskyttelse(Gradering.FORTROLIG)))
+
+        val response = tilgangController.accessToPersonListViaAzure(listOf(
+            BJARNE_BRUKER,
+            BENGT_KODE6_BRUKER,
+            BIRTE_KODE7_BRUKER,
+            ERIK_EGENANSATT_BRUKER
+        ))
+        assertEquals(200, response.statusCodeValue.toLong())
+        assertEquals(listOf(BJARNE_BRUKER), response.body)
     }
 
     private fun assertAccessOk(response: ResponseEntity<*>) {

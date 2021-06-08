@@ -71,6 +71,27 @@ class TilgangController @Autowired constructor(
         return sjekktilgangTilBruker(veilederId, fnr, consumerClientId)
     }
 
+    @PostMapping(path = ["/navident/brukere"])
+    @ProtectedWithClaims(issuer = VEILEDERAZURE)
+    fun accessToPersonListViaAzure(
+        @RequestBody personIdentList: List<String>,
+    ): ResponseEntity<*> {
+        val veilederId = tokenConsumer.getSubjectFromMsGraph(getTokenFromAzureOIDCToken(contextHolder))
+        return sjekkTilgangTilBrukere(veilederId, personIdentList)
+    }
+
+    @GetMapping(path = ["/navident/enhet/{enhetNr}"])
+    @ProtectedWithClaims(issuer = VEILEDERAZURE)
+    fun accessToEnhet(
+        @PathVariable enhetNr: String,
+    ): ResponseEntity<*> {
+        val veilederId = tokenConsumer.getSubjectFromMsGraph(getTokenFromAzureOIDCToken(contextHolder))
+        if (!enhetNr.matches(Regex("\\d{4}$"))) return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+            .body("enhet paramater must be at least four digits long")
+        val tilgang = tilgangService.sjekkTilgangTilEnhet(veilederId, enhetNr)
+        return lagRespons(tilgang)
+    }
+
     private fun sjekkTilgangTilTjenesten(veilederId: String): ResponseEntity<*> {
         val tilgang = tilgangService.sjekkTilgangTilTjenesten(veilederId)
         return lagRespons(tilgang)

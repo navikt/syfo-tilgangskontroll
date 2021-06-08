@@ -122,6 +122,6 @@ class TilgangService @Autowired constructor(
 
     companion object {
         const val GEOGRAFISK = "GEOGRAFISK"
-        private const val ENHET = "ENHET"
+        const val ENHET = "ENHET"
     }
 }
