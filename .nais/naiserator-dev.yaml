@@ -2,7 +2,7 @@ apiVersion: "nais.io/v1alpha1"
 kind: "Application"
 metadata:
   name: syfo-tilgangskontroll
-  namespace: default
+  namespace: teamsykefravr
   labels:
     team: teamsykefravr
 spec:
@@ -78,6 +78,8 @@ spec:
       value: ldaps://ldapgw.preprod.local
     - name: LDAP_BASEDN
       value: dc=preprod,dc=local
+    - name: AXSYS_URL
+      value: "https://axsys.nais.preprod.local"
     - name: NORG2_URL
       value: https://app-q1.adeo.no/norg2
     - name: PDL_URL
