@@ -35,7 +35,6 @@ spec:
     path: /syfo-tilgangskontroll/internal/prometheus
   ingresses:
     - "https://syfo-tilgangskontroll.nais.adeo.no"
-    - "https://app.adeo.no/syfo-tilgangskontroll"
     - "https://syfo-tilgangskontroll.prod-fss-pub.nais.io"
     - "https://syfo-tilgangskontroll.intern.nav.no"
   vault:
