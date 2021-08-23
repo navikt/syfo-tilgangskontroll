@@ -2,7 +2,6 @@ package no.nav.syfo.tilgang
 
 import no.nav.security.token.support.core.api.ProtectedWithClaims
 import no.nav.security.token.support.core.context.TokenValidationContextHolder
-import no.nav.syfo.metric.Metric
 import no.nav.syfo.api.auth.OIDCClaim.NAVIDENT
 import no.nav.syfo.api.auth.OIDCIssuer.AZURE
 import no.nav.syfo.api.auth.OIDCIssuer.VEILEDERAZURE
@@ -10,11 +9,12 @@ import no.nav.syfo.api.auth.OIDCUtil.getConsumerClientId
 import no.nav.syfo.api.auth.OIDCUtil.getSubjectFromAzureOIDCToken
 import no.nav.syfo.api.auth.OIDCUtil.getTokenFromAzureOIDCToken
 import no.nav.syfo.consumer.msgraph.TokenConsumer
+import no.nav.syfo.metric.Metric
+import no.nav.syfo.util.getPersonIdent
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.http.HttpStatus
-import org.springframework.http.MediaType
-import org.springframework.http.ResponseEntity
+import org.springframework.http.*
+import org.springframework.util.MultiValueMap
 import org.springframework.web.bind.annotation.*
 
 @RestController
@@ -69,6 +69,18 @@ class TilgangController @Autowired constructor(
         val veilederId = tokenConsumer.getSubjectFromMsGraph(getTokenFromAzureOIDCToken(contextHolder))
         val consumerClientId = getConsumerClientId(contextHolder)
         return sjekktilgangTilBruker(veilederId, fnr, consumerClientId)
+    }
+
+    @GetMapping(path = ["/navident/person"])
+    @ProtectedWithClaims(issuer = VEILEDERAZURE)
+    fun accessToPersonIdentViaAzure(
+        @RequestHeader headers: MultiValueMap<String, String>,
+    ): ResponseEntity<*> {
+        val requestedPersonIdent = headers.getPersonIdent() ?: throw IllegalArgumentException("Did not find a PersonIdent in request headers")
+
+        val veilederId = tokenConsumer.getSubjectFromMsGraph(getTokenFromAzureOIDCToken(contextHolder))
+        val consumerClientId = getConsumerClientId(contextHolder)
+        return sjekktilgangTilBruker(veilederId, requestedPersonIdent, consumerClientId)
     }
 
     @PostMapping(path = ["/navident/brukere"])
