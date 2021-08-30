@@ -6,12 +6,7 @@ spring:
     port: 6379
 
 no.nav.security.jwt:
-  issuers: veileder,veilederaad
   issuer:
-    veileder:
-      discoveryurl: <nais-manifest>
-      accepted_audience: <nais-manifest>
-      cookiename: isso-idtoken
     veilederaad:
       discoveryurl: <nais-manifest>
       accepted_audience: <nais-manifest>

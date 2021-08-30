@@ -2,11 +2,8 @@ package no.nav.syfo.tilgang
 
 import no.nav.security.token.support.core.api.ProtectedWithClaims
 import no.nav.security.token.support.core.context.TokenValidationContextHolder
-import no.nav.syfo.api.auth.OIDCClaim.NAVIDENT
-import no.nav.syfo.api.auth.OIDCIssuer.AZURE
 import no.nav.syfo.api.auth.OIDCIssuer.VEILEDERAZURE
 import no.nav.syfo.api.auth.OIDCUtil.getConsumerClientId
-import no.nav.syfo.api.auth.OIDCUtil.getSubjectFromAzureOIDCToken
 import no.nav.syfo.api.auth.OIDCUtil.getTokenFromAzureOIDCToken
 import no.nav.syfo.consumer.msgraph.TokenConsumer
 import no.nav.syfo.metric.Metric
@@ -25,37 +22,6 @@ class TilgangController @Autowired constructor(
     private val tilgangService: TilgangService,
     private val tokenConsumer: TokenConsumer
 ) {
-    @GetMapping(path = ["/syfo"])
-    @ProtectedWithClaims(issuer = AZURE)
-    fun tilgangTilTjenestenViaAzure(): ResponseEntity<*> {
-        val veilederId = getSubjectFromAzureOIDCToken(contextHolder, AZURE, NAVIDENT)
-        return sjekkTilgangTilTjenesten(veilederId)
-    }
-
-    @GetMapping(path = ["/bruker"])
-    @ProtectedWithClaims(issuer = AZURE)
-    fun tilgangTilBrukerViaAzure(@RequestParam fnr: String): ResponseEntity<*> {
-        val veilederId = getSubjectFromAzureOIDCToken(contextHolder, AZURE, NAVIDENT)
-        return sjekktilgangTilBruker(veilederId, fnr)
-    }
-
-    @PostMapping(path = ["/brukere"])
-    @ProtectedWithClaims(issuer = AZURE)
-    fun tilgangTilBrukereViaAzure(@RequestBody fnrList: List<String>): ResponseEntity<*> {
-        val veilederId = getSubjectFromAzureOIDCToken(contextHolder, AZURE, NAVIDENT)
-        return sjekkTilgangTilBrukere(veilederId, fnrList)
-    }
-
-    @GetMapping(path = ["/enhet"])
-    @ProtectedWithClaims(issuer = AZURE)
-    fun tilgangTilEnhet(@RequestParam enhet: String): ResponseEntity<*> {
-        val veilederId = getSubjectFromAzureOIDCToken(contextHolder, AZURE, NAVIDENT)
-        if (!enhet.matches(Regex("\\d{4}$"))) return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-            .body("enhet paramater must be at least four digits long")
-        val tilgang = tilgangService.sjekkTilgangTilEnhet(veilederId, enhet)
-        return lagRespons(tilgang)
-    }
-
     @GetMapping(path = ["/navident/syfo"])
     @ProtectedWithClaims(issuer = VEILEDERAZURE)
     fun accessToSYFOViaAzure(): ResponseEntity<*> {
@@ -76,7 +42,8 @@ class TilgangController @Autowired constructor(
     fun accessToPersonIdentViaAzure(
         @RequestHeader headers: MultiValueMap<String, String>,
     ): ResponseEntity<*> {
-        val requestedPersonIdent = headers.getPersonIdent() ?: throw IllegalArgumentException("Did not find a PersonIdent in request headers")
+        val requestedPersonIdent = headers.getPersonIdent()
+            ?: throw IllegalArgumentException("Did not find a PersonIdent in request headers")
 
         val veilederId = tokenConsumer.getSubjectFromMsGraph(getTokenFromAzureOIDCToken(contextHolder))
         val consumerClientId = getConsumerClientId(contextHolder)

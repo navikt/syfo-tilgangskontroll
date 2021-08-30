@@ -61,10 +61,6 @@ spec:
       value: 966ac572-f5b7-4bbe-aa88-c76419c0f851
     - name: SMREGISTRERING_CLIENT_ID
       value: "6e2c2c7d-9bc1-45f9-a76c-9d32b489268a"
-    - name: NO_NAV_SECURITY_JWT_ISSUER_VEILEDER_DISCOVERYURL
-      value: https://login.microsoftonline.com/966ac572-f5b7-4bbe-aa88-c76419c0f851/.well-known/openid-configuration
-    - name: NO_NAV_SECURITY_JWT_ISSUER_VEILEDER_ACCEPTEDAUDIENCE
-      value: 38e07d31-659d-4595-939a-f18dce3446c5,595e0237-37db-4d5e-8dde-4fb3d0bf8839,33ad42cc-b88c-45c9-b640-8c8a4c93d3a1,38e07d31-659d-4595-939a-f18dce3446c5
     - name: NO_NAV_SECURITY_JWT_ISSUER_VEILEDERAAD_DISCOVERYURL
       value: https://login.microsoftonline.com/966ac572-f5b7-4bbe-aa88-c76419c0f851/v2.0/.well-known/openid-configuration
     - name: NO_NAV_SECURITY_JWT_ISSUER_VEILEDERAAD_ACCEPTEDAUDIENCE
