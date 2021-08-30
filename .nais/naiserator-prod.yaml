@@ -37,6 +37,67 @@ spec:
     - "https://syfo-tilgangskontroll.nais.adeo.no"
     - "https://syfo-tilgangskontroll.prod-fss-pub.nais.io"
     - "https://syfo-tilgangskontroll.intern.nav.no"
+  accessPolicy:
+    inbound:
+      rules:
+        - application: isdialogmote
+          namespace: teamsykefravr
+          cluster: prod-gcp
+        - application: ispengestopp
+          namespace: teamsykefravr
+          cluster: prod-fss
+        - application: ispersonoppgave
+          namespace: teamsykefravr
+          cluster: prod-fss
+        - application: isprediksjon
+          namespace: teamsykefravr
+          cluster: prod-fss
+        - application: fastlegerest
+          namespace: teamsykefravr
+          cluster: prod-fss
+        - application: finnfastlege
+          namespace: teamsykefravr
+          cluster: prod-fss
+        - application: modiasyforest
+          namespace: teamsykefravr
+          cluster: prod-fss
+        - application: syfobehandlendeenhet
+          namespace: teamsykefravr
+          cluster: prod-fss
+        - application: syfomodiaperson
+          namespace: teamsykefravr
+          cluster: prod-fss
+        - application: syfomoteadmin
+          namespace: teamsykefravr
+          cluster: prod-fss
+        - application: syfooversikt
+          namespace: teamsykefravr
+          cluster: prod-fss
+        - application: syfooversiktsrv
+          namespace: teamsykefravr
+          cluster: prod-fss
+        - application: syfomotebehov
+          namespace: team-esyfo
+          cluster: prod-fss
+        - application: syfooppfolgingsplanservice
+          namespace: team-esyfo
+          cluster: prod-fss
+        - application: spinnsyn-backend
+          namespace: flex
+          cluster: prod-gcp
+        - application: syfosoknad
+          namespace: flex
+          cluster: prod-fss
+        - application: syfosmregister
+          namespace: teamsykmelding
+          cluster: prod-fss
+  azure:
+    application:
+      enabled: true
+      tenant: nav.no
+      claims:
+        extra:
+          - "NAVident"
   vault:
     enabled: true
     paths:

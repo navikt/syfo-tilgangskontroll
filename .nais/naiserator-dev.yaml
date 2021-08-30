@@ -37,6 +37,67 @@ spec:
     - "https://syfo-tilgangskontroll.nais.preprod.local"
     - "https://syfo-tilgangskontroll.dev-fss-pub.nais.io"
     - "https://syfo-tilgangskontroll.dev.intern.nav.no"
+  accessPolicy:
+    inbound:
+      rules:
+        - application: isdialogmote
+          namespace: teamsykefravr
+          cluster: dev-gcp
+        - application: ispengestopp
+          namespace: teamsykefravr
+          cluster: dev-fss
+        - application: ispersonoppgave
+          namespace: teamsykefravr
+          cluster: dev-fss
+        - application: isprediksjon
+          namespace: teamsykefravr
+          cluster: dev-fss
+        - application: fastlegerest
+          namespace: teamsykefravr
+          cluster: dev-fss
+        - application: finnfastlege
+          namespace: teamsykefravr
+          cluster: dev-fss
+        - application: modiasyforest
+          namespace: teamsykefravr
+          cluster: dev-fss
+        - application: syfobehandlendeenhet
+          namespace: teamsykefravr
+          cluster: dev-fss
+        - application: syfomodiaperson
+          namespace: teamsykefravr
+          cluster: dev-fss
+        - application: syfomoteadmin
+          namespace: teamsykefravr
+          cluster: dev-fss
+        - application: syfooversikt
+          namespace: teamsykefravr
+          cluster: dev-fss
+        - application: syfooversiktsrv
+          namespace: teamsykefravr
+          cluster: dev-fss
+        - application: syfomotebehov
+          namespace: team-esyfo
+          cluster: dev-fss
+        - application: syfooppfolgingsplanservice
+          namespace: team-esyfo
+          cluster: dev-fss
+        - application: spinnsyn-backend
+          namespace: flex
+          cluster: dev-gcp
+        - application: syfosoknad
+          namespace: flex
+          cluster: dev-fss
+        - application: syfosmregister
+          namespace: teamsykmelding
+          cluster: dev-fss
+  azure:
+    application:
+      enabled: true
+      tenant: trygdeetaten.no
+      claims:
+        extra:
+          - "NAVident"
   vault:
     enabled: true
     paths:
