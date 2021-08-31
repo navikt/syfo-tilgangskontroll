@@ -125,7 +125,7 @@ spec:
     - name: NO_NAV_SECURITY_JWT_ISSUER_VEILEDERAAD_DISCOVERYURL
       value: https://login.microsoftonline.com/966ac572-f5b7-4bbe-aa88-c76419c0f851/v2.0/.well-known/openid-configuration
     - name: NO_NAV_SECURITY_JWT_ISSUER_VEILEDERAAD_ACCEPTEDAUDIENCE
-      value: 32e36aa5-1d12-452a-9b1e-9f3f557cbb4d
+      value: 32e36aa5-1d12-452a-9b1e-9f3f557cbb4d,edd82db3-6e00-476c-8b9a-cf4ad8e2ab46
     - name: SECURITYTOKENSERVICE_URL
       value: https://sts-q1.preprod.local/SecurityTokenServiceProvider/
     - name: PERSON_V3_URL

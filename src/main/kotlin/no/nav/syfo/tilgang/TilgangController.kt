@@ -5,6 +5,7 @@ import no.nav.security.token.support.core.context.TokenValidationContextHolder
 import no.nav.syfo.api.auth.OIDCIssuer.VEILEDERAZURE
 import no.nav.syfo.api.auth.OIDCUtil.getConsumerClientId
 import no.nav.syfo.api.auth.OIDCUtil.getTokenFromAzureOIDCToken
+import no.nav.syfo.api.auth.getNAVIdentFromOBOToken
 import no.nav.syfo.consumer.msgraph.TokenConsumer
 import no.nav.syfo.metric.Metric
 import no.nav.syfo.util.getPersonIdent
@@ -25,14 +26,16 @@ class TilgangController @Autowired constructor(
     @GetMapping(path = ["/navident/syfo"])
     @ProtectedWithClaims(issuer = VEILEDERAZURE)
     fun accessToSYFOViaAzure(): ResponseEntity<*> {
-        val veilederId = tokenConsumer.getSubjectFromMsGraph(getTokenFromAzureOIDCToken(contextHolder))
+        val veilederId = getNAVIdentFromOBOToken(contextHolder)
+            ?: tokenConsumer.getSubjectFromMsGraph(getTokenFromAzureOIDCToken(contextHolder))
         return sjekkTilgangTilTjenesten(veilederId)
     }
 
     @GetMapping(path = ["/navident/bruker/{fnr}"])
     @ProtectedWithClaims(issuer = VEILEDERAZURE)
     fun accessToPersonViaAzure(@PathVariable fnr: String): ResponseEntity<*> {
-        val veilederId = tokenConsumer.getSubjectFromMsGraph(getTokenFromAzureOIDCToken(contextHolder))
+        val veilederId = getNAVIdentFromOBOToken(contextHolder)
+            ?: tokenConsumer.getSubjectFromMsGraph(getTokenFromAzureOIDCToken(contextHolder))
         val consumerClientId = getConsumerClientId(contextHolder)
         return sjekktilgangTilBruker(veilederId, fnr, consumerClientId)
     }
@@ -45,7 +48,8 @@ class TilgangController @Autowired constructor(
         val requestedPersonIdent = headers.getPersonIdent()
             ?: throw IllegalArgumentException("Did not find a PersonIdent in request headers")
 
-        val veilederId = tokenConsumer.getSubjectFromMsGraph(getTokenFromAzureOIDCToken(contextHolder))
+        val veilederId = getNAVIdentFromOBOToken(contextHolder)
+            ?: tokenConsumer.getSubjectFromMsGraph(getTokenFromAzureOIDCToken(contextHolder))
         val consumerClientId = getConsumerClientId(contextHolder)
         return sjekktilgangTilBruker(veilederId, requestedPersonIdent, consumerClientId)
     }
@@ -55,7 +59,8 @@ class TilgangController @Autowired constructor(
     fun accessToPersonListViaAzure(
         @RequestBody personIdentList: List<String>,
     ): ResponseEntity<*> {
-        val veilederId = tokenConsumer.getSubjectFromMsGraph(getTokenFromAzureOIDCToken(contextHolder))
+        val veilederId = getNAVIdentFromOBOToken(contextHolder)
+            ?: tokenConsumer.getSubjectFromMsGraph(getTokenFromAzureOIDCToken(contextHolder))
         return sjekkTilgangTilBrukere(veilederId, personIdentList)
     }
 
@@ -64,9 +69,10 @@ class TilgangController @Autowired constructor(
     fun accessToEnhet(
         @PathVariable enhetNr: String,
     ): ResponseEntity<*> {
-        val veilederId = tokenConsumer.getSubjectFromMsGraph(getTokenFromAzureOIDCToken(contextHolder))
         if (!enhetNr.matches(Regex("\\d{4}$"))) return ResponseEntity.status(HttpStatus.BAD_REQUEST)
             .body("enhet paramater must be at least four digits long")
+        val veilederId = getNAVIdentFromOBOToken(contextHolder)
+            ?: tokenConsumer.getSubjectFromMsGraph(getTokenFromAzureOIDCToken(contextHolder))
         val tilgang = tilgangService.sjekkTilgangTilEnhet(veilederId, enhetNr)
         return lagRespons(tilgang)
     }
