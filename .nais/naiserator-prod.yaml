@@ -76,13 +76,13 @@ spec:
         - application: syfooversiktsrv
           namespace: teamsykefravr
           cluster: prod-fss
+        - application: syfoperson
+          namespace: teamsykefravr
+          cluster: prod-fss
         - application: syfomotebehov
           namespace: team-esyfo
           cluster: prod-fss
         - application: syfooppfolgingsplanservice
-          namespace: team-esyfo
-          cluster: prod-fss
-        - application: syfoperson
           namespace: team-esyfo
           cluster: prod-fss
         - application: spinnsyn-backend
