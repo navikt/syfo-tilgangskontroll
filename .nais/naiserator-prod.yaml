@@ -82,6 +82,9 @@ spec:
         - application: syfooppfolgingsplanservice
           namespace: team-esyfo
           cluster: prod-fss
+        - application: syfoperson
+          namespace: team-esyfo
+          cluster: prod-fss
         - application: spinnsyn-backend
           namespace: flex
           cluster: prod-gcp
