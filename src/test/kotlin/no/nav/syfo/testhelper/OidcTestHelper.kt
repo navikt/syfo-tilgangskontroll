@@ -16,9 +16,9 @@ object OidcTestHelper {
     fun logInVeilederWithAzure2(
         oidcRequestContextHolder: TokenValidationContextHolder,
         consumerClientId: String = "",
-        veilederIdent: String?
+        veilederIdent: String
     ) {
-        val claimsSet = JWTClaimsSet.parse("{ \"azp\": \"$consumerClientId\" }")
+        val claimsSet = JWTClaimsSet.parse("{ \"azp\": \"$consumerClientId\", \"NAVident\": \"$veilederIdent\"}")
         val jwt = JwtTokenGenerator.createSignedJWT(claimsSet)
         settOIDCValidationContext(oidcRequestContextHolder, jwt, VEILEDERAZURE)
     }

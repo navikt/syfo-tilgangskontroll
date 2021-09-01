@@ -27,10 +27,14 @@ class TilgangController @Autowired constructor(
     @ProtectedWithClaims(issuer = VEILEDERAZURE)
     fun accessToSYFOViaAzure(): ResponseEntity<*> {
         val veilederId = getNAVIdentFromOBOToken(contextHolder)
-            ?: tokenConsumer.getSubjectFromMsGraph(getTokenFromAzureOIDCToken(contextHolder))
+            ?: throw IllegalArgumentException("Did not find a NAVIdent in token")
         return sjekkTilgangTilTjenesten(veilederId)
     }
 
+    /*
+    This endpoint is deprecated, but is still use by smregistering-backend and syfosmmanuell-backend.
+    No NavIdent is supplied in the token from these two services.
+     */
     @GetMapping(path = ["/navident/bruker/{fnr}"])
     @ProtectedWithClaims(issuer = VEILEDERAZURE)
     fun accessToPersonViaAzure(@PathVariable fnr: String): ResponseEntity<*> {
@@ -49,7 +53,7 @@ class TilgangController @Autowired constructor(
             ?: throw IllegalArgumentException("Did not find a PersonIdent in request headers")
 
         val veilederId = getNAVIdentFromOBOToken(contextHolder)
-            ?: tokenConsumer.getSubjectFromMsGraph(getTokenFromAzureOIDCToken(contextHolder))
+            ?: throw IllegalArgumentException("Did not find a NAVIdent in token")
         val consumerClientId = getConsumerClientId(contextHolder)
         return sjekktilgangTilBruker(veilederId, requestedPersonIdent, consumerClientId)
     }
@@ -59,8 +63,7 @@ class TilgangController @Autowired constructor(
     fun accessToPersonListViaAzure(
         @RequestBody personIdentList: List<String>,
     ): ResponseEntity<*> {
-        val veilederId = getNAVIdentFromOBOToken(contextHolder)
-            ?: tokenConsumer.getSubjectFromMsGraph(getTokenFromAzureOIDCToken(contextHolder))
+        val veilederId = getNAVIdentFromOBOToken(contextHolder)!!
         return sjekkTilgangTilBrukere(veilederId, personIdentList)
     }
 
@@ -72,7 +75,7 @@ class TilgangController @Autowired constructor(
         if (!enhetNr.matches(Regex("\\d{4}$"))) return ResponseEntity.status(HttpStatus.BAD_REQUEST)
             .body("enhet paramater must be at least four digits long")
         val veilederId = getNAVIdentFromOBOToken(contextHolder)
-            ?: tokenConsumer.getSubjectFromMsGraph(getTokenFromAzureOIDCToken(contextHolder))
+            ?: throw IllegalArgumentException("Did not find a NAVIdent in token")
         val tilgang = tilgangService.sjekkTilgangTilEnhet(veilederId, enhetNr)
         return lagRespons(tilgang)
     }
