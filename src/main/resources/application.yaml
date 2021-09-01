@@ -8,7 +8,7 @@ spring:
 no.nav.security.jwt:
   issuer:
     veilederaad:
-      discoveryurl: ${azure.app.well.known.url},
+      discoveryurl: ${azure.app.well.known.url}
       accepted_audience: <nais-manifest>
       cookiename: ID_token
 
