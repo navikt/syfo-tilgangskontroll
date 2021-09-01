@@ -91,6 +91,12 @@ spec:
         - application: syfosoknad
           namespace: flex
           cluster: dev-fss
+        - application: smregistrering-backend
+          namespace: teamsykmelding
+          cluster: dev-fss
+        - application: syfosmmanuell-backend
+          namespace: teamsykmelding
+          cluster: dev-fss
         - application: syfosmregister
           namespace: teamsykmelding
           cluster: dev-fss
