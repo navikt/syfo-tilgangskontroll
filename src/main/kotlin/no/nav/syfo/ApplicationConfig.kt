@@ -7,6 +7,7 @@ import org.springframework.context.annotation.Profile
 import org.springframework.web.client.RestTemplate
 
 @Configuration
+@Profile("remote")
 class ApplicationConfig {
     @Bean
     @Primary

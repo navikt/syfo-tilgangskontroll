@@ -110,6 +110,8 @@ spec:
   vault:
     enabled: true
     paths:
+      - kvPath: /azuread/data/prod/creds/syfo-tilgangskontroll
+        mountPath: /var/run/secrets/nais.io/azuread
       - kvPath: "/serviceuser/data/prod/srvsyfo-tilgangskontroll"
         mountPath: "/secrets/serviceuser/syfo-tilgangskontroll"
       - kvPath: serviceuser/data/prod/srvssolinux
@@ -125,6 +127,8 @@ spec:
       value: "443"
     - name: APPDYNAMICS_CONTROLLER_SSL_ENABLED
       value: "true"
+    - name: AAD_TENANT_ID
+      value: 62366534-1ec3-4962-8869-9b5535279d0b
     - name: SMREGISTRERING_CLIENT_ID
       value: "88adf8ed-fed1-4022-bbc6-da222e4795eb"
     - name: NO_NAV_SECURITY_JWT_ISSUER_VEILEDERAAD_DISCOVERYURL
