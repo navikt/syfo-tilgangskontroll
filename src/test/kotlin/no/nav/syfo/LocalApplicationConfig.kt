@@ -1,10 +1,9 @@
 package no.nav.syfo
 
 import no.nav.security.token.support.test.spring.TokenGeneratorConfiguration
-import org.springframework.context.annotation.Bean
-import org.springframework.context.annotation.Configuration
-import org.springframework.context.annotation.Import
-import org.springframework.context.annotation.Profile
+import no.nav.syfo.consumer.ldap.LdapService
+import org.mockito.Mockito
+import org.springframework.context.annotation.*
 import org.springframework.web.client.RestTemplate
 
 @Configuration
@@ -12,7 +11,8 @@ import org.springframework.web.client.RestTemplate
 @Import(TokenGeneratorConfiguration::class)
 class LocalApplicationConfig {
     @Bean
-    fun restTemplate(): RestTemplate {
-        return RestTemplate()
+    @Primary
+    fun ldapServiceMock(): LdapService {
+        return Mockito.mock(LdapService::class.java)
     }
 }
