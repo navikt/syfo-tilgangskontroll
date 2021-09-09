@@ -1,21 +1,23 @@
 package no.nav.syfo.consumer.pdl
 
-import no.nav.syfo.consumer.sts.StsConsumer
+import no.nav.syfo.consumer.azuread.AzureAdTokenConsumer
 import no.nav.syfo.metric.Metric
-import no.nav.syfo.util.*
+import no.nav.syfo.util.ALLE_TEMA_HEADERVERDI
+import no.nav.syfo.util.TEMA_HEADER
 import org.slf4j.LoggerFactory
+import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.http.*
-import org.springframework.http.HttpHeaders.AUTHORIZATION
 import org.springframework.stereotype.Service
 import org.springframework.web.client.*
 
 @Service
 class PdlConsumer(
     private val metric: Metric,
+    private val azureAdTokenConsumer: AzureAdTokenConsumer,
+    @Qualifier("restTemplateProxy") private val restTemplateProxy: RestTemplate,
     @Value("\${pdl.url}") private val pdlUrl: String,
-    private val stsConsumer: StsConsumer,
-    private val restTemplate: RestTemplate
+    @Value("\${pdl.client.id}") private val pdlClientId: String,
 ) {
     fun geografiskTilknytning(ident: String): GeografiskTilknytning {
         return geografiskTilknytningResponse(ident)?.geografiskTilknytning()
@@ -33,7 +35,7 @@ class PdlConsumer(
             createRequestHeaders()
         )
         try {
-            val pdlPerson = restTemplate.exchange(
+            val pdlPerson = restTemplateProxy.exchange(
                 pdlUrl,
                 HttpMethod.POST,
                 entity,
@@ -76,7 +78,7 @@ class PdlConsumer(
             createRequestHeaders()
         )
         try {
-            val pdlPerson = restTemplate.exchange(
+            val pdlPerson = restTemplateProxy.exchange(
                 pdlUrl,
                 HttpMethod.POST,
                 entity,
@@ -108,12 +110,13 @@ class PdlConsumer(
     }
 
     private fun createRequestHeaders(): HttpHeaders {
-        val stsToken: String = stsConsumer.token()
+        val azureADSystemToken = azureAdTokenConsumer.getSystemToken(
+            scopeClientId = pdlClientId,
+        )
         val headers = HttpHeaders()
         headers.contentType = MediaType.APPLICATION_JSON
         headers.set(TEMA_HEADER, ALLE_TEMA_HEADERVERDI)
-        headers.set(AUTHORIZATION, bearerCredentials(stsToken))
-        headers.set(NAV_CONSUMER_TOKEN_HEADER, bearerCredentials(stsToken))
+        headers.setBearerAuth(azureADSystemToken)
         return headers
     }
 

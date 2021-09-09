@@ -143,8 +143,10 @@ spec:
       value: "https://axsys.nais.adeo.no"
     - name: NORG2_URL
       value: https://app.adeo.no/norg2
+    - name: PDL_CLIENT_ID
+      value: "prod-fss.pdl.pdl-api"
     - name: PDL_URL
-      value: https://pdl-api.nais.adeo.no/graphql
+      value: "https://pdl-api.intern.nav.no/graphql"
     - name: SECURITY_TOKEN_SERVICE_REST_URL
       value: https://security-token-service.nais.adeo.no
     - name: SYFOBEHANDLENDEENHET_URL
