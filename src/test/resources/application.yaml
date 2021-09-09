@@ -16,6 +16,16 @@ server:
   servlet:
     context-path: /syfo-tilgangskontroll
 
+azure:
+  app:
+    client:
+      id: "1345678"
+      secret: "secret"
+  openid:
+    config:
+      token:
+        endpoint: "https://login.microsoftonline.com/id/oauth2/v2.0/token"
+
 srv:
   username: "username"
   password: "password"

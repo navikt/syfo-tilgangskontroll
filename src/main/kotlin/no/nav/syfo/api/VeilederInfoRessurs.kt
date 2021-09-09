@@ -9,7 +9,7 @@ import no.nav.syfo.api.auth.OIDCIssuer.VEILEDERAZURE
 import no.nav.syfo.api.auth.OIDCUtil
 import org.springframework.http.MediaType.APPLICATION_JSON
 import org.springframework.http.ResponseEntity.ok
-import no.nav.syfo.consumer.msgraph.TokenConsumer
+import no.nav.syfo.consumer.azuread.TokenConsumer
 import javax.inject.Inject
 
 @RestController

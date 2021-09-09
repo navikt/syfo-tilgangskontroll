@@ -6,7 +6,7 @@ import no.nav.syfo.api.auth.OIDCIssuer.VEILEDERAZURE
 import no.nav.syfo.api.auth.OIDCUtil.getConsumerClientId
 import no.nav.syfo.api.auth.OIDCUtil.getTokenFromAzureOIDCToken
 import no.nav.syfo.api.auth.getNAVIdentFromOBOToken
-import no.nav.syfo.consumer.msgraph.TokenConsumer
+import no.nav.syfo.consumer.azuread.TokenConsumer
 import no.nav.syfo.metric.Metric
 import no.nav.syfo.util.getPersonIdent
 import org.slf4j.LoggerFactory

@@ -5,7 +5,7 @@ import no.nav.syfo.LocalApplication
 import no.nav.syfo.consumer.axsys.AxsysConsumer
 import no.nav.syfo.consumer.axsys.AxsysEnhet
 import no.nav.syfo.consumer.ldap.LdapService
-import no.nav.syfo.consumer.msgraph.TokenConsumer
+import no.nav.syfo.consumer.azuread.TokenConsumer
 import no.nav.syfo.consumer.norg2.NorgConsumer
 import no.nav.syfo.consumer.pdl.*
 import no.nav.syfo.consumer.skjermedepersoner.SkjermedePersonerPipConsumer
