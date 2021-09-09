@@ -37,4 +37,5 @@ norg2.url: http://norg2/norg2
 pdl.client.id: "dev-fss.pdl.pdl-api"
 pdl.url: "http://pdl"
 security.token.service.rest.url: "http://security-token-service"
+syfobehandlendeenhet.client.id: "dev-fss.teamsykefravr.syfobehandlendeenhet"
 syfobehandlendeenhet.url: "http://syfobehandlendeenhet"

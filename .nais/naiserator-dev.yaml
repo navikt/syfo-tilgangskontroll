@@ -149,5 +149,7 @@ spec:
       value: "https://pdl-api.dev.intern.nav.no/graphql"
     - name: SECURITY_TOKEN_SERVICE_REST_URL
       value: https://security-token-service.nais.preprod.local
+    - name: SYFOBEHANDLENDEENHET_CLIENT_ID
+      value: "dev-fss.teamsykefravr.syfobehandlendeenhet"
     - name: SYFOBEHANDLENDEENHET_URL
       value: https://syfobehandlendeenhet.nais.preprod.local
