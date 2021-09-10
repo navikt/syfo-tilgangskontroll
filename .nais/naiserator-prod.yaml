@@ -112,8 +112,6 @@ spec:
     paths:
       - kvPath: /azuread/data/prod/creds/syfo-tilgangskontroll
         mountPath: /var/run/secrets/nais.io/azuread
-      - kvPath: "/serviceuser/data/prod/srvsyfo-tilgangskontroll"
-        mountPath: "/secrets/serviceuser/syfo-tilgangskontroll"
       - kvPath: serviceuser/data/prod/srvssolinux
         mountPath: /secrets/ldap/ldap
       - kvPath: /kv/prod/fss/syfo-tilgangskontroll/default
@@ -147,8 +145,6 @@ spec:
       value: "prod-fss.pdl.pdl-api"
     - name: PDL_URL
       value: "https://pdl-api.intern.nav.no/graphql"
-    - name: SECURITY_TOKEN_SERVICE_REST_URL
-      value: https://security-token-service.nais.adeo.no
     - name: SYFOBEHANDLENDEENHET_CLIENT_ID
       value: "prod-fss.teamsykefravr.syfobehandlendeenhet"
     - name: SYFOBEHANDLENDEENHET_URL
