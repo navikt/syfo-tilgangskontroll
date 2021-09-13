@@ -43,6 +43,9 @@ spec:
         - application: isdialogmote
           namespace: teamsykefravr
           cluster: prod-gcp
+        - application: isnarmesteleder
+          namespace: teamsykefravr
+          cluster: prod-gcp
         - application: ispengestopp
           namespace: teamsykefravr
           cluster: prod-fss
