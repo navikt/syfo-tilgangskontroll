@@ -8,6 +8,7 @@ import org.springframework.util.LinkedMultiValueMap
 import org.springframework.util.MultiValueMap
 import org.springframework.web.client.RestClientResponseException
 import org.springframework.web.client.RestTemplate
+import java.util.concurrent.ConcurrentHashMap
 
 @Component
 class AzureAdTokenConsumer @Autowired constructor(
@@ -19,20 +20,30 @@ class AzureAdTokenConsumer @Autowired constructor(
     fun getSystemToken(
         scopeClientId: String,
     ): String {
-        try {
-            val requestEntity = systemTokenRequestEntity(
-                scopeClientId = scopeClientId,
-            )
-            return getToken(requestEntity = requestEntity)
-        } catch (e: RestClientResponseException) {
-            log.error("Call to get AzureADV2Token from AzureAD as system for scope: $scopeClientId with status: ${e.rawStatusCode} and message: ${e.responseBodyAsString}", e)
-            throw e
+        val cachedToken = systemTokenCache[scopeClientId]
+        return if (cachedToken == null || cachedToken.isExpired()) {
+            try {
+                val requestEntity = systemTokenRequestEntity(
+                    scopeClientId = scopeClientId,
+                )
+                val token = getToken(requestEntity = requestEntity)
+                systemTokenCache[scopeClientId] = token
+                token.accessToken
+            } catch (e: RestClientResponseException) {
+                log.error(
+                    "Call to get AzureADV2Token from AzureAD as system for scope: $scopeClientId with status: ${e.rawStatusCode} and message: ${e.responseBodyAsString}",
+                    e
+                )
+                throw e
+            }
+        } else {
+            cachedToken.accessToken
         }
     }
 
-    private fun getToken(
+    fun getToken(
         requestEntity: HttpEntity<MultiValueMap<String, String>>,
-    ): String {
+    ): AzureAdToken {
         val response = restTemplateProxy.exchange(
             azureTokenEndpoint,
             HttpMethod.POST,
@@ -41,10 +52,10 @@ class AzureAdTokenConsumer @Autowired constructor(
         )
         val tokenResponse = response.body!!
 
-        return tokenResponse.toAzureAdV2Token().accessToken
+        return tokenResponse.toAzureAdV2Token()
     }
 
-    private fun systemTokenRequestEntity(
+    fun systemTokenRequestEntity(
         scopeClientId: String,
     ): HttpEntity<MultiValueMap<String, String>> {
         val headers = HttpHeaders()
@@ -60,5 +71,6 @@ class AzureAdTokenConsumer @Autowired constructor(
 
     companion object {
         private val log = LoggerFactory.getLogger(AzureAdTokenConsumer::class.java)
+        val systemTokenCache = ConcurrentHashMap<String, AzureAdToken>()
     }
 }
