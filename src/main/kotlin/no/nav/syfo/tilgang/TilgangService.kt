@@ -1,5 +1,6 @@
 package no.nav.syfo.tilgang
 
+import io.micrometer.core.annotation.Timed
 import no.nav.syfo.cache.CacheConfig
 import no.nav.syfo.consumer.axsys.AxsysConsumer
 import no.nav.syfo.consumer.ldap.LdapService
@@ -50,8 +51,8 @@ class TilgangService @Autowired constructor(
         val personIdentNumber = PersonIdentNumber(brukerFnr)
         val pdlPerson = pdlConsumer.person(personIdentNumber.value)
         if (
-            pdlConsumer.isKode6(pdlPerson)
-            && !kode6TilgangService.harTilgang(
+            pdlConsumer.isKode6(pdlPerson) &&
+            !kode6TilgangService.harTilgang(
                 consumerClientId = consumerClientId,
                 veilederId = veilederId
             )
@@ -98,6 +99,7 @@ class TilgangService @Autowired constructor(
         )
     }
 
+    @Timed("syfotilgangskontroll_harTilgangTilTjenesten", histogram = true)
     private fun harTilgangTilTjenesten(veilederId: String): Boolean {
         return harTilgangTilSykefravaersoppfoelging(veilederId)
     }
@@ -106,10 +108,12 @@ class TilgangService @Autowired constructor(
         return ldapService.harTilgang(veilederId, AdRoller.SYFO.rolle)
     }
 
+    @Timed("syfotilgangskontroll_harTilgangTilKode7", histogram = true)
     private fun harTilgangTilKode7(veilederId: String): Boolean {
         return ldapService.harTilgang(veilederId, AdRoller.KODE7.rolle)
     }
 
+    @Timed("syfotilgangskontroll_harTilgangTilEgenAnsatt", histogram = true)
     private fun harTilgangTilEgenAnsatt(veilederId: String): Boolean {
         return ldapService.harTilgang(veilederId, AdRoller.EGEN_ANSATT.rolle)
     }
