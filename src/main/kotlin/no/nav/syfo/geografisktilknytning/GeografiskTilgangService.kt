@@ -1,5 +1,6 @@
 package no.nav.syfo.geografisktilknytning
 
+import io.micrometer.core.annotation.Timed
 import no.nav.syfo.consumer.axsys.AxsysConsumer
 import no.nav.syfo.consumer.axsys.AxsysEnhet
 import no.nav.syfo.consumer.behandlendeenhet.BehandlendeEnhetConsumer
@@ -19,6 +20,7 @@ class GeografiskTilgangService @Autowired constructor(
     private val norgConsumer: NorgConsumer,
     private val pdlConsumer: PdlConsumer
 ) {
+    @Timed("syfotilgangskontroll_harGeografiskTilgang", histogram = true)
     fun harGeografiskTilgang(veilederId: String, personFnr: String): Boolean {
         if (harNasjonalTilgang(veilederId)) {
             return true
@@ -29,13 +31,17 @@ class GeografiskTilgangService @Autowired constructor(
             .stream()
             .map(AxsysEnhet::enhetId)
             .collect(Collectors.toList())
-        return (harLokalTilgangTilBrukersEnhet(navKontorForGT, veiledersEnheter)
-            || harRegionalTilgangTilBrukersEnhet(navKontorForGT, veiledersEnheter, veilederId))
+        return (
+            harLokalTilgangTilBrukersEnhet(navKontorForGT, veiledersEnheter) ||
+                harRegionalTilgangTilBrukersEnhet(navKontorForGT, veiledersEnheter, veilederId)
+            )
     }
 
     private fun harNasjonalTilgang(veilederId: String): Boolean {
-        return (ldapService.harTilgang(veilederId, AdRoller.NASJONAL.rolle)
-            || ldapService.harTilgang(veilederId, AdRoller.UTVIDBAR_TIL_NASJONAL.rolle))
+        return (
+            ldapService.harTilgang(veilederId, AdRoller.NASJONAL.rolle) ||
+                ldapService.harTilgang(veilederId, AdRoller.UTVIDBAR_TIL_NASJONAL.rolle)
+            )
     }
 
     private fun harLokalTilgangTilBrukersEnhet(navKontorForGT: String, veiledersEnheter: List<String>): Boolean {
@@ -43,8 +49,10 @@ class GeografiskTilgangService @Autowired constructor(
     }
 
     private fun harRegionalTilgang(veilederId: String): Boolean {
-        return (ldapService.harTilgang(veilederId, AdRoller.REGIONAL.rolle)
-            || ldapService.harTilgang(veilederId, AdRoller.UTVIDBAR_TIL_REGIONAL.rolle))
+        return (
+            ldapService.harTilgang(veilederId, AdRoller.REGIONAL.rolle) ||
+                ldapService.harTilgang(veilederId, AdRoller.UTVIDBAR_TIL_REGIONAL.rolle)
+            )
     }
 
     private fun harRegionalTilgangTilBrukersEnhet(navKontorForGT: String, veiledersEnheter: List<String>, veilederId: String): Boolean {

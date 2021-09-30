@@ -1,5 +1,6 @@
 package no.nav.syfo.tilgang
 
+import io.micrometer.core.annotation.Timed
 import no.nav.syfo.consumer.ldap.LdapService
 import no.nav.syfo.domain.AdRoller
 import org.springframework.beans.factory.annotation.Value
@@ -12,6 +13,7 @@ class Kode6TilgangService(
 ) {
     private var kode6TjenesteList = listOf(smregisteringClientId)
 
+    @Timed("syfotilgangskontroll_kode6TilgangSevice_harTilgang", histogram = true)
     fun harTilgang(
         consumerClientId: String,
         veilederId: String

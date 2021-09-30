@@ -1,6 +1,7 @@
 package no.nav.syfo.consumer.pdl
 
 import no.nav.syfo.cache.CacheConfig
+import io.micrometer.core.annotation.Timed
 import no.nav.syfo.consumer.azuread.AzureAdTokenConsumer
 import no.nav.syfo.metric.Metric
 import no.nav.syfo.util.ALLE_TEMA_HEADERVERDI
@@ -71,6 +72,7 @@ class PdlConsumer(
     }
 
     @Cacheable(cacheNames = [CacheConfig.CACHENAME_PDL_PERSON], key = "#personIdentNumber", condition = "#personIdentNumber != null")
+    @Timed("syfotilgangskontroll_pdlConsumer_person", histogram = true)
     fun person(personIdentNumber: String): PdlHentPerson? {
         val query = getPdlQuery("/pdl/hentPerson.graphql")
         val request = PdlPersonRequest(
