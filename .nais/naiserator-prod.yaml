@@ -40,6 +40,9 @@ spec:
   accessPolicy:
     inbound:
       rules:
+        - application: isdialogmelding
+          namespace: teamsykefravr
+          cluster: prod-gcp
         - application: isdialogmote
           namespace: teamsykefravr
           cluster: prod-gcp
