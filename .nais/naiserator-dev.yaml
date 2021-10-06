@@ -84,6 +84,9 @@ spec:
           cluster: dev-fss
         - application: syfoperson
           namespace: teamsykefravr
+          cluster: dev-gcp
+        - application: syfoperson
+          namespace: teamsykefravr
           cluster: dev-fss
         - application: syfomotebehov
           namespace: team-esyfo
