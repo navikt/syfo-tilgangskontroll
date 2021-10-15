@@ -64,9 +64,6 @@ spec:
         - application: finnfastlege
           namespace: teamsykefravr
           cluster: dev-fss
-        - application: modiasyforest
-          namespace: teamsykefravr
-          cluster: dev-fss
         - application: syfobehandlendeenhet
           namespace: teamsykefravr
           cluster: dev-fss
