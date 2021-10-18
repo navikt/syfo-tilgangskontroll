@@ -49,7 +49,7 @@ class ControllerExceptionHandler @Inject constructor(
 
     private fun handleExceptionInternal(ex: Exception, body: ApiError, headers: HttpHeaders, status: HttpStatus, request: WebRequest): ResponseEntity<ApiError> {
         metric.tellHttpKall(status.value())
-        if (HttpStatus.INTERNAL_SERVER_ERROR == status) {
+        if (HttpStatus.INTERNAL_SERVER_ERROR == status || HttpStatus.BAD_REQUEST == status) {
             log.error("Uventet feil: {} : {}", ex.javaClass.toString(), ex.message, ex)
             request.setAttribute(WebUtils.ERROR_EXCEPTION_ATTRIBUTE, ex, WebRequest.SCOPE_REQUEST)
         }
