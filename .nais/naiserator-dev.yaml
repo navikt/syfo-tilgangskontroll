@@ -131,7 +131,7 @@ spec:
     - name: AAD_TENANT_ID
       value: 966ac572-f5b7-4bbe-aa88-c76419c0f851
     - name: SMREGISTRERING_CLIENT_ID
-      value: "6e2c2c7d-9bc1-45f9-a76c-9d32b489268a"
+      value: "3936bfbe-f658-4eab-a0e4-0222fc730d67"
     - name: NO_NAV_SECURITY_JWT_ISSUER_VEILEDERAAD_DISCOVERYURL
       value: https://login.microsoftonline.com/966ac572-f5b7-4bbe-aa88-c76419c0f851/v2.0/.well-known/openid-configuration
     - name: NO_NAV_SECURITY_JWT_ISSUER_VEILEDERAAD_ACCEPTEDAUDIENCE
