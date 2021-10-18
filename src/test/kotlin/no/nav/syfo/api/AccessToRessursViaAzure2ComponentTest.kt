@@ -5,7 +5,6 @@ import no.nav.syfo.LocalApplication
 import no.nav.syfo.consumer.axsys.AxsysConsumer
 import no.nav.syfo.consumer.axsys.AxsysEnhet
 import no.nav.syfo.consumer.ldap.LdapService
-import no.nav.syfo.consumer.msgraph.TokenConsumer
 import no.nav.syfo.consumer.norg2.NorgConsumer
 import no.nav.syfo.consumer.pdl.*
 import no.nav.syfo.consumer.skjermedepersoner.SkjermedePersonerPipConsumer
@@ -58,9 +57,6 @@ class AccessToRessursViaAzure2ComponentTest {
     @MockBean
     private lateinit var skjermedePersonerPipConsumer: SkjermedePersonerPipConsumer
 
-    @MockBean
-    private lateinit var tokenConsumer: TokenConsumer
-
     @Autowired
     private lateinit var oidcRequestContextHolder: TokenValidationContextHolder
 
@@ -85,27 +81,29 @@ class AccessToRessursViaAzure2ComponentTest {
                 AxsysEnhet(
                     NAV_ENHETID_2,
                     NAV_ENHET_NAVN
-                ))
-        )
-        Mockito.`when`(norgConsumer.getNAVKontorForGT(
-            GeografiskTilknytning(
-                type = GeografiskTilknytningType.BYDEL,
-                value = NAV_ENHETID_1,
+                )
             )
-        )).thenReturn(
+        )
+        Mockito.`when`(
+            norgConsumer.getNAVKontorForGT(
+                GeografiskTilknytning(
+                    type = GeografiskTilknytningType.BYDEL,
+                    value = NAV_ENHETID_1,
+                )
+            )
+        ).thenReturn(
             NAV_ENHETID_1
         )
-        Mockito.`when`(pdlConsumer.geografiskTilknytning(ArgumentMatchers.anyString())).thenReturn(GeografiskTilknytning(
-            type = GeografiskTilknytningType.BYDEL,
-            value = "0330",
-        ))
+        Mockito.`when`(pdlConsumer.geografiskTilknytning(ArgumentMatchers.anyString())).thenReturn(
+            GeografiskTilknytning(
+                type = GeografiskTilknytningType.BYDEL,
+                value = "0330",
+            )
+        )
         Mockito.`when`(skjermedePersonerPipConsumer.erSkjermet(BJARNE_BRUKER)).thenReturn(false)
         Mockito.`when`(skjermedePersonerPipConsumer.erSkjermet(BENGT_KODE6_BRUKER)).thenReturn(false)
         Mockito.`when`(skjermedePersonerPipConsumer.erSkjermet(BIRTE_KODE7_BRUKER)).thenReturn(false)
         Mockito.`when`(skjermedePersonerPipConsumer.erSkjermet(ERIK_EGENANSATT_BRUKER)).thenReturn(true)
-        Mockito.`when`(tokenConsumer.getSubjectFromMsGraph(ArgumentMatchers.anyString())).thenReturn(
-            VEILEDER_ID
-        )
         logInVeilederWithAzure2(oidcRequestContextHolder, "", VEILEDER_ID)
     }
 
@@ -126,69 +124,6 @@ class AccessToRessursViaAzure2ComponentTest {
         mockRoller(ldapServiceMock, VEILEDER_ID, NEKT, AdRoller.SYFO)
         val response = tilgangController.accessToSYFOViaAzure()
         assertAccessDenied(response, AdRoller.SYFO.name)
-    }
-
-    @Test
-    fun accessToBrukerGranted() {
-        mockRoller(ldapServiceMock, VEILEDER_ID, INNVILG, AdRoller.SYFO)
-        val response = tilgangController.accessToPersonViaAzure(BJARNE_BRUKER)
-        assertAccessOk(response)
-    }
-
-    @Test
-    fun accessToKode6PersonDenied() {
-        mockRoller(ldapServiceMock, VEILEDER_ID, INNVILG, AdRoller.SYFO)
-        Mockito.`when`(pdlConsumer.isKode6(ArgumentMatchers.any())).thenReturn(true)
-        val response = tilgangController.accessToPersonViaAzure(BENGT_KODE6_BRUKER)
-        assertAccessDenied(response, AdRoller.KODE6.name)
-    }
-
-    @Test
-    fun `access to Kode6-person always denied by default`() {
-        mockRoller(ldapServiceMock, VEILEDER_ID, INNVILG, AdRoller.SYFO, AdRoller.KODE6)
-        Mockito.`when`(pdlConsumer.isKode6(ArgumentMatchers.any())).thenReturn(true)
-        val response = tilgangController.accessToPersonViaAzure(BENGT_KODE6_BRUKER)
-        assertAccessDenied(response, AdRoller.KODE6.name)
-    }
-
-    @Test
-    fun `access to Kode6-person granted for smregistrering and NAVIdent with Kode6 access`() {
-        loggUtAlle(oidcRequestContextHolder)
-        logInVeilederWithAzure2(oidcRequestContextHolder, smregistreringClientId, VEILEDER_ID)
-
-        mockRoller(ldapServiceMock, VEILEDER_ID, INNVILG, AdRoller.SYFO, AdRoller.KODE6)
-        Mockito.`when`(pdlConsumer.isKode6(ArgumentMatchers.any())).thenReturn(true)
-        val response = tilgangController.accessToPersonViaAzure(BENGT_KODE6_BRUKER)
-        assertAccessOk(response)
-    }
-
-    @Test
-    fun accessToKode7PersonDenied() {
-        mockRoller(ldapServiceMock, VEILEDER_ID, INNVILG, AdRoller.SYFO)
-        Mockito.`when`(pdlConsumer.isKode7(ArgumentMatchers.any())).thenReturn(true)
-        val response = tilgangController.accessToPersonViaAzure(BIRTE_KODE7_BRUKER)
-        assertAccessDenied(response, AdRoller.KODE7.name)
-    }
-
-    @Test
-    fun accessToKode7PersonGranted() {
-        mockRoller(ldapServiceMock, VEILEDER_ID, INNVILG, AdRoller.SYFO, AdRoller.KODE7)
-        val response = tilgangController.accessToPersonViaAzure(BIRTE_KODE7_BRUKER)
-        assertAccessOk(response)
-    }
-
-    @Test
-    fun accessToEgenAnsattPersonDenied() {
-        mockRoller(ldapServiceMock, VEILEDER_ID, INNVILG, AdRoller.SYFO)
-        val response = tilgangController.accessToPersonViaAzure(ERIK_EGENANSATT_BRUKER)
-        assertAccessDenied(response, AdRoller.EGEN_ANSATT.name)
-    }
-
-    @Test
-    fun accessToEgenAnsattPersonGranted() {
-        mockRoller(ldapServiceMock, VEILEDER_ID, INNVILG, AdRoller.SYFO, AdRoller.EGEN_ANSATT)
-        val response = tilgangController.accessToPersonViaAzure(ERIK_EGENANSATT_BRUKER)
-        assertAccessOk(response)
     }
 
     @Test
