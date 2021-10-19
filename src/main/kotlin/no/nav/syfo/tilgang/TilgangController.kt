@@ -4,9 +4,7 @@ import no.nav.security.token.support.core.api.ProtectedWithClaims
 import no.nav.security.token.support.core.context.TokenValidationContextHolder
 import no.nav.syfo.api.auth.OIDCIssuer.VEILEDERAZURE
 import no.nav.syfo.api.auth.OIDCUtil.getConsumerClientId
-import no.nav.syfo.api.auth.OIDCUtil.getTokenFromAzureOIDCToken
 import no.nav.syfo.api.auth.getNAVIdentFromOBOToken
-import no.nav.syfo.consumer.msgraph.TokenConsumer
 import no.nav.syfo.metric.Metric
 import no.nav.syfo.util.getPersonIdent
 import org.slf4j.LoggerFactory
@@ -21,7 +19,6 @@ class TilgangController @Autowired constructor(
     private val contextHolder: TokenValidationContextHolder,
     private val metric: Metric,
     private val tilgangService: TilgangService,
-    private val tokenConsumer: TokenConsumer
 ) {
     @GetMapping(path = ["/navident/syfo"])
     @ProtectedWithClaims(issuer = VEILEDERAZURE)
@@ -29,19 +26,6 @@ class TilgangController @Autowired constructor(
         val veilederId = getNAVIdentFromOBOToken(contextHolder)
             ?: throw IllegalArgumentException("Did not find a NAVIdent in token")
         return sjekkTilgangTilTjenesten(veilederId)
-    }
-
-    /*
-    This endpoint is deprecated, but is still use by smregistering-backend and syfosmmanuell-backend.
-    No NavIdent is supplied in the token from these two services.
-     */
-    @GetMapping(path = ["/navident/bruker/{fnr}"])
-    @ProtectedWithClaims(issuer = VEILEDERAZURE)
-    fun accessToPersonViaAzure(@PathVariable fnr: String): ResponseEntity<*> {
-        val veilederId = getNAVIdentFromOBOToken(contextHolder)
-            ?: tokenConsumer.getSubjectFromMsGraph(getTokenFromAzureOIDCToken(contextHolder))
-        val consumerClientId = getConsumerClientId(contextHolder)
-        return sjekktilgangTilBruker(veilederId, fnr, consumerClientId)
     }
 
     @GetMapping(path = ["/navident/person"])
