@@ -6,8 +6,7 @@ import no.nav.syfo.consumer.axsys.AxsysConsumer
 import no.nav.syfo.consumer.ldap.LdapService
 import no.nav.syfo.consumer.pdl.PdlConsumer
 import no.nav.syfo.consumer.skjermedepersoner.SkjermedePersonerPipConsumer
-import no.nav.syfo.domain.AdRoller
-import no.nav.syfo.domain.PersonIdentNumber
+import no.nav.syfo.domain.*
 import no.nav.syfo.geografisktilknytning.GeografiskTilgangService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.cache.annotation.Cacheable
@@ -15,6 +14,7 @@ import org.springframework.stereotype.Service
 
 @Service
 class TilgangService @Autowired constructor(
+    private val adRoller: AdRoller,
     private val axsysConsumer: AxsysConsumer,
     private val kode6TilgangService: Kode6TilgangService,
     private val ldapService: LdapService,
@@ -39,7 +39,7 @@ class TilgangService @Autowired constructor(
         if (!harTilgangTilTjenesten(veilederId)) {
             return Tilgang(
                 harTilgang = false,
-                begrunnelse = AdRoller.SYFO.name
+                begrunnelse = adRoller.SYFO.name
             )
         }
         if (!geografiskTilgangService.harGeografiskTilgang(veilederId, brukerFnr)) {
@@ -59,18 +59,18 @@ class TilgangService @Autowired constructor(
         ) {
             return Tilgang(
                 harTilgang = false,
-                begrunnelse = AdRoller.KODE6.name
+                begrunnelse = adRoller.KODE6.name
             )
         } else if (pdlConsumer.isKode7(pdlPerson) && !harTilgangTilKode7(veilederId)) {
             return Tilgang(
                 harTilgang = false,
-                begrunnelse = AdRoller.KODE7.name
+                begrunnelse = adRoller.KODE7.name
             )
         }
         return if (skjermedePersonerPipConsumer.erSkjermet(brukerFnr) && !harTilgangTilEgenAnsatt(veilederId)) {
             return Tilgang(
                 harTilgang = false,
-                begrunnelse = AdRoller.EGEN_ANSATT.name
+                begrunnelse = adRoller.EGEN_ANSATT.name
             )
         } else Tilgang(harTilgang = true)
     }
@@ -81,7 +81,7 @@ class TilgangService @Autowired constructor(
             harTilgang = true
         ) else Tilgang(
             harTilgang = false,
-            begrunnelse = AdRoller.SYFO.name
+            begrunnelse = adRoller.SYFO.name
         )
     }
 
@@ -89,7 +89,7 @@ class TilgangService @Autowired constructor(
     fun sjekkTilgangTilEnhet(veilederId: String, enhet: String): Tilgang {
         if (!harTilgangTilSykefravaersoppfoelging(veilederId)) return Tilgang(
             harTilgang = false,
-            begrunnelse = AdRoller.SYFO.name
+            begrunnelse = adRoller.SYFO.name
         )
         return if (!harTilgangTilEnhet(veilederId, enhet)) Tilgang(
             harTilgang = false,
@@ -105,17 +105,17 @@ class TilgangService @Autowired constructor(
     }
 
     private fun harTilgangTilSykefravaersoppfoelging(veilederId: String): Boolean {
-        return ldapService.harTilgang(veilederId, AdRoller.SYFO.rolle)
+        return ldapService.harTilgang(veilederId, adRoller.SYFO)
     }
 
     @Timed("syfotilgangskontroll_harTilgangTilKode7", histogram = true)
     private fun harTilgangTilKode7(veilederId: String): Boolean {
-        return ldapService.harTilgang(veilederId, AdRoller.KODE7.rolle)
+        return ldapService.harTilgang(veilederId, adRoller.KODE7)
     }
 
     @Timed("syfotilgangskontroll_harTilgangTilEgenAnsatt", histogram = true)
     private fun harTilgangTilEgenAnsatt(veilederId: String): Boolean {
-        return ldapService.harTilgang(veilederId, AdRoller.EGEN_ANSATT.rolle)
+        return ldapService.harTilgang(veilederId, adRoller.EGEN_ANSATT)
     }
 
     private fun harTilgangTilEnhet(veilederId: String, navEnhetId: String): Boolean {

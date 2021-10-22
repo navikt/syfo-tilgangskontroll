@@ -13,3 +13,6 @@ fun getNAVIdentFromOBOToken(contextHolder: TokenValidationContextHolder): String
     val context = contextHolder.tokenValidationContext
     return context.getClaims(OIDCIssuer.VEILEDERAZURE).getStringClaim(OIDCClaim.NAVIDENT)
 }
+
+fun TokenValidationContextHolder.getToken(): String =
+    this.tokenValidationContext.getJwtToken(OIDCIssuer.VEILEDERAZURE).tokenAsString

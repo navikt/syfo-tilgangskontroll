@@ -14,6 +14,7 @@ import java.util.stream.Collectors
 
 @Service
 class GeografiskTilgangService @Autowired constructor(
+    private val adRoller: AdRoller,
     private val axsysConsumer: AxsysConsumer,
     private val behandlendeEnhetConsumer: BehandlendeEnhetConsumer,
     private val ldapService: LdapService,
@@ -39,8 +40,8 @@ class GeografiskTilgangService @Autowired constructor(
 
     private fun harNasjonalTilgang(veilederId: String): Boolean {
         return (
-            ldapService.harTilgang(veilederId, AdRoller.NASJONAL.rolle) ||
-                ldapService.harTilgang(veilederId, AdRoller.UTVIDBAR_TIL_NASJONAL.rolle)
+            ldapService.harTilgang(veilederId, adRoller.NASJONAL) ||
+                ldapService.harTilgang(veilederId, adRoller.UTVIDBAR_TIL_NASJONAL)
             )
     }
 
@@ -50,8 +51,8 @@ class GeografiskTilgangService @Autowired constructor(
 
     private fun harRegionalTilgang(veilederId: String): Boolean {
         return (
-            ldapService.harTilgang(veilederId, AdRoller.REGIONAL.rolle) ||
-                ldapService.harTilgang(veilederId, AdRoller.UTVIDBAR_TIL_REGIONAL.rolle)
+            ldapService.harTilgang(veilederId, adRoller.REGIONAL) ||
+                ldapService.harTilgang(veilederId, adRoller.UTVIDBAR_TIL_REGIONAL)
             )
     }
 
