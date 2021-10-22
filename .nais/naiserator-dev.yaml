@@ -59,6 +59,9 @@ spec:
           cluster: dev-fss
         - application: fastlegerest
           namespace: teamsykefravr
+          cluster: dev-gcp
+        - application: fastlegerest
+          namespace: teamsykefravr
           cluster: dev-fss
         - application: finnfastlege
           namespace: teamsykefravr

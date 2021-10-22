@@ -59,6 +59,9 @@ spec:
           cluster: prod-fss
         - application: fastlegerest
           namespace: teamsykefravr
+          cluster: prod-gcp
+        - application: fastlegerest
+          namespace: teamsykefravr
           cluster: prod-fss
         - application: finnfastlege
           namespace: teamsykefravr
