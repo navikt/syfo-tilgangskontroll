@@ -68,6 +68,9 @@ spec:
           cluster: prod-fss
         - application: syfobehandlendeenhet
           namespace: teamsykefravr
+          cluster: prod-gcp
+        - application: syfobehandlendeenhet
+          namespace: teamsykefravr
           cluster: prod-fss
         - application: syfomodiaperson
           namespace: teamsykefravr
