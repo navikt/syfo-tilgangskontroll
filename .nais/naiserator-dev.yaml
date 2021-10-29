@@ -68,6 +68,9 @@ spec:
           cluster: dev-fss
         - application: syfobehandlendeenhet
           namespace: teamsykefravr
+          cluster: dev-gcp
+        - application: syfobehandlendeenhet
+          namespace: teamsykefravr
           cluster: dev-fss
         - application: syfomodiaperson
           namespace: teamsykefravr
