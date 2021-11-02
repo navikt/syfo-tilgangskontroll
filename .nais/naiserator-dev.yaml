@@ -146,6 +146,6 @@ spec:
     - name: PDL_URL
       value: "https://pdl-api.dev.intern.nav.no/graphql"
     - name: SYFOBEHANDLENDEENHET_CLIENT_ID
-      value: "dev-fss.teamsykefravr.syfobehandlendeenhet"
+      value: "dev-gcp.teamsykefravr.syfobehandlendeenhet"
     - name: SYFOBEHANDLENDEENHET_URL
-      value: https://syfobehandlendeenhet.nais.preprod.local
+      value: "https://syfobehandlendeenhet.dev.intern.nav.no"
