@@ -4,6 +4,9 @@ metadata:
   namespace: teamsykefravr
   labels:
     team: teamsykefravr
+  annotations:
+    nais.io/read-only-file-system: "false"
+    nais.io/run-as-user: "999"
   name: syfo-tilgangskontroll-redis
 spec:
   image: redis:5-alpine
