@@ -40,13 +40,13 @@ class AzureTokenCacheTest {
 
     @AfterEach
     fun tearDown() {
-        AzureAdTokenConsumer.systemTokenCache.clear()
+        AzureAdTokenConsumer.tokenCache.clear()
     }
 
 
     @Test
     fun `token is cached`() {
-        assertEquals(AzureAdTokenConsumer.systemTokenCache.size, 0)
+        assertEquals(AzureAdTokenConsumer.tokenCache.size, 0)
         // Two thenReturn-statements to get different result on first and second invocation
         Mockito.`when`(azureAdTokenConsumer.getToken(requestEntityPDL)).thenReturn(
             AzureAdToken(
@@ -61,15 +61,15 @@ class AzureTokenCacheTest {
         )
         val token = azureAdTokenConsumer.getSystemToken(pdlScopeClientId)
         assertEquals(token, "first")
-        assertEquals(AzureAdTokenConsumer.systemTokenCache.size, 1)
+        assertEquals(AzureAdTokenConsumer.tokenCache.size, 1)
         val anotherToken = azureAdTokenConsumer.getSystemToken(pdlScopeClientId)
         assertEquals(anotherToken, "first")
-        assertEquals(AzureAdTokenConsumer.systemTokenCache.size, 1)
+        assertEquals(AzureAdTokenConsumer.tokenCache.size, 1)
      }
 
     @Test
     fun `expired token is renewed`() {
-        assertEquals(AzureAdTokenConsumer.systemTokenCache.size, 0)
+        assertEquals(AzureAdTokenConsumer.tokenCache.size, 0)
         // Two thenReturn-statements to get different result on first and second invocation
         Mockito.`when`(azureAdTokenConsumer.getToken(requestEntityPDL)).thenReturn(
             AzureAdToken(
@@ -84,15 +84,15 @@ class AzureTokenCacheTest {
         )
         val token = azureAdTokenConsumer.getSystemToken(pdlScopeClientId)
         assertEquals(token, "first")
-        assertEquals(AzureAdTokenConsumer.systemTokenCache.size, 1)
+        assertEquals(AzureAdTokenConsumer.tokenCache.size, 1)
         val anotherToken = azureAdTokenConsumer.getSystemToken(pdlScopeClientId)
         assertEquals(anotherToken, "second")
-        assertEquals(AzureAdTokenConsumer.systemTokenCache.size, 1)
+        assertEquals(AzureAdTokenConsumer.tokenCache.size, 1)
     }
 
     @Test
     fun `different scope ids get separate tokens`() {
-        assertEquals(AzureAdTokenConsumer.systemTokenCache.size, 0)
+        assertEquals(AzureAdTokenConsumer.tokenCache.size, 0)
         Mockito.`when`(azureAdTokenConsumer.getToken(requestEntityPDL)).thenReturn(
             AzureAdToken(
                 accessToken = "firstPDL",
@@ -117,18 +117,18 @@ class AzureTokenCacheTest {
         )
         val tokenPDL = azureAdTokenConsumer.getSystemToken(pdlScopeClientId)
         assertEquals(tokenPDL, "firstPDL")
-        assertEquals(AzureAdTokenConsumer.systemTokenCache.size, 1)
+        assertEquals(AzureAdTokenConsumer.tokenCache.size, 1)
 
         val tokenAnother = azureAdTokenConsumer.getSystemToken(anotherScopeClientId)
         assertEquals(tokenAnother, "firstAnother")
-        assertEquals(AzureAdTokenConsumer.systemTokenCache.size, 2)
+        assertEquals(AzureAdTokenConsumer.tokenCache.size, 2)
 
         val newTokenPDL = azureAdTokenConsumer.getSystemToken(pdlScopeClientId)
         assertEquals(newTokenPDL, "firstPDL")
-        assertEquals(AzureAdTokenConsumer.systemTokenCache.size, 2)
+        assertEquals(AzureAdTokenConsumer.tokenCache.size, 2)
 
         val newTokenAnother = azureAdTokenConsumer.getSystemToken(anotherScopeClientId)
         assertEquals(newTokenAnother, "firstAnother")
-        assertEquals(AzureAdTokenConsumer.systemTokenCache.size, 2)
+        assertEquals(AzureAdTokenConsumer.tokenCache.size, 2)
     }
 }

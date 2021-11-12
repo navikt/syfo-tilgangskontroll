@@ -58,6 +58,9 @@ class AccessToRessursViaAzure2ComponentTest {
     private lateinit var skjermedePersonerPipConsumer: SkjermedePersonerPipConsumer
 
     @Autowired
+    private lateinit var adRoller: AdRoller
+
+    @Autowired
     private lateinit var oidcRequestContextHolder: TokenValidationContextHolder
 
     @Autowired
@@ -114,21 +117,21 @@ class AccessToRessursViaAzure2ComponentTest {
 
     @Test
     fun accessToSYFOGranted() {
-        mockRoller(ldapServiceMock, VEILEDER_ID, INNVILG, AdRoller.SYFO)
+        mockRoller(ldapServiceMock, VEILEDER_ID, INNVILG, adRoller.SYFO)
         val response = tilgangController.accessToSYFOViaAzure()
         assertAccessOk(response)
     }
 
     @Test
     fun accessToSYFODenied() {
-        mockRoller(ldapServiceMock, VEILEDER_ID, NEKT, AdRoller.SYFO)
+        mockRoller(ldapServiceMock, VEILEDER_ID, NEKT, adRoller.SYFO)
         val response = tilgangController.accessToSYFOViaAzure()
-        assertAccessDenied(response, AdRoller.SYFO.name)
+        assertAccessDenied(response, adRoller.SYFO.name)
     }
 
     @Test
     fun `access to PersonIdent granted`() {
-        mockRoller(ldapServiceMock, VEILEDER_ID, INNVILG, AdRoller.SYFO)
+        mockRoller(ldapServiceMock, VEILEDER_ID, INNVILG, adRoller.SYFO)
         val headers: MultiValueMap<String, String> = LinkedMultiValueMap()
         headers.add(NAV_PERSONIDENT_HEADER, BJARNE_BRUKER)
         val response = tilgangController.accessToPersonIdentViaAzure(headers)
@@ -137,22 +140,22 @@ class AccessToRessursViaAzure2ComponentTest {
 
     @Test
     fun `access to Kode6-personident denied`() {
-        mockRoller(ldapServiceMock, VEILEDER_ID, INNVILG, AdRoller.SYFO)
+        mockRoller(ldapServiceMock, VEILEDER_ID, INNVILG, adRoller.SYFO)
         Mockito.`when`(pdlConsumer.isKode6(ArgumentMatchers.any())).thenReturn(true)
         val headers: MultiValueMap<String, String> = LinkedMultiValueMap()
         headers.add(NAV_PERSONIDENT_HEADER, BENGT_KODE6_BRUKER)
         val response = tilgangController.accessToPersonIdentViaAzure(headers)
-        assertAccessDenied(response, AdRoller.KODE6.name)
+        assertAccessDenied(response, adRoller.KODE6.name)
     }
 
     @Test
     fun `access to Kode6-personident always denied by default`() {
-        mockRoller(ldapServiceMock, VEILEDER_ID, INNVILG, AdRoller.SYFO, AdRoller.KODE6)
+        mockRoller(ldapServiceMock, VEILEDER_ID, INNVILG, adRoller.SYFO, adRoller.KODE6)
         Mockito.`when`(pdlConsumer.isKode6(ArgumentMatchers.any())).thenReturn(true)
         val headers: MultiValueMap<String, String> = LinkedMultiValueMap()
         headers.add(NAV_PERSONIDENT_HEADER, BENGT_KODE6_BRUKER)
         val response = tilgangController.accessToPersonIdentViaAzure(headers)
-        assertAccessDenied(response, AdRoller.KODE6.name)
+        assertAccessDenied(response, adRoller.KODE6.name)
     }
 
     @Test
@@ -160,7 +163,7 @@ class AccessToRessursViaAzure2ComponentTest {
         loggUtAlle(oidcRequestContextHolder)
         logInVeilederWithAzure2(oidcRequestContextHolder, smregistreringClientId, VEILEDER_ID)
 
-        mockRoller(ldapServiceMock, VEILEDER_ID, INNVILG, AdRoller.SYFO, AdRoller.KODE6)
+        mockRoller(ldapServiceMock, VEILEDER_ID, INNVILG, adRoller.SYFO, adRoller.KODE6)
         Mockito.`when`(pdlConsumer.isKode6(ArgumentMatchers.any())).thenReturn(true)
         val headers: MultiValueMap<String, String> = LinkedMultiValueMap()
         headers.add(NAV_PERSONIDENT_HEADER, BENGT_KODE6_BRUKER)
@@ -170,17 +173,17 @@ class AccessToRessursViaAzure2ComponentTest {
 
     @Test
     fun `access to Kode7-personident denied`() {
-        mockRoller(ldapServiceMock, VEILEDER_ID, INNVILG, AdRoller.SYFO)
+        mockRoller(ldapServiceMock, VEILEDER_ID, INNVILG, adRoller.SYFO)
         Mockito.`when`(pdlConsumer.isKode7(ArgumentMatchers.any())).thenReturn(true)
         val headers: MultiValueMap<String, String> = LinkedMultiValueMap()
         headers.add(NAV_PERSONIDENT_HEADER, BIRTE_KODE7_BRUKER)
         val response = tilgangController.accessToPersonIdentViaAzure(headers)
-        assertAccessDenied(response, AdRoller.KODE7.name)
+        assertAccessDenied(response, adRoller.KODE7.name)
     }
 
     @Test
     fun `access to Kode7-personident granted`() {
-        mockRoller(ldapServiceMock, VEILEDER_ID, INNVILG, AdRoller.SYFO, AdRoller.KODE7)
+        mockRoller(ldapServiceMock, VEILEDER_ID, INNVILG, adRoller.SYFO, adRoller.KODE7)
         val headers: MultiValueMap<String, String> = LinkedMultiValueMap()
         headers.add(NAV_PERSONIDENT_HEADER, BIRTE_KODE7_BRUKER)
         val response = tilgangController.accessToPersonIdentViaAzure(headers)
@@ -189,16 +192,16 @@ class AccessToRessursViaAzure2ComponentTest {
 
     @Test
     fun `access to EgenAnsatt-personident denied`() {
-        mockRoller(ldapServiceMock, VEILEDER_ID, INNVILG, AdRoller.SYFO)
+        mockRoller(ldapServiceMock, VEILEDER_ID, INNVILG, adRoller.SYFO)
         val headers: MultiValueMap<String, String> = LinkedMultiValueMap()
         headers.add(NAV_PERSONIDENT_HEADER, ERIK_EGENANSATT_BRUKER)
         val response = tilgangController.accessToPersonIdentViaAzure(headers)
-        assertAccessDenied(response, AdRoller.EGEN_ANSATT.name)
+        assertAccessDenied(response, adRoller.EGEN_ANSATT.name)
     }
 
     @Test
     fun `access to EgenAnsatt-personident granted`() {
-        mockRoller(ldapServiceMock, VEILEDER_ID, INNVILG, AdRoller.SYFO, AdRoller.EGEN_ANSATT)
+        mockRoller(ldapServiceMock, VEILEDER_ID, INNVILG, adRoller.SYFO, adRoller.EGEN_ANSATT)
         val headers: MultiValueMap<String, String> = LinkedMultiValueMap()
         headers.add(NAV_PERSONIDENT_HEADER, ERIK_EGENANSATT_BRUKER)
         val response = tilgangController.accessToPersonIdentViaAzure(headers)
@@ -207,21 +210,21 @@ class AccessToRessursViaAzure2ComponentTest {
 
     @Test
     fun `access to enhet granted`() {
-        mockRoller(ldapServiceMock, VEILEDER_ID, INNVILG, AdRoller.SYFO)
+        mockRoller(ldapServiceMock, VEILEDER_ID, INNVILG, adRoller.SYFO)
         val response = tilgangController.accessToEnhet(NAV_ENHETID_1)
         assertAccessOk(response)
     }
 
     @Test
     fun `access to enhet denied`() {
-        mockRoller(ldapServiceMock, VEILEDER_ID, INNVILG, AdRoller.SYFO)
+        mockRoller(ldapServiceMock, VEILEDER_ID, INNVILG, adRoller.SYFO)
         val response = tilgangController.accessToEnhet(NAV_ENHETID_3)
         assertAccessDenied(response, ENHET)
     }
 
     @Test
     fun `access to person list`() {
-        mockRoller(ldapServiceMock, VEILEDER_ID, INNVILG, AdRoller.SYFO)
+        mockRoller(ldapServiceMock, VEILEDER_ID, INNVILG, adRoller.SYFO)
         Mockito.`when`(pdlConsumer.isKode6(generatePdlHentPerson()))
             .thenReturn(false)
         Mockito.`when`(pdlConsumer.isKode6(generatePdlHentPerson(generateAdressebeskyttelse(Gradering.FORTROLIG))))

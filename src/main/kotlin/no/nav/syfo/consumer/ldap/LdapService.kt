@@ -1,11 +1,11 @@
 package no.nav.syfo.consumer.ldap
 
-import no.nav.syfo.cache.CacheConfig
+import no.nav.syfo.consumer.graphapi.GraphApiConsumer
+import no.nav.syfo.domain.AdRolle
 import org.apache.commons.lang3.StringUtils
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.cache.annotation.Cacheable
 import org.springframework.core.env.Environment
 import org.springframework.stereotype.Service
 import java.util.*
@@ -16,7 +16,9 @@ import javax.naming.ldap.InitialLdapContext
 import javax.naming.ldap.LdapContext
 
 @Service
-class LdapService {
+class LdapService(
+    private val graphApiConsumer: GraphApiConsumer,
+) {
     private val env = Hashtable<String, String>()
 
     @Autowired
@@ -29,28 +31,41 @@ class LdapService {
         SEARCHBASE = "OU=Users,OU=NAV,OU=BusinessUnits," + springEnv.getRequiredProperty("ldap.basedn")
     }
 
-    @Cacheable(cacheNames = [CacheConfig.CACHENAME_VEILEDER_LDAP], key = "#veilederUid.concat(#rolle)", condition = "#veilederUid != null && #rolle != null")
-    fun harTilgang(veilederUid: String, rolle: String): Boolean {
-        try {
+    fun harTilgang(
+        veilederUid: String,
+        adRolle: AdRolle,
+    ): Boolean {
+        val graphApiHasAccess = graphApiConsumer.hasAccess(
+            veilederIdent = veilederUid,
+            adRolle = adRolle,
+        )
+
+        val ldapHasAccess: Boolean = try {
             val searchCtrl = SearchControls()
             searchCtrl.searchScope = SearchControls.SUBTREE_SCOPE
-            val result = ldapContext().search(SEARCHBASE, String.format("(&(objectClass=user)(CN=%s))", veilederUid), searchCtrl)
+            val result =
+                ldapContext().search(SEARCHBASE, String.format("(&(objectClass=user)(CN=%s))", veilederUid), searchCtrl)
             val searchResult = Optional.ofNullable(result.next())
             if (searchResult.isPresent) {
                 val ldapAttributes = searchResult.get().attributes
                 val namingEnumeration = ldapAttributes["memberof"].all
                 while (namingEnumeration.hasMore()) {
-                    if (hentRolleNavn(namingEnumeration.next().toString()).contains(rolle)) {
+                    if (hentRolleNavn(namingEnumeration.next().toString()).contains(adRolle.rolle)) {
                         return true
                     }
                 }
             } else {
-                LOG.error("SearchResult from LDAP was empty for veileder {}", veilederUid)
+                log.error("SearchResult from LDAP was empty for veileder {}", veilederUid)
             }
+            false
         } catch (e: NamingException) {
             throw RuntimeException(e)
         }
-        return false
+
+        if (graphApiHasAccess != ldapHasAccess) {
+            log.info("ACCESS-TRACE: graphApiHasAccess=$graphApiHasAccess is not equal to ldapHasAccess=$ldapHasAccess")
+        }
+        return ldapHasAccess
     }
 
     private fun hentRolleNavn(ldapstreng: String): String {
@@ -63,7 +78,7 @@ class LdapService {
     }
 
     companion object {
-        private val LOG: Logger = LoggerFactory.getLogger(LdapService::class.java)
+        private val log: Logger = LoggerFactory.getLogger(LdapService::class.java)
         private var SEARCHBASE: String? = null
     }
 }

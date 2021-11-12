@@ -29,8 +29,18 @@ azure:
 smregistrering.client.id: "smregistrering"
 
 axsys.url: "http://test-axsys"
+graphapi.url: "https://graph.microsoft.com"
 norg2.url: http://norg2/norg2
 pdl.client.id: "dev-fss.pdl.pdl-api"
 pdl.url: "http://pdl"
 syfobehandlendeenhet.client.id: "dev-fss.teamsykefravr.syfobehandlendeenhet"
 syfobehandlendeenhet.url: "http://syfobehandlendeenhet"
+
+role.kode6.id: "kode6Id"
+role.kode7.id: "kode7Id"
+role.syfo.id: "syfoId"
+role.skjerming.id: "skjermingId"
+role.nasjonal.id: "nasjonalId"
+role.utvidbar.nasjonal.id: "utvidbarNasjonalId"
+role.regional.id: "regionalId"
+role.utvidbar.regional.id: "utvidvarRegionalId"

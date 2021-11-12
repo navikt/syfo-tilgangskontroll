@@ -1,5 +1,9 @@
 package no.nav.syfo.consumer.azuread
 
+import no.nav.security.token.support.core.context.TokenValidationContextHolder
+import no.nav.syfo.api.auth.OIDCUtil.getConsumerClientId
+import no.nav.syfo.api.auth.getNAVIdentFromOBOToken
+import no.nav.syfo.api.auth.getToken
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.*
 import org.springframework.http.*
@@ -16,18 +20,51 @@ class AzureAdTokenConsumer @Autowired constructor(
     @Value("\${azure.app.client.id}") private val azureAppClientId: String,
     @Value("\${azure.app.client.secret}") private val azureAppClientSecret: String,
     @Value("\${azure.openid.config.token.endpoint}") private val azureTokenEndpoint: String,
+    @Value("\${graphapi.url}") private val graphApiUrl: String,
+    private val contextHolder: TokenValidationContextHolder,
 ) {
+    fun getOboToken(
+        scopeClientId: String,
+    ): String {
+        val token = contextHolder.getToken()
+        val veilederIdent = getNAVIdentFromOBOToken(contextHolder)
+            ?: throw RuntimeException("Missing veilederId in OIDC-context")
+        val azp = getConsumerClientId(contextHolder)
+
+        val keyForTokenCache = "$veilederIdent-$azp-$scopeClientId"
+        val cachedToken = tokenCache[keyForTokenCache]
+        return if (cachedToken?.isExpired() == false) {
+            cachedToken.accessToken
+        } else {
+            try {
+                val requestEntity = onBehalfOfRequestEntity(
+                    scopeClientId = scopeClientId,
+                    token = token,
+                )
+                val token = getToken(requestEntity = requestEntity)
+                tokenCache[keyForTokenCache] = token
+                token.accessToken
+            } catch (e: RestClientResponseException) {
+                log.error(
+                    "Call to get AzureADV2Token from AzureAD for scope: $scopeClientId with status: ${e.rawStatusCode} and message: ${e.responseBodyAsString}",
+                    e
+                )
+                throw e
+            }
+        }
+    }
+
     fun getSystemToken(
         scopeClientId: String,
     ): String {
-        val cachedToken = systemTokenCache[scopeClientId]
+        val cachedToken = tokenCache[scopeClientId]
         return if (cachedToken == null || cachedToken.isExpired()) {
             try {
                 val requestEntity = systemTokenRequestEntity(
                     scopeClientId = scopeClientId,
                 )
                 val token = getToken(requestEntity = requestEntity)
-                systemTokenCache[scopeClientId] = token
+                tokenCache[scopeClientId] = token
                 token.accessToken
             } catch (e: RestClientResponseException) {
                 log.error(
@@ -55,6 +92,28 @@ class AzureAdTokenConsumer @Autowired constructor(
         return tokenResponse.toAzureAdV2Token()
     }
 
+    private fun onBehalfOfRequestEntity(
+        scopeClientId: String,
+        token: String
+    ): HttpEntity<MultiValueMap<String, String>> {
+        val scope = if (scopeClientId == graphApiUrl) {
+            "$scopeClientId/.default"
+        } else {
+            "api://$scopeClientId/.default"
+        }
+        val headers = HttpHeaders()
+        headers.contentType = MediaType.MULTIPART_FORM_DATA
+        val body: MultiValueMap<String, String> = LinkedMultiValueMap()
+        body.add("client_id", azureAppClientId)
+        body.add("client_secret", azureAppClientSecret)
+        body.add("client_assertion_type", "urn:ietf:params:oauth:grant-type:jwt-bearer")
+        body.add("grant_type", "urn:ietf:params:oauth:grant-type:jwt-bearer")
+        body.add("assertion", token)
+        body.add("scope", scope)
+        body.add("requested_token_use", "on_behalf_of")
+        return HttpEntity<MultiValueMap<String, String>>(body, headers)
+    }
+
     fun systemTokenRequestEntity(
         scopeClientId: String,
     ): HttpEntity<MultiValueMap<String, String>> {
@@ -71,6 +130,6 @@ class AzureAdTokenConsumer @Autowired constructor(
 
     companion object {
         private val log = LoggerFactory.getLogger(AzureAdTokenConsumer::class.java)
-        val systemTokenCache = ConcurrentHashMap<String, AzureAdToken>()
+        val tokenCache = ConcurrentHashMap<String, AzureAdToken>()
     }
 }

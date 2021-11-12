@@ -1,5 +1,6 @@
 package no.nav.syfo.geografisktilknyntning
 
+import no.nav.syfo.LocalApplication
 import no.nav.syfo.consumer.axsys.AxsysConsumer
 import no.nav.syfo.consumer.axsys.AxsysEnhet
 import no.nav.syfo.consumer.behandlendeenhet.BehandlendeEnhetConsumer
@@ -16,26 +17,35 @@ import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 import org.mockito.*
+import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.boot.test.context.SpringBootTest
+import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.test.context.junit.jupiter.SpringExtension
+import javax.inject.Inject
 
 @ExtendWith(SpringExtension::class)
+@SpringBootTest(classes = [LocalApplication::class])
 class GeografiskTilgangServiceTest {
-    @Mock
+
+    @MockBean
     private lateinit var axsysConsumer: AxsysConsumer
 
-    @Mock
+    @MockBean
     private lateinit var behandlendeEnhetConsumer: BehandlendeEnhetConsumer
 
-    @Mock
+    @MockBean
     private lateinit var ldapService: LdapService
 
-    @Mock
+    @MockBean
     private lateinit var norgConsumer: NorgConsumer
 
-    @Mock
+    @MockBean
     private lateinit var pdlConsumer: PdlConsumer
 
-    @InjectMocks
+    @Autowired
+    private lateinit var adRoller: AdRoller
+
+    @Autowired
     private lateinit var geografiskTilgangService: GeografiskTilgangService
 
     @BeforeEach
@@ -47,13 +57,13 @@ class GeografiskTilgangServiceTest {
 
     @Test
     fun nasjonalTilgangGirTilgang() {
-        Mockito.`when`(ldapService.harTilgang(VEILEDER_UID, AdRoller.NASJONAL.rolle)).thenReturn(true)
+        Mockito.`when`(ldapService.harTilgang(VEILEDER_UID, adRoller.NASJONAL)).thenReturn(true)
         Assertions.assertThat(geografiskTilgangService.harGeografiskTilgang(VEILEDER_UID, PERSON_FNR)).isTrue
     }
 
     @Test
     fun utvidetTilNasjonalTilgangGirTilgang() {
-        Mockito.`when`(ldapService.harTilgang(VEILEDER_UID, AdRoller.UTVIDBAR_TIL_NASJONAL.rolle)).thenReturn(true)
+        Mockito.`when`(ldapService.harTilgang(VEILEDER_UID, adRoller.UTVIDBAR_TIL_NASJONAL)).thenReturn(true)
         Assertions.assertThat(geografiskTilgangService.harGeografiskTilgang(VEILEDER_UID, PERSON_FNR)).isTrue
     }
 
@@ -125,7 +135,7 @@ class GeografiskTilgangServiceTest {
 
     @Test
     fun harTilgangHvisRegionalTilgangOgTilgangTilEnhetensFylkeskontor() {
-        Mockito.`when`(ldapService.harTilgang(VEILEDER_UID, AdRoller.REGIONAL.rolle)).thenReturn(true)
+        Mockito.`when`(ldapService.harTilgang(VEILEDER_UID, adRoller.REGIONAL)).thenReturn(true)
         Mockito.`when`(axsysConsumer.enheter(VEILEDER_UID)).thenReturn(
             listOf(AxsysEnhet(
                 VEILEDERS_ENHET,

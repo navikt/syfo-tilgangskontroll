@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service
 
 @Service
 class Kode6TilgangService(
+    private val adRoller: AdRoller,
     @Value("\${smregistrering.client.id}") private val smregisteringClientId: String,
     private val ldapService: LdapService,
 ) {
@@ -26,6 +27,6 @@ class Kode6TilgangService(
     }
 
     private fun harVeilederTilgang(veilederId: String): Boolean {
-        return ldapService.harTilgang(veilederId, AdRoller.KODE6.rolle)
+        return ldapService.harTilgang(veilederId, adRoller.KODE6)
     }
 }
