@@ -1,11 +1,14 @@
 package no.nav.syfo.consumer.ldap
 
+import no.nav.syfo.cache.CacheConfig
 import no.nav.syfo.consumer.graphapi.GraphApiConsumer
 import no.nav.syfo.domain.AdRolle
 import org.apache.commons.lang3.StringUtils
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.cache.Cache
+import org.springframework.cache.CacheManager
 import org.springframework.core.env.Environment
 import org.springframework.stereotype.Service
 import java.util.*
@@ -17,6 +20,7 @@ import javax.naming.ldap.LdapContext
 
 @Service
 class LdapService(
+    private val cacheManager: CacheManager,
     private val graphApiConsumer: GraphApiConsumer,
 ) {
     private val env = Hashtable<String, String>()
@@ -39,25 +43,19 @@ class LdapService(
             veilederIdent = veilederUid,
             adRolle = adRolle,
         )
-
         val ldapHasAccess: Boolean = try {
-            val searchCtrl = SearchControls()
-            searchCtrl.searchScope = SearchControls.SUBTREE_SCOPE
-            val result =
-                ldapContext().search(SEARCHBASE, String.format("(&(objectClass=user)(CN=%s))", veilederUid), searchCtrl)
-            val searchResult = Optional.ofNullable(result.next())
-            if (searchResult.isPresent) {
-                val ldapAttributes = searchResult.get().attributes
-                val namingEnumeration = ldapAttributes["memberof"].all
-                while (namingEnumeration.hasMore()) {
-                    if (hentRolleNavn(namingEnumeration.next().toString()).contains(adRolle.rolle)) {
-                        return true
-                    }
-                }
+            val cacheKey = "$veilederUid-${adRolle.rolle}"
+            val cachedValue = cache().get(cacheKey)?.get() as Boolean?
+            if (cachedValue != null) {
+                cachedValue
             } else {
-                log.error("SearchResult from LDAP was empty for veileder {}", veilederUid)
+                val hasAccess = ldapHasAccess(
+                    rolle = adRolle.rolle,
+                    veilederUid = veilederUid,
+                )
+                cache().put(cacheKey, hasAccess)
+                hasAccess
             }
-            false
         } catch (e: NamingException) {
             throw RuntimeException(e)
         }
@@ -68,6 +66,30 @@ class LdapService(
         return ldapHasAccess
     }
 
+    fun ldapHasAccess(
+        veilederUid: String,
+        rolle: String,
+    ): Boolean {
+        val searchCtrl = SearchControls()
+        searchCtrl.searchScope = SearchControls.SUBTREE_SCOPE
+
+        val result =
+            ldapContext().search(SEARCHBASE, String.format("(&(objectClass=user)(CN=%s))", veilederUid), searchCtrl)
+        val searchResult = Optional.ofNullable(result.next())
+        if (searchResult.isPresent) {
+            val ldapAttributes = searchResult.get().attributes
+            val namingEnumeration = ldapAttributes["memberof"].all
+            while (namingEnumeration.hasMore()) {
+                if (hentRolleNavn(namingEnumeration.next().toString()).contains(rolle)) {
+                    return true
+                }
+            }
+        } else {
+            log.error("SearchResult from LDAP was empty for veileder {}", veilederUid)
+        }
+        return false
+    }
+
     private fun hentRolleNavn(ldapstreng: String): String {
         return StringUtils.substringBetween(ldapstreng, "CN=", ",")
     }
@@ -75,6 +97,10 @@ class LdapService(
     @Throws(NamingException::class)
     private fun ldapContext(): LdapContext {
         return InitialLdapContext(env, null)
+    }
+
+    private fun cache(): Cache {
+        return cacheManager.getCache(CacheConfig.CACHENAME_VEILEDER_LDAP)!!
     }
 
     companion object {
