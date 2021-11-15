@@ -46,8 +46,11 @@ class CacheConfig {
         cacheConfigurations[CACHENAME_GEOGRAFISK_TILHORIGHET_ENHET] = defaultConfig
         cacheConfigurations[CACHENAME_VEILEDER_ENHETER] = defaultConfig
         cacheConfigurations[CACHENAME_VEILEDER_LDAP] = defaultConfig
+        cacheConfigurations[CACHENAME_VEILEDER_GRAPHAPI_ROLE] = defaultConfig
         cacheConfigurations[CACHENAME_PDL_PERSON] = shortPDLConfig
         cacheConfigurations[CACHENAME_PDL_GEOGRAFISK_TILKNYTNING] = longPDLConfig
+
+        cacheConfigurations[CACHENAME_TOKENS] = shortConfig
 
         return RedisCacheManager.builder(redisConnectionFactory)
             .cacheDefaults(RedisCacheConfiguration.defaultCacheConfig())
@@ -66,7 +69,9 @@ class CacheConfig {
         const val CACHENAME_GEOGRAFISK_TILHORIGHET_ENHET = "geografisktilhorighetenhet"
         const val CACHENAME_VEILEDER_ENHETER = "veilederenhet"
         const val CACHENAME_VEILEDER_LDAP = "ldapveilederrolle"
+        const val CACHENAME_VEILEDER_GRAPHAPI_ROLE = "graphveilederrolle"
         const val CACHENAME_PDL_PERSON = "pdlperson"
         const val CACHENAME_PDL_GEOGRAFISK_TILKNYTNING = "pdlgeografisk"
+        const val CACHENAME_TOKENS = "token"
     }
 }

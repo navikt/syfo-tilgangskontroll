@@ -4,8 +4,11 @@ import no.nav.security.token.support.core.context.TokenValidationContextHolder
 import no.nav.syfo.api.auth.OIDCUtil.getConsumerClientId
 import no.nav.syfo.api.auth.getNAVIdentFromOBOToken
 import no.nav.syfo.api.auth.getToken
+import no.nav.syfo.cache.CacheConfig.Companion.CACHENAME_TOKENS
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.*
+import org.springframework.cache.Cache
+import org.springframework.cache.CacheManager
 import org.springframework.http.*
 import org.springframework.stereotype.Component
 import org.springframework.util.LinkedMultiValueMap
@@ -21,6 +24,7 @@ class AzureAdTokenConsumer @Autowired constructor(
     @Value("\${azure.app.client.secret}") private val azureAppClientSecret: String,
     @Value("\${azure.openid.config.token.endpoint}") private val azureTokenEndpoint: String,
     @Value("\${graphapi.url}") private val graphApiUrl: String,
+    private val cacheManager: CacheManager,
     private val contextHolder: TokenValidationContextHolder,
 ) {
     fun getOboToken(
@@ -31,8 +35,8 @@ class AzureAdTokenConsumer @Autowired constructor(
             ?: throw RuntimeException("Missing veilederId in OIDC-context")
         val azp = getConsumerClientId(contextHolder)
 
-        val keyForTokenCache = "$veilederIdent-$azp-$scopeClientId"
-        val cachedToken = tokenCache[keyForTokenCache]
+        val cacheKey = "$veilederIdent-$azp-$scopeClientId"
+        val cachedToken = oboTokenCache().get(cacheKey)?.get() as AzureAdToken?
         return if (cachedToken?.isExpired() == false) {
             cachedToken.accessToken
         } else {
@@ -41,9 +45,9 @@ class AzureAdTokenConsumer @Autowired constructor(
                     scopeClientId = scopeClientId,
                     token = token,
                 )
-                val token = getToken(requestEntity = requestEntity)
-                tokenCache[keyForTokenCache] = token
-                token.accessToken
+                val oboToken = getToken(requestEntity = requestEntity)
+                oboTokenCache().put(cacheKey, oboToken)
+                oboToken.accessToken
             } catch (e: RestClientResponseException) {
                 log.error(
                     "Call to get AzureADV2Token from AzureAD for scope: $scopeClientId with status: ${e.rawStatusCode} and message: ${e.responseBodyAsString}",
@@ -126,6 +130,10 @@ class AzureAdTokenConsumer @Autowired constructor(
         body.add("client_secret", azureAppClientSecret)
 
         return HttpEntity<MultiValueMap<String, String>>(body, headers)
+    }
+
+    private fun oboTokenCache(): Cache {
+        return cacheManager.getCache(CACHENAME_TOKENS)!!
     }
 
     companion object {
