@@ -2,7 +2,7 @@ package no.nav.syfo
 
 import no.nav.security.token.support.test.spring.TokenGeneratorConfiguration
 import no.nav.syfo.cache.CacheConfig.Companion.CACHENAME_TOKENS
-import no.nav.syfo.consumer.ldap.LdapService
+import no.nav.syfo.consumer.graphapi.GraphApiConsumer
 import org.mockito.Mockito
 import org.springframework.cache.CacheManager
 import org.springframework.context.annotation.*
@@ -17,8 +17,8 @@ import java.time.Duration
 class LocalApplicationConfig {
     @Bean
     @Primary
-    fun ldapServiceMock(): LdapService {
-        return Mockito.mock(LdapService::class.java)
+    fun graphApiConsumerMock(): GraphApiConsumer {
+        return Mockito.mock(GraphApiConsumer::class.java)
     }
 
     @Bean

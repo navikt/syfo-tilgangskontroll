@@ -4,7 +4,7 @@ import io.micrometer.core.annotation.Timed
 import no.nav.syfo.consumer.axsys.AxsysConsumer
 import no.nav.syfo.consumer.axsys.AxsysEnhet
 import no.nav.syfo.consumer.behandlendeenhet.BehandlendeEnhetConsumer
-import no.nav.syfo.consumer.ldap.LdapService
+import no.nav.syfo.consumer.graphapi.GraphApiConsumer
 import no.nav.syfo.consumer.norg2.NorgConsumer
 import no.nav.syfo.consumer.pdl.*
 import no.nav.syfo.domain.AdRoller
@@ -17,7 +17,7 @@ class GeografiskTilgangService @Autowired constructor(
     private val adRoller: AdRoller,
     private val axsysConsumer: AxsysConsumer,
     private val behandlendeEnhetConsumer: BehandlendeEnhetConsumer,
-    private val ldapService: LdapService,
+    private val graphApiConsumer: GraphApiConsumer,
     private val norgConsumer: NorgConsumer,
     private val pdlConsumer: PdlConsumer
 ) {
@@ -40,8 +40,8 @@ class GeografiskTilgangService @Autowired constructor(
 
     private fun harNasjonalTilgang(veilederId: String): Boolean {
         return (
-            ldapService.harTilgang(veilederId, adRoller.NASJONAL) ||
-                ldapService.harTilgang(veilederId, adRoller.UTVIDBAR_TIL_NASJONAL)
+            graphApiConsumer.hasAccess(veilederId, adRoller.NASJONAL) ||
+                graphApiConsumer.hasAccess(veilederId, adRoller.UTVIDBAR_TIL_NASJONAL)
             )
     }
 
@@ -51,8 +51,8 @@ class GeografiskTilgangService @Autowired constructor(
 
     private fun harRegionalTilgang(veilederId: String): Boolean {
         return (
-            ldapService.harTilgang(veilederId, adRoller.REGIONAL) ||
-                ldapService.harTilgang(veilederId, adRoller.UTVIDBAR_TIL_REGIONAL)
+            graphApiConsumer.hasAccess(veilederId, adRoller.REGIONAL) ||
+                graphApiConsumer.hasAccess(veilederId, adRoller.UTVIDBAR_TIL_REGIONAL)
             )
     }
 

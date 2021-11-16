@@ -4,12 +4,12 @@ import no.nav.security.token.support.core.context.TokenValidationContextHolder
 import no.nav.syfo.LocalApplication
 import no.nav.syfo.consumer.axsys.AxsysConsumer
 import no.nav.syfo.consumer.axsys.AxsysEnhet
-import no.nav.syfo.consumer.ldap.LdapService
+import no.nav.syfo.consumer.graphapi.GraphApiConsumer
 import no.nav.syfo.consumer.norg2.NorgConsumer
 import no.nav.syfo.consumer.pdl.*
 import no.nav.syfo.consumer.skjermedepersoner.SkjermedePersonerPipConsumer
 import no.nav.syfo.domain.AdRoller
-import no.nav.syfo.testhelper.LdapUtil.mockRoller
+import no.nav.syfo.testhelper.GraphApiUtil.mockAdRolle
 import no.nav.syfo.testhelper.OidcTestHelper.logInVeilederWithAzure2
 import no.nav.syfo.testhelper.OidcTestHelper.loggUtAlle
 import no.nav.syfo.testhelper.UserConstants.BENGT_KODE6_BRUKER
@@ -64,7 +64,7 @@ class AccessToRessursViaAzure2ComponentTest {
     private lateinit var oidcRequestContextHolder: TokenValidationContextHolder
 
     @Autowired
-    private lateinit var ldapServiceMock: LdapService
+    private lateinit var graphApiConsumerMock: GraphApiConsumer
 
     @Value("\${smregistrering.client.id}")
     private lateinit var smregistreringClientId: String
@@ -117,21 +117,21 @@ class AccessToRessursViaAzure2ComponentTest {
 
     @Test
     fun accessToSYFOGranted() {
-        mockRoller(ldapServiceMock, VEILEDER_ID, INNVILG, adRoller.SYFO)
+        mockAdRolle(graphApiConsumerMock, VEILEDER_ID, INNVILG, adRoller.SYFO)
         val response = tilgangController.accessToSYFOViaAzure()
         assertAccessOk(response)
     }
 
     @Test
     fun accessToSYFODenied() {
-        mockRoller(ldapServiceMock, VEILEDER_ID, NEKT, adRoller.SYFO)
+        mockAdRolle(graphApiConsumerMock, VEILEDER_ID, NEKT, adRoller.SYFO)
         val response = tilgangController.accessToSYFOViaAzure()
         assertAccessDenied(response, adRoller.SYFO.name)
     }
 
     @Test
     fun `access to PersonIdent granted`() {
-        mockRoller(ldapServiceMock, VEILEDER_ID, INNVILG, adRoller.SYFO)
+        mockAdRolle(graphApiConsumerMock, VEILEDER_ID, INNVILG, adRoller.SYFO)
         val headers: MultiValueMap<String, String> = LinkedMultiValueMap()
         headers.add(NAV_PERSONIDENT_HEADER, BJARNE_BRUKER)
         val response = tilgangController.accessToPersonIdentViaAzure(headers)
@@ -140,7 +140,7 @@ class AccessToRessursViaAzure2ComponentTest {
 
     @Test
     fun `access to Kode6-personident denied`() {
-        mockRoller(ldapServiceMock, VEILEDER_ID, INNVILG, adRoller.SYFO)
+        mockAdRolle(graphApiConsumerMock, VEILEDER_ID, INNVILG, adRoller.SYFO)
         Mockito.`when`(pdlConsumer.isKode6(ArgumentMatchers.any())).thenReturn(true)
         val headers: MultiValueMap<String, String> = LinkedMultiValueMap()
         headers.add(NAV_PERSONIDENT_HEADER, BENGT_KODE6_BRUKER)
@@ -150,7 +150,7 @@ class AccessToRessursViaAzure2ComponentTest {
 
     @Test
     fun `access to Kode6-personident always denied by default`() {
-        mockRoller(ldapServiceMock, VEILEDER_ID, INNVILG, adRoller.SYFO, adRoller.KODE6)
+        mockAdRolle(graphApiConsumerMock, VEILEDER_ID, INNVILG, adRoller.SYFO, adRoller.KODE6)
         Mockito.`when`(pdlConsumer.isKode6(ArgumentMatchers.any())).thenReturn(true)
         val headers: MultiValueMap<String, String> = LinkedMultiValueMap()
         headers.add(NAV_PERSONIDENT_HEADER, BENGT_KODE6_BRUKER)
@@ -163,7 +163,7 @@ class AccessToRessursViaAzure2ComponentTest {
         loggUtAlle(oidcRequestContextHolder)
         logInVeilederWithAzure2(oidcRequestContextHolder, smregistreringClientId, VEILEDER_ID)
 
-        mockRoller(ldapServiceMock, VEILEDER_ID, INNVILG, adRoller.SYFO, adRoller.KODE6)
+        mockAdRolle(graphApiConsumerMock, VEILEDER_ID, INNVILG, adRoller.SYFO, adRoller.KODE6)
         Mockito.`when`(pdlConsumer.isKode6(ArgumentMatchers.any())).thenReturn(true)
         val headers: MultiValueMap<String, String> = LinkedMultiValueMap()
         headers.add(NAV_PERSONIDENT_HEADER, BENGT_KODE6_BRUKER)
@@ -173,7 +173,7 @@ class AccessToRessursViaAzure2ComponentTest {
 
     @Test
     fun `access to Kode7-personident denied`() {
-        mockRoller(ldapServiceMock, VEILEDER_ID, INNVILG, adRoller.SYFO)
+        mockAdRolle(graphApiConsumerMock, VEILEDER_ID, INNVILG, adRoller.SYFO)
         Mockito.`when`(pdlConsumer.isKode7(ArgumentMatchers.any())).thenReturn(true)
         val headers: MultiValueMap<String, String> = LinkedMultiValueMap()
         headers.add(NAV_PERSONIDENT_HEADER, BIRTE_KODE7_BRUKER)
@@ -183,7 +183,7 @@ class AccessToRessursViaAzure2ComponentTest {
 
     @Test
     fun `access to Kode7-personident granted`() {
-        mockRoller(ldapServiceMock, VEILEDER_ID, INNVILG, adRoller.SYFO, adRoller.KODE7)
+        mockAdRolle(graphApiConsumerMock, VEILEDER_ID, INNVILG, adRoller.SYFO, adRoller.KODE7)
         val headers: MultiValueMap<String, String> = LinkedMultiValueMap()
         headers.add(NAV_PERSONIDENT_HEADER, BIRTE_KODE7_BRUKER)
         val response = tilgangController.accessToPersonIdentViaAzure(headers)
@@ -192,7 +192,7 @@ class AccessToRessursViaAzure2ComponentTest {
 
     @Test
     fun `access to EgenAnsatt-personident denied`() {
-        mockRoller(ldapServiceMock, VEILEDER_ID, INNVILG, adRoller.SYFO)
+        mockAdRolle(graphApiConsumerMock, VEILEDER_ID, INNVILG, adRoller.SYFO)
         val headers: MultiValueMap<String, String> = LinkedMultiValueMap()
         headers.add(NAV_PERSONIDENT_HEADER, ERIK_EGENANSATT_BRUKER)
         val response = tilgangController.accessToPersonIdentViaAzure(headers)
@@ -201,7 +201,7 @@ class AccessToRessursViaAzure2ComponentTest {
 
     @Test
     fun `access to EgenAnsatt-personident granted`() {
-        mockRoller(ldapServiceMock, VEILEDER_ID, INNVILG, adRoller.SYFO, adRoller.EGEN_ANSATT)
+        mockAdRolle(graphApiConsumerMock, VEILEDER_ID, INNVILG, adRoller.SYFO, adRoller.EGEN_ANSATT)
         val headers: MultiValueMap<String, String> = LinkedMultiValueMap()
         headers.add(NAV_PERSONIDENT_HEADER, ERIK_EGENANSATT_BRUKER)
         val response = tilgangController.accessToPersonIdentViaAzure(headers)
@@ -210,21 +210,21 @@ class AccessToRessursViaAzure2ComponentTest {
 
     @Test
     fun `access to enhet granted`() {
-        mockRoller(ldapServiceMock, VEILEDER_ID, INNVILG, adRoller.SYFO)
+        mockAdRolle(graphApiConsumerMock, VEILEDER_ID, INNVILG, adRoller.SYFO)
         val response = tilgangController.accessToEnhet(NAV_ENHETID_1)
         assertAccessOk(response)
     }
 
     @Test
     fun `access to enhet denied`() {
-        mockRoller(ldapServiceMock, VEILEDER_ID, INNVILG, adRoller.SYFO)
+        mockAdRolle(graphApiConsumerMock, VEILEDER_ID, INNVILG, adRoller.SYFO)
         val response = tilgangController.accessToEnhet(NAV_ENHETID_3)
         assertAccessDenied(response, ENHET)
     }
 
     @Test
     fun `access to person list`() {
-        mockRoller(ldapServiceMock, VEILEDER_ID, INNVILG, adRoller.SYFO)
+        mockAdRolle(graphApiConsumerMock, VEILEDER_ID, INNVILG, adRoller.SYFO)
         Mockito.`when`(pdlConsumer.isKode6(generatePdlHentPerson()))
             .thenReturn(false)
         Mockito.`when`(pdlConsumer.isKode6(generatePdlHentPerson(generateAdressebeskyttelse(Gradering.FORTROLIG))))

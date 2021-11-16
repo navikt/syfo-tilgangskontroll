@@ -1,7 +1,7 @@
 package no.nav.syfo.tilgang
 
 import io.micrometer.core.annotation.Timed
-import no.nav.syfo.consumer.ldap.LdapService
+import no.nav.syfo.consumer.graphapi.GraphApiConsumer
 import no.nav.syfo.domain.AdRoller
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Service
@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service
 class Kode6TilgangService(
     private val adRoller: AdRoller,
     @Value("\${smregistrering.client.id}") private val smregisteringClientId: String,
-    private val ldapService: LdapService,
+    private val graphApiConsumer: GraphApiConsumer,
 ) {
     private var kode6TjenesteList = listOf(smregisteringClientId)
 
@@ -27,6 +27,6 @@ class Kode6TilgangService(
     }
 
     private fun harVeilederTilgang(veilederId: String): Boolean {
-        return ldapService.harTilgang(veilederId, adRoller.KODE6)
+        return graphApiConsumer.hasAccess(veilederId, adRoller.KODE6)
     }
 }
