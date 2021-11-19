@@ -50,6 +50,9 @@ spec:
           cluster: prod-gcp
         - application: ispengestopp
           namespace: teamsykefravr
+          cluster: prod-gcp
+        - application: ispengestopp
+          namespace: teamsykefravr
           cluster: prod-fss
         - application: ispersonoppgave
           namespace: teamsykefravr
