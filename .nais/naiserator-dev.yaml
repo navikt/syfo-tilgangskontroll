@@ -51,9 +51,6 @@ spec:
         - application: ispengestopp
           namespace: teamsykefravr
           cluster: dev-gcp
-        - application: ispengestopp
-          namespace: teamsykefravr
-          cluster: dev-fss
         - application: ispersonoppgave
           namespace: teamsykefravr
           cluster: dev-fss
