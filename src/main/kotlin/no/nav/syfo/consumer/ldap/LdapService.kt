@@ -61,7 +61,7 @@ class LdapService(
         }
 
         if (graphApiHasAccess != ldapHasAccess) {
-            log.info("ACCESS-TRACE: graphApiHasAccess=$graphApiHasAccess is not equal to ldapHasAccess=$ldapHasAccess")
+            log.info("ACCESS-TRACE: graphApiHasAccess=$graphApiHasAccess is not equal to ldapHasAccess=$ldapHasAccess, role=${adRolle.rolle}, veilederUid=${veilederUid}")
         }
         return ldapHasAccess
     }
