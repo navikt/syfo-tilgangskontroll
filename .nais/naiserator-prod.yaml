@@ -53,6 +53,9 @@ spec:
           cluster: prod-gcp
         - application: ispersonoppgave
           namespace: teamsykefravr
+          cluster: prod-gcp
+        - application: ispersonoppgave
+          namespace: teamsykefravr
           cluster: prod-fss
         - application: isprediksjon
           namespace: teamsykefravr

@@ -53,6 +53,9 @@ spec:
           cluster: dev-gcp
         - application: ispersonoppgave
           namespace: teamsykefravr
+          cluster: dev-gcp
+        - application: ispersonoppgave
+          namespace: teamsykefravr
           cluster: dev-fss
         - application: isprediksjon
           namespace: teamsykefravr
