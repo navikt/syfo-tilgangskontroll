@@ -54,42 +54,27 @@ spec:
         - application: ispersonoppgave
           namespace: teamsykefravr
           cluster: prod-gcp
-        - application: ispersonoppgave
-          namespace: teamsykefravr
-          cluster: prod-fss
         - application: isprediksjon
           namespace: teamsykefravr
           cluster: prod-fss
         - application: fastlegerest
           namespace: teamsykefravr
           cluster: prod-gcp
-        - application: fastlegerest
-          namespace: teamsykefravr
-          cluster: prod-fss
         - application: finnfastlege
           namespace: teamsykefravr
           cluster: prod-fss
         - application: syfobehandlendeenhet
           namespace: teamsykefravr
           cluster: prod-gcp
-        - application: syfobehandlendeenhet
-          namespace: teamsykefravr
-          cluster: prod-fss
         - application: syfomodiaperson
           namespace: teamsykefravr
           cluster: prod-fss
         - application: syfomoteadmin
           namespace: teamsykefravr
           cluster: prod-fss
-        - application: syfooversikt
-          namespace: teamsykefravr
-          cluster: prod-fss
         - application: syfooversiktsrv
           namespace: teamsykefravr
           cluster: prod-gcp
-        - application: syfooversiktsrv
-          namespace: teamsykefravr
-          cluster: prod-fss
         - application: syfoperson
           namespace: teamsykefravr
           cluster: prod-gcp
