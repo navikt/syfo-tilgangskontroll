@@ -109,8 +109,6 @@ spec:
   vault:
     enabled: true
     paths:
-      - kvPath: serviceuser/data/dev/srvssolinux
-        mountPath: /secrets/ldap/ldap
       - kvPath: /kv/preprod/fss/syfo-tilgangskontroll/default
         mountPath: /var/run/secrets/nais.io/vault
   env:
@@ -124,10 +122,6 @@ spec:
       value: "true"
     - name: SMREGISTRERING_CLIENT_ID
       value: "3936bfbe-f658-4eab-a0e4-0222fc730d67"
-    - name: LDAP_URL
-      value: ldaps://ldapgw.preprod.local
-    - name: LDAP_BASEDN
-      value: dc=preprod,dc=local
     - name: AXSYS_URL
       value: "https://axsys.nais.preprod.local"
     - name: GRAPHAPI_URL

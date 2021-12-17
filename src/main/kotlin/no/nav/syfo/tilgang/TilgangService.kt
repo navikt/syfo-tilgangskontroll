@@ -3,7 +3,7 @@ package no.nav.syfo.tilgang
 import io.micrometer.core.annotation.Timed
 import no.nav.syfo.cache.CacheConfig
 import no.nav.syfo.consumer.axsys.AxsysConsumer
-import no.nav.syfo.consumer.ldap.LdapService
+import no.nav.syfo.consumer.graphapi.GraphApiConsumer
 import no.nav.syfo.consumer.pdl.PdlConsumer
 import no.nav.syfo.consumer.skjermedepersoner.SkjermedePersonerPipConsumer
 import no.nav.syfo.domain.*
@@ -17,7 +17,7 @@ class TilgangService @Autowired constructor(
     private val adRoller: AdRoller,
     private val axsysConsumer: AxsysConsumer,
     private val kode6TilgangService: Kode6TilgangService,
-    private val ldapService: LdapService,
+    private val graphApiConsumer: GraphApiConsumer,
     private val skjermedePersonerPipConsumer: SkjermedePersonerPipConsumer,
     private val geografiskTilgangService: GeografiskTilgangService,
     private val pdlConsumer: PdlConsumer
@@ -105,17 +105,17 @@ class TilgangService @Autowired constructor(
     }
 
     private fun harTilgangTilSykefravaersoppfoelging(veilederId: String): Boolean {
-        return ldapService.harTilgang(veilederId, adRoller.SYFO)
+        return graphApiConsumer.hasAccess(veilederId, adRoller.SYFO)
     }
 
     @Timed("syfotilgangskontroll_harTilgangTilKode7", histogram = true)
     private fun harTilgangTilKode7(veilederId: String): Boolean {
-        return ldapService.harTilgang(veilederId, adRoller.KODE7)
+        return graphApiConsumer.hasAccess(veilederId, adRoller.KODE7)
     }
 
     @Timed("syfotilgangskontroll_harTilgangTilEgenAnsatt", histogram = true)
     private fun harTilgangTilEgenAnsatt(veilederId: String): Boolean {
-        return ldapService.harTilgang(veilederId, adRoller.EGEN_ANSATT)
+        return graphApiConsumer.hasAccess(veilederId, adRoller.EGEN_ANSATT)
     }
 
     private fun harTilgangTilEnhet(veilederId: String, navEnhetId: String): Boolean {

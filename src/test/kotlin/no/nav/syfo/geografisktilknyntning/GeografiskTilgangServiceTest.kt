@@ -4,7 +4,7 @@ import no.nav.syfo.LocalApplication
 import no.nav.syfo.consumer.axsys.AxsysConsumer
 import no.nav.syfo.consumer.axsys.AxsysEnhet
 import no.nav.syfo.consumer.behandlendeenhet.BehandlendeEnhetConsumer
-import no.nav.syfo.consumer.ldap.LdapService
+import no.nav.syfo.consumer.graphapi.GraphApiConsumer
 import no.nav.syfo.consumer.norg2.NorgConsumer
 import no.nav.syfo.consumer.pdl.*
 import no.nav.syfo.domain.AdRoller
@@ -21,7 +21,6 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.test.context.junit.jupiter.SpringExtension
-import javax.inject.Inject
 
 @ExtendWith(SpringExtension::class)
 @SpringBootTest(classes = [LocalApplication::class])
@@ -34,7 +33,7 @@ class GeografiskTilgangServiceTest {
     private lateinit var behandlendeEnhetConsumer: BehandlendeEnhetConsumer
 
     @MockBean
-    private lateinit var ldapService: LdapService
+    private lateinit var graphApiConsumer: GraphApiConsumer
 
     @MockBean
     private lateinit var norgConsumer: NorgConsumer
@@ -57,13 +56,13 @@ class GeografiskTilgangServiceTest {
 
     @Test
     fun nasjonalTilgangGirTilgang() {
-        Mockito.`when`(ldapService.harTilgang(VEILEDER_UID, adRoller.NASJONAL)).thenReturn(true)
+        Mockito.`when`(graphApiConsumer.hasAccess(VEILEDER_UID, adRoller.NASJONAL)).thenReturn(true)
         Assertions.assertThat(geografiskTilgangService.harGeografiskTilgang(VEILEDER_UID, PERSON_FNR)).isTrue
     }
 
     @Test
     fun utvidetTilNasjonalTilgangGirTilgang() {
-        Mockito.`when`(ldapService.harTilgang(VEILEDER_UID, adRoller.UTVIDBAR_TIL_NASJONAL)).thenReturn(true)
+        Mockito.`when`(graphApiConsumer.hasAccess(VEILEDER_UID, adRoller.UTVIDBAR_TIL_NASJONAL)).thenReturn(true)
         Assertions.assertThat(geografiskTilgangService.harGeografiskTilgang(VEILEDER_UID, PERSON_FNR)).isTrue
     }
 
@@ -135,7 +134,7 @@ class GeografiskTilgangServiceTest {
 
     @Test
     fun harTilgangHvisRegionalTilgangOgTilgangTilEnhetensFylkeskontor() {
-        Mockito.`when`(ldapService.harTilgang(VEILEDER_UID, adRoller.REGIONAL)).thenReturn(true)
+        Mockito.`when`(graphApiConsumer.hasAccess(VEILEDER_UID, adRoller.REGIONAL)).thenReturn(true)
         Mockito.`when`(axsysConsumer.enheter(VEILEDER_UID)).thenReturn(
             listOf(AxsysEnhet(
                 VEILEDERS_ENHET,
