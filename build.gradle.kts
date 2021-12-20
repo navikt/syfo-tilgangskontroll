@@ -6,8 +6,6 @@ group = "no.nav.syfo"
 version = "1.0.0"
 
 val apacheHttpClientVersion = "4.5.13"
-val javaxActivationVersion = "1.2.0"
-val jaxRiVersion = "2.3.5"
 val kotlinJacksonVersion = "2.13.0"
 val logbackVersion = "7.0.1"
 val prometheusVersion = "1.8.1"
@@ -36,9 +34,6 @@ dependencies {
     implementation(kotlin("stdlib"))
     implementation(kotlin("reflect"))
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin:$kotlinJacksonVersion")
-
-    implementation("com.sun.xml.ws:jaxws-ri:$jaxRiVersion")
-    implementation("com.sun.activation:javax.activation:$javaxActivationVersion")
 
     implementation("org.springframework.boot:spring-boot-starter-actuator")
     implementation("org.springframework.boot:spring-boot-starter-aop")
