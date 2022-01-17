@@ -6,10 +6,15 @@ import no.nav.syfo.api.auth.OIDCIssuer.VEILEDERAZURE
 import no.nav.syfo.api.auth.OIDCUtil.getConsumerClientId
 import no.nav.syfo.api.auth.getNAVIdentFromOBOToken
 import no.nav.syfo.metric.Metric
+import no.nav.syfo.util.AuditLogEvent
+import no.nav.syfo.util.CEF
+import no.nav.syfo.util.auditLog
 import no.nav.syfo.util.getPersonIdent
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.http.*
+import org.springframework.http.HttpStatus
+import org.springframework.http.MediaType
+import org.springframework.http.ResponseEntity
 import org.springframework.util.MultiValueMap
 import org.springframework.web.bind.annotation.*
 
@@ -75,12 +80,26 @@ class TilgangController @Autowired constructor(
         consumerClientId: String = ""
     ): ResponseEntity<*> {
         val tilgang = tilgangService.sjekkTilgangTilBruker(veilederId, fnr, consumerClientId)
+
+        if (tilgang.harTilgang) {
+            auditLog(CEF(suid = veilederId, duid = fnr, event = AuditLogEvent.Access, permit = true))
+        } else {
+            auditLog(CEF(suid = veilederId, duid = fnr, event = AuditLogEvent.Access, permit = false))
+        }
+
         return lagRespons(tilgang)
     }
 
     private fun trySjekkTilgangTilBruker(veilederId: String, fnr: String): Boolean {
+
         return try {
-            tilgangService.sjekkTilgangTilBruker(veilederId, fnr).harTilgang
+            val harTilgang = tilgangService.sjekkTilgangTilBruker(veilederId, fnr).harTilgang
+            if (harTilgang) {
+                auditLog(CEF(suid = veilederId, duid = fnr, event = AuditLogEvent.Access, permit = true))
+            } else {
+                auditLog(CEF(suid = veilederId, duid = fnr, event = AuditLogEvent.Access, permit = false))
+            }
+            return harTilgang
         } catch (e: RuntimeException) {
             log.error("Uventet feil ved sjekk av tilgang til bruker i liste: {} : {}", e.toString(), e.message, e)
             metric.countEvent("access_persons_person_error")

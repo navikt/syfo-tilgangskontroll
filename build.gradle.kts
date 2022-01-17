@@ -11,6 +11,7 @@ val logbackVersion = "7.0.1"
 val prometheusVersion = "1.8.1"
 val slf4jVersion = "1.7.32"
 val tokenValidationSpringSupportVersion = "1.3.9"
+val logbackSyslog4jVersion = "1.0.0"
 
 plugins {
     kotlin("jvm") version "1.6.10"
@@ -49,6 +50,8 @@ dependencies {
     implementation("io.micrometer:micrometer-registry-prometheus:$prometheusVersion")
 
     implementation("org.apache.httpcomponents:httpclient:$apacheHttpClientVersion")
+
+    implementation("com.papertrailapp:logback-syslog4j:$logbackSyslog4jVersion")
 
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     testImplementation("no.nav.security:token-validation-test-support:$tokenValidationSpringSupportVersion")
