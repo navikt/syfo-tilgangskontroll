@@ -48,6 +48,9 @@ spec:
         - application: isnarmesteleder
           namespace: teamsykefravr
           cluster: prod-gcp
+        - application: isoppfolgingstilfelle
+          namespace: teamsykefravr
+          cluster: prod-gcp
         - application: ispengestopp
           namespace: teamsykefravr
           cluster: prod-gcp
