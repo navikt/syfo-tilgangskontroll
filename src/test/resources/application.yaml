@@ -37,3 +37,5 @@ role.nasjonal.id: "nasjonalId"
 role.utvidbar.nasjonal.id: "utvidbarNasjonalId"
 role.regional.id: "regionalId"
 role.utvidbar.regional.id: "utvidvarRegionalId"
+
+AZURE_APP_PRE_AUTHORIZED_APPS: "[]"
