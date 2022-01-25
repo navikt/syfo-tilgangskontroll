@@ -1,7 +1,7 @@
 package no.nav.syfo.consumer.pdl
 
-import no.nav.syfo.cache.CacheConfig
 import io.micrometer.core.annotation.Timed
+import no.nav.syfo.cache.CacheConfig
 import no.nav.syfo.consumer.azuread.AzureAdTokenConsumer
 import no.nav.syfo.metric.Metric
 import no.nav.syfo.util.ALLE_TEMA_HEADERVERDI
@@ -27,7 +27,10 @@ class PdlConsumer(
             ?: throw PdlRequestFailedException("No Geografisk Tilknytning was found in response from PDL")
     }
 
-    @Cacheable(cacheNames = [CacheConfig.CACHENAME_PDL_GEOGRAFISK_TILKNYTNING], key = "#ident", condition = "#ident != null")
+    @Cacheable(cacheNames = [CacheConfig.CACHENAME_PDL_GEOGRAFISK_TILKNYTNING],
+        key = "#ident",
+        condition = "#ident != null",
+        unless = "#result == null")
     fun geografiskTilknytningResponse(ident: String): PdlHentGeografiskTilknytning? {
         val query = getPdlQuery("/pdl/hentGeografiskTilknytning.graphql")
         val request = PdlGeografiskTilknytningRequest(
@@ -71,7 +74,10 @@ class PdlConsumer(
         return pdlHentPerson?.isKode7() ?: throw PdlRequestFailedException()
     }
 
-    @Cacheable(cacheNames = [CacheConfig.CACHENAME_PDL_PERSON], key = "#personIdentNumber", condition = "#personIdentNumber != null")
+    @Cacheable(cacheNames = [CacheConfig.CACHENAME_PDL_PERSON],
+        key = "#personIdentNumber",
+        condition = "#personIdentNumber != null",
+        unless = "#result == null")
     @Timed("syfotilgangskontroll_pdlConsumer_person", histogram = true)
     fun person(personIdentNumber: String): PdlHentPerson? {
         val query = getPdlQuery("/pdl/hentPerson.graphql")
