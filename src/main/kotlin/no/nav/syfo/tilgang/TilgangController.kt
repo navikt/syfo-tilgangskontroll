@@ -24,6 +24,7 @@ class TilgangController @Autowired constructor(
     private val contextHolder: TokenValidationContextHolder,
     private val metric: Metric,
     private val tilgangService: TilgangService,
+    private val apiConsumerAccessService: APIConsumerAccessService
 ) {
     @GetMapping(path = ["/navident/syfo"])
     @ProtectedWithClaims(issuer = VEILEDERAZURE)
@@ -80,13 +81,8 @@ class TilgangController @Autowired constructor(
         consumerClientId: String = ""
     ): ResponseEntity<*> {
         val tilgang = tilgangService.sjekkTilgangTilBruker(veilederId, fnr, consumerClientId)
-
-        if (tilgang.harTilgang) {
-            auditLog(CEF(suid = veilederId, duid = fnr, event = AuditLogEvent.Access, permit = true))
-        } else {
-            auditLog(CEF(suid = veilederId, duid = fnr, event = AuditLogEvent.Access, permit = false))
-        }
-
+        val appName = apiConsumerAccessService.getAuthorizedAppNameFromClientId(consumerClientId)
+        auditLog(CEF(suid = veilederId, duid = fnr, event = AuditLogEvent.Access, permit = tilgang.harTilgang, appName))
         return lagRespons(tilgang)
     }
 
@@ -94,11 +90,8 @@ class TilgangController @Autowired constructor(
 
         return try {
             val harTilgang = tilgangService.sjekkTilgangTilBruker(veilederId, fnr).harTilgang
-            if (harTilgang) {
-                auditLog(CEF(suid = veilederId, duid = fnr, event = AuditLogEvent.Access, permit = true))
-            } else {
-                auditLog(CEF(suid = veilederId, duid = fnr, event = AuditLogEvent.Access, permit = false))
-            }
+            val appName = apiConsumerAccessService.getAuthorizedAppNameFromClientId(getConsumerClientId(contextHolder))
+            auditLog(CEF(suid = veilederId, duid = fnr, event = AuditLogEvent.Access, permit = harTilgang, appName))
             return harTilgang
         } catch (e: RuntimeException) {
             log.error("Uventet feil ved sjekk av tilgang til bruker i liste: {} : {}", e.toString(), e.message, e)
