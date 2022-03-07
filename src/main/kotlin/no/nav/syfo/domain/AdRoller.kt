@@ -19,6 +19,7 @@ class AdRoller(
     @Value("\${role.utvidbar.nasjonal.id}") val utvidbarNasjonalId: String,
     @Value("\${role.regional.id}") val regionalId: String,
     @Value("\${role.utvidbar.regional.id}") val utvidvarRegionalId: String,
+    @Value("\${role.papirsykmelding.id}") val papirsykmeldingId: String,
 ) {
     val KODE6 = AdRolle(
         name = "KODE6",
@@ -59,5 +60,10 @@ class AdRoller(
         name = "UTVIDBAR_TIL_REGIONAL",
         id = utvidvarRegionalId,
         rolle = "0000-GA-GOSYS_UTVIDBAR_TIL_REGIONAL",
+    )
+    val PAPIRSYKMELDING = AdRolle(
+        name = "PAPIRSYKMELDING",
+        id = papirsykmeldingId,
+        rolle = "0000-GA-papirsykmelding",
     )
 }

@@ -156,3 +156,5 @@ spec:
       value: "d2987104-63b2-4110-83ac-20ff6afe24a2" # 0000-GA-GOSYS_REGIONAL
     - name: ROLE_UTVIDBAR_REGIONAL_ID
       value: "a5c2370e-6b3d-4c2c-9a5e-238008526574" # 0000-GA-GOSYS_UTVIDBAR_TIL_REGIONAL
+    - name: ROLE_PAPIRSYKMELDING_ID
+      value: "16aff429-1efc-402a-ae12-4000633d0063" # 0000-GA-papirsykmelding
