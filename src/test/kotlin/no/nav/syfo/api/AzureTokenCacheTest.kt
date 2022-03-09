@@ -4,6 +4,7 @@ import no.nav.syfo.LocalApplication
 import no.nav.syfo.consumer.azuread.AzureAdToken
 import no.nav.syfo.consumer.azuread.AzureAdTokenConsumer
 import org.junit.jupiter.api.*
+import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.extension.ExtendWith
 import org.mockito.Mockito
 import org.springframework.boot.test.context.SpringBootTest
@@ -13,7 +14,6 @@ import org.springframework.test.context.junit.jupiter.SpringExtension
 import org.springframework.util.MultiValueMap
 import java.text.ParseException
 import java.time.LocalDateTime
-import org.junit.jupiter.api.Assertions.*
 
 @ExtendWith(SpringExtension::class)
 @SpringBootTest(classes = [LocalApplication::class])
@@ -43,7 +43,6 @@ class AzureTokenCacheTest {
         AzureAdTokenConsumer.tokenCache.clear()
     }
 
-
     @Test
     fun `token is cached`() {
         assertEquals(AzureAdTokenConsumer.tokenCache.size, 0)
@@ -65,7 +64,7 @@ class AzureTokenCacheTest {
         val anotherToken = azureAdTokenConsumer.getSystemToken(pdlScopeClientId)
         assertEquals(anotherToken, "first")
         assertEquals(AzureAdTokenConsumer.tokenCache.size, 1)
-     }
+    }
 
     @Test
     fun `expired token is renewed`() {

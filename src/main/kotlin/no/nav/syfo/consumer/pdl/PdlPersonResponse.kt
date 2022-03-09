@@ -4,26 +4,26 @@ import java.io.Serializable
 
 data class PdlPersonResponse(
     val errors: List<PdlError>?,
-    val data: PdlHentPerson?
+    val data: PdlHentPerson?,
 )
 
 data class PdlHentPerson(
-    val hentPerson: PdlPerson?
+    val hentPerson: PdlPerson?,
 ) : Serializable
 
 data class PdlPerson(
-    val adressebeskyttelse: List<Adressebeskyttelse>?
+    val adressebeskyttelse: List<Adressebeskyttelse>?,
 ) : Serializable
 
 data class Adressebeskyttelse(
-    val gradering: Gradering
+    val gradering: Gradering,
 ) : Serializable
 
 enum class Gradering : Serializable {
     STRENGT_FORTROLIG_UTLAND,
     STRENGT_FORTROLIG,
     FORTROLIG,
-    UGRADERT
+    UGRADERT,
 }
 
 fun PdlHentPerson.isKode6(): Boolean {

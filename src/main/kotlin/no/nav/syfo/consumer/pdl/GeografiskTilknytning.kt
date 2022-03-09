@@ -4,12 +4,12 @@ import java.io.Serializable
 
 data class GeografiskTilknytning(
     val type: GeografiskTilknytningType,
-    val value: String?
+    val value: String?,
 ) : Serializable
 
 enum class GeografiskTilknytningType {
     BYDEL,
     KOMMUNE,
     UTLAND,
-    UDEFINERT
+    UDEFINERT,
 }

@@ -15,7 +15,11 @@ tilgang til informasjon om en person sjekkes det om personen er diskresjonsmerke
 *Lokalt*
 
 - Bygg ved å kjøre `./gradlew build` i kommandolinjen
-- Start ved å kjøre `LocalApplication`  
+- Start ved å kjøre `LocalApplication`
+
+### Lint
+
+Kjør `./gradlew --continue ktlintCheck`
 
 **Redis Cache**
 

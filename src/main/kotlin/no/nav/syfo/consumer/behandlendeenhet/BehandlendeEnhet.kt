@@ -4,5 +4,5 @@ import java.io.Serializable
 
 data class BehandlendeEnhet(
     val enhetId: String,
-    val navn: String
+    val navn: String,
 ) : Serializable
