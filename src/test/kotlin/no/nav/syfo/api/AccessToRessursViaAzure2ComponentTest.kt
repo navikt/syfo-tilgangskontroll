@@ -248,12 +248,14 @@ class AccessToRessursViaAzure2ComponentTest {
         Mockito.`when`(pdlConsumer.person(BIRTE_KODE7_BRUKER))
             .thenReturn(generatePdlHentPerson(generateAdressebeskyttelse(Gradering.FORTROLIG)))
 
-        val response = tilgangController.accessToPersonListViaAzure(listOf(
-            BJARNE_BRUKER,
-            BENGT_KODE6_BRUKER,
-            BIRTE_KODE7_BRUKER,
-            ERIK_EGENANSATT_BRUKER
-        ))
+        val response = tilgangController.accessToPersonListViaAzure(
+            listOf(
+                BJARNE_BRUKER,
+                BENGT_KODE6_BRUKER,
+                BIRTE_KODE7_BRUKER,
+                ERIK_EGENANSATT_BRUKER
+            )
+        )
         assertEquals(200, response.statusCodeValue.toLong())
         assertEquals(listOf(BJARNE_BRUKER), response.body)
     }

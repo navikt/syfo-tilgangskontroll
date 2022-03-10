@@ -3,23 +3,23 @@ package no.nav.syfo.consumer.norg2
 import java.io.Serializable
 
 data class NorgEnhet(
-        var aktiveringsdato: String?,
-        var antallRessurser: String?,
-        var enhetId: String?,
-        var enhetNr: String,
-        var kanalstrategi: String?,
-        var navn: String,
-        var nedleggelsesdato: String?,
-        var oppgavebehandler: String?,
-        var orgNivaa: String?,
-        var orgNrTilKommunaltNavKontor: String?,
-        var organisasjonsnummer: String?,
-        var sosialeTjenester: String?,
-        var status: String,
-        var type: String?,
-        var underAvviklingDato: String?,
-        var underEtableringDato: String?,
-        var versjon: String?
+    val aktiveringsdato: String?,
+    val antallRessurser: String?,
+    val enhetId: String?,
+    val enhetNr: String,
+    val kanalstrategi: String?,
+    val navn: String,
+    val nedleggelsesdato: String?,
+    val oppgavebehandler: String?,
+    val orgNivaa: String?,
+    val orgNrTilKommunaltNavKontor: String?,
+    val organisasjonsnummer: String?,
+    val sosialeTjenester: String?,
+    val status: String,
+    val type: String?,
+    val underAvviklingDato: String?,
+    val underEtableringDato: String?,
+    val versjon: String?,
 ) : Serializable
 
 enum class Enhetsstatus(val formattedName: String) {

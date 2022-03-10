@@ -16,22 +16,23 @@ import javax.inject.Inject
 class AxsysConsumer @Inject constructor(
     @Value("\${axsys.url}") val axsysUrl: String,
     private val metric: Metric,
-    private val restTemplate: RestTemplate
+    private val restTemplate: RestTemplate,
 ) {
     fun axsysTilgangerResponse(navIdent: String): AxsysTilgangerResponse {
         try {
             val response = restTemplate.exchange(
-                    getAxsysTilgangUrl(navIdent),
-                    HttpMethod.GET,
-                    entity(),
-                    AxsysTilgangerResponse::class.java
+                getAxsysTilgangUrl(navIdent),
+                HttpMethod.GET,
+                entity(),
+                AxsysTilgangerResponse::class.java
             )
             val axsysResponse = response.body!!
             metric.countEvent(METRIC_CALL_AXSYS_SUCCESS)
             return axsysResponse
         } catch (e: RestClientResponseException) {
             metric.countEvent(METRIC_CALL_AXSYS_FAIL)
-            val message = "Call to get Tilganger from Axsys failed with status: ${e.rawStatusCode} and message: ${e.responseBodyAsString}"
+            val message =
+                "Call to get Tilganger from Axsys failed with status: ${e.rawStatusCode} and message: ${e.responseBodyAsString}"
             LOG.error(message)
             throw e
         }

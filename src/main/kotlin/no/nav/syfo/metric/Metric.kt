@@ -7,7 +7,7 @@ import javax.inject.Inject
 
 @Component
 class Metric @Inject constructor(
-    private val registry: MeterRegistry
+    private val registry: MeterRegistry,
 ) {
     fun countEvent(name: String) {
         registry.counter(
@@ -21,7 +21,8 @@ class Metric @Inject constructor(
             addPrefix("httpstatus"),
             Tags.of(
                 "type", "info",
-                "kode", kode.toString())
+                "kode", kode.toString()
+            )
         ).increment()
     }
 

@@ -14,9 +14,13 @@ import javax.inject.Inject
 @Service
 class SkjermedePersonerPipConsumer @Inject constructor(
     private val metric: Metric,
-    private val restTemplate: RestTemplate
+    private val restTemplate: RestTemplate,
 ) {
-    @Cacheable(cacheNames = [CacheConfig.CACHENAME_EGENANSATT], key = "#personIdent", condition = "#personIdent != null")
+    @Cacheable(
+        cacheNames = [CacheConfig.CACHENAME_EGENANSATT],
+        key = "#personIdent",
+        condition = "#personIdent != null"
+    )
     fun erSkjermet(personIdent: String): Boolean {
         try {
             val response = restTemplate.exchange(
@@ -30,14 +34,15 @@ class SkjermedePersonerPipConsumer @Inject constructor(
             return skjermedePersonerResponse
         } catch (e: RestClientResponseException) {
             metric.countEvent(METRIC_CALL_SKJERMEDE_PERSONER_PIP_FAIL)
-            val message = "Call to get response from Skjermede Person failed with status: ${e.rawStatusCode} and message: ${e.responseBodyAsString}"
+            val message =
+                "Call to get response from Skjermede Person failed with status: ${e.rawStatusCode} and message: ${e.responseBodyAsString}"
             LOG.error(message)
             throw e
         }
     }
 
     private fun getSkjermedePersonerPipUrl(personIdent: String): String {
-        return "http://skjermede-personer-pip.nom.svc.nais.local/skjermet?personident=${personIdent}"
+        return "http://skjermede-personer-pip.nom.svc.nais.local/skjermet?personident=$personIdent"
     }
 
     private fun entity(): HttpEntity<String> {

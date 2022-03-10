@@ -72,12 +72,13 @@ class GeografiskTilgangServiceTest {
             listOf(
                 AxsysEnhet(
                     BRUKERS_ENHET,
-                    NAV_ENHET_NAVN
+                    NAV_ENHET_NAVN,
                 ),
                 AxsysEnhet(
                     "enHeltAnnenEnhet",
-                    NAV_ENHET_NAVN
-                ))
+                    NAV_ENHET_NAVN,
+                )
+            )
         )
         Mockito.`when`(pdlConsumer.geografiskTilknytning(PERSON_FNR)).thenReturn(GEOGRAFISK_TILKNYTNING)
 
@@ -92,12 +93,13 @@ class GeografiskTilgangServiceTest {
             listOf(
                 AxsysEnhet(
                     BRUKERS_ENHET,
-                    NAV_ENHET_NAVN
+                    NAV_ENHET_NAVN,
                 ),
                 AxsysEnhet(
                     "enHeltAnnenEnhet",
-                    NAV_ENHET_NAVN
-                ))
+                    NAV_ENHET_NAVN,
+                )
+            )
         )
         Mockito.`when`(pdlConsumer.geografiskTilknytning(PERSON_FNR)).thenReturn(GEOGRAFISK_TILKNYTNING_UTLAND)
 
@@ -109,10 +111,12 @@ class GeografiskTilgangServiceTest {
         val behandlendeEnhet = generateBehandlendeEnhet(BRUKERS_ENHET)
         Mockito.`when`(behandlendeEnhetConsumer.getBehandlendeEnhet(PERSON_FNR, null)).thenReturn(behandlendeEnhet)
         Mockito.`when`(axsysConsumer.enheter(VEILEDER_UID)).thenReturn(
-            listOf(AxsysEnhet(
-                "enHeltAnnenEnhet",
-                NAV_ENHET_NAVN
-            ))
+            listOf(
+                AxsysEnhet(
+                    "enHeltAnnenEnhet",
+                    NAV_ENHET_NAVN,
+                )
+            )
         )
         Mockito.`when`(pdlConsumer.geografiskTilknytning(PERSON_FNR)).thenReturn(GEOGRAFISK_TILKNYTNING_UTLAND)
 
@@ -122,10 +126,12 @@ class GeografiskTilgangServiceTest {
     @Test
     fun harIkkeTilgangHvisVeilederIkkeHarTilgangTilSammeEnhetSomBruker() {
         Mockito.`when`(axsysConsumer.enheter(VEILEDER_UID)).thenReturn(
-            listOf(AxsysEnhet(
-                "enHeltAnnenEnhet",
-                NAV_ENHET_NAVN
-            ))
+            listOf(
+                AxsysEnhet(
+                    "enHeltAnnenEnhet",
+                    NAV_ENHET_NAVN,
+                )
+            )
         )
         Mockito.`when`(pdlConsumer.geografiskTilknytning(PERSON_FNR)).thenReturn(GEOGRAFISK_TILKNYTNING)
 
@@ -136,13 +142,17 @@ class GeografiskTilgangServiceTest {
     fun harTilgangHvisRegionalTilgangOgTilgangTilEnhetensFylkeskontor() {
         Mockito.`when`(graphApiConsumer.hasAccess(VEILEDER_UID, adRoller.REGIONAL)).thenReturn(true)
         Mockito.`when`(axsysConsumer.enheter(VEILEDER_UID)).thenReturn(
-            listOf(AxsysEnhet(
-                VEILEDERS_ENHET,
-                NAV_ENHET_NAVN
-            ))
+            listOf(
+                AxsysEnhet(
+                    VEILEDERS_ENHET,
+                    NAV_ENHET_NAVN,
+                )
+            )
         )
-        Mockito.`when`(norgConsumer.getOverordnetEnhetListForNAVKontor(VEILEDERS_ENHET)).thenReturn(listOf(OVERORDNET_ENHET))
-        Mockito.`when`(norgConsumer.getOverordnetEnhetListForNAVKontor(BRUKERS_ENHET)).thenReturn(listOf(OVERORDNET_ENHET))
+        Mockito.`when`(norgConsumer.getOverordnetEnhetListForNAVKontor(VEILEDERS_ENHET))
+            .thenReturn(listOf(OVERORDNET_ENHET))
+        Mockito.`when`(norgConsumer.getOverordnetEnhetListForNAVKontor(BRUKERS_ENHET))
+            .thenReturn(listOf(OVERORDNET_ENHET))
         Mockito.`when`(pdlConsumer.geografiskTilknytning(PERSON_FNR)).thenReturn(GEOGRAFISK_TILKNYTNING)
 
         Assertions.assertThat(geografiskTilgangService.harGeografiskTilgang(VEILEDER_UID, PERSON_FNR)).isTrue
@@ -151,10 +161,12 @@ class GeografiskTilgangServiceTest {
     @Test
     fun harIkkeTilgangHvisTilgangTilEnhetensFylkeskontorMenIkkeRegionalTilgang() {
         Mockito.`when`(axsysConsumer.enheter(VEILEDER_UID)).thenReturn(
-            listOf(AxsysEnhet(
-                OVERORDNET_ENHET,
-                NAV_ENHET_NAVN
-            ))
+            listOf(
+                AxsysEnhet(
+                    OVERORDNET_ENHET,
+                    NAV_ENHET_NAVN,
+                )
+            )
         )
         Mockito.`when`(pdlConsumer.geografiskTilknytning(PERSON_FNR)).thenReturn(GEOGRAFISK_TILKNYTNING)
 
