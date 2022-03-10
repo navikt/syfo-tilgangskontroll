@@ -30,7 +30,11 @@ class TilgangService @Autowired constructor(
         return sjekkTilgang(fnr, veilederId, consumerClientId)
     }
 
-    @Cacheable(cacheNames = [CacheConfig.TILGANGTILBRUKER], key = "#veilederId.concat(#brukerFnr)", condition = "#brukerFnr != null && #veilederId != null")
+    @Cacheable(
+        cacheNames = [CacheConfig.TILGANGTILBRUKER],
+        key = "#veilederId.concat(#brukerFnr).concat(#consumerClientId)",
+        condition = "#brukerFnr != null && #veilederId != null && #consumerClientId != null"
+    )
     fun sjekkTilgang(
         brukerFnr: String,
         veilederId: String,
