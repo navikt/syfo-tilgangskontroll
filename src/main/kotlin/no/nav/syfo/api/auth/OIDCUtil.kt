@@ -6,6 +6,7 @@ object OIDCUtil {
     @JvmStatic
     fun getConsumerClientId(contextHolder: TokenValidationContextHolder): String {
         return contextHolder.tokenValidationContext.getClaims(OIDCIssuer.VEILEDERAZURE).getStringClaim("azp")
+            ?: throw IllegalArgumentException("Claim AZP was not found in token")
     }
 }
 

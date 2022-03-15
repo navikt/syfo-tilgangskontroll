@@ -37,7 +37,7 @@ class CacheConfig {
             .entryTtl(Duration.ofHours(12L))
 
         cacheConfigurations[TILGANGTILBRUKER] = defaultConfig
-        cacheConfigurations[TILGANGTILTJENESTEN] = defaultConfig
+        cacheConfigurations[TILGANGTILBRUKER_PAPIRSYKMELDING] = defaultConfig
         cacheConfigurations[TILGANGTILENHET] = defaultConfig
         cacheConfigurations[CACHENAME_AXSYS_ENHETER] = defaultConfig
         cacheConfigurations[CACHENAME_BEHANDLENDEENHET_FNR] = defaultConfig
@@ -59,6 +59,7 @@ class CacheConfig {
 
     companion object {
         const val TILGANGTILBRUKER = "tilgangbruker"
+        const val TILGANGTILBRUKER_PAPIRSYKMELDING = "tilgangbrukerpapirsykmelding"
         const val TILGANGTILTJENESTEN = "tilgangtjenesten"
         const val TILGANGTILENHET = "tilgangenhet"
         const val CACHENAME_AXSYS_ENHETER = "axsysenheter"

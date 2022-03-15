@@ -5,16 +5,12 @@ import no.nav.security.token.support.core.context.TokenValidationContextHolder
 import no.nav.syfo.api.auth.OIDCIssuer.VEILEDERAZURE
 import no.nav.syfo.api.auth.OIDCUtil.getConsumerClientId
 import no.nav.syfo.api.auth.getNAVIdentFromOBOToken
+import no.nav.syfo.domain.PersonIdentNumber
 import no.nav.syfo.metric.Metric
-import no.nav.syfo.util.AuditLogEvent
-import no.nav.syfo.util.CEF
-import no.nav.syfo.util.auditLog
-import no.nav.syfo.util.getPersonIdent
+import no.nav.syfo.util.*
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.http.HttpStatus
-import org.springframework.http.MediaType
-import org.springframework.http.ResponseEntity
+import org.springframework.http.*
 import org.springframework.util.MultiValueMap
 import org.springframework.web.bind.annotation.*
 
@@ -48,6 +44,24 @@ class TilgangController @Autowired constructor(
         return sjekktilgangTilBruker(veilederId, requestedPersonIdent, consumerClientId)
     }
 
+    @GetMapping(path = ["/navident/person/papirsykmelding"])
+    @ProtectedWithClaims(issuer = VEILEDERAZURE)
+    fun accessToPersonIdentWithPapirsykmelding(
+        @RequestHeader headers: MultiValueMap<String, String>,
+    ): ResponseEntity<*> {
+        val requestedPersonIdent = headers.getPersonIdent()?.let { personIdent ->
+            PersonIdentNumber(personIdent)
+        } ?: throw IllegalArgumentException("Did not find a PersonIdent in request headers")
+
+        val veilederIdent = getNAVIdentFromOBOToken(contextHolder)
+            ?: throw IllegalArgumentException("Did not find a NAVIdent in token")
+
+        return sjekkTilgangTilPapirsykmelding(
+            personIdent = requestedPersonIdent,
+            veilederIdent = veilederIdent,
+        )
+    }
+
     @PostMapping(path = ["/navident/brukere"])
     @ProtectedWithClaims(issuer = VEILEDERAZURE)
     fun accessToPersonListViaAzure(
@@ -67,6 +81,20 @@ class TilgangController @Autowired constructor(
         val veilederId = getNAVIdentFromOBOToken(contextHolder)
             ?: throw IllegalArgumentException("Did not find a NAVIdent in token")
         val tilgang = tilgangService.sjekkTilgangTilEnhet(veilederId, enhetNr)
+        return lagRespons(tilgang)
+    }
+
+    private fun sjekkTilgangTilPapirsykmelding(
+        personIdent: PersonIdentNumber,
+        veilederIdent: String,
+    ): ResponseEntity<*> {
+        val consumerClientId = getConsumerClientId(contextHolder)
+
+        val tilgang = tilgangService.sjekkTilgangTilBrukerMedPapirsykmelding(
+            consumerClientId = consumerClientId,
+            personIdent = personIdent.value,
+            veilederIdent = veilederIdent,
+        )
         return lagRespons(tilgang)
     }
 

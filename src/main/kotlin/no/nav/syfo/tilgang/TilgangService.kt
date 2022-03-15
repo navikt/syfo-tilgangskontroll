@@ -6,7 +6,8 @@ import no.nav.syfo.consumer.axsys.AxsysConsumer
 import no.nav.syfo.consumer.graphapi.GraphApiConsumer
 import no.nav.syfo.consumer.pdl.PdlConsumer
 import no.nav.syfo.consumer.skjermedepersoner.SkjermedePersonerPipConsumer
-import no.nav.syfo.domain.*
+import no.nav.syfo.domain.AdRoller
+import no.nav.syfo.domain.PersonIdentNumber
 import no.nav.syfo.geografisktilknytning.GeografiskTilgangService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.cache.annotation.Cacheable
@@ -17,6 +18,7 @@ class TilgangService @Autowired constructor(
     private val adRoller: AdRoller,
     private val axsysConsumer: AxsysConsumer,
     private val kode6TilgangService: Kode6TilgangService,
+    private val papirsykmeldingTilgangService: PapirsykmeldingTilgangService,
     private val graphApiConsumer: GraphApiConsumer,
     private val skjermedePersonerPipConsumer: SkjermedePersonerPipConsumer,
     private val geografiskTilgangService: GeografiskTilgangService,
@@ -77,6 +79,28 @@ class TilgangService @Autowired constructor(
                 begrunnelse = adRoller.EGEN_ANSATT.name
             )
         } else Tilgang(harTilgang = true)
+    }
+
+    @Cacheable(
+        cacheNames = [CacheConfig.TILGANGTILBRUKER_PAPIRSYKMELDING],
+        key = "#veilederIdent.concat(#personIdent).concat(#consumerClientId)",
+        condition = "#personIdent != null && #veilederIdent != null && #consumerClientId !=null"
+    )
+    fun sjekkTilgangTilBrukerMedPapirsykmelding(
+        consumerClientId: String,
+        personIdent: String,
+        veilederIdent: String,
+    ): Tilgang {
+        return if (papirsykmeldingTilgangService.harPapirsykmeldingTilgang(veilederIdent = veilederIdent)) {
+            sjekkTilgang(
+                consumerClientId = consumerClientId,
+                brukerFnr = personIdent,
+                veilederId = veilederIdent,
+            )
+        } else Tilgang(
+            harTilgang = false,
+            begrunnelse = adRoller.PAPIRSYKMELDING.name
+        )
     }
 
     @Cacheable(cacheNames = [CacheConfig.TILGANGTILTJENESTEN], key = "#veilederId", condition = "#veilederId != null")

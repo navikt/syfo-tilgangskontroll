@@ -9,17 +9,23 @@ server:
   servlet:
     context-path: /syfo-tilgangskontroll
 
+smregistrering.client.id: "smregistrering-backend-client-id"
+
+preauthorized:
+  smregistrering: "{\"name\":\"dev-fss:teamsykmelding:smregistrering-backend\",\"clientId\":\"${smregistrering.client.id}\"}"
+
 azure:
   app:
     client:
       id: "1345678"
       secret: "secret"
+    pre:
+      authorized:
+        apps: "[${preauthorized.smregistrering}]"
   openid:
     config:
       token:
         endpoint: "https://login.microsoftonline.com/id/oauth2/v2.0/token"
-
-smregistrering.client.id: "smregistrering"
 
 axsys.url: "http://test-axsys"
 graphapi.url: "https://graph.microsoft.com"
@@ -37,5 +43,6 @@ role.nasjonal.id: "nasjonalId"
 role.utvidbar.nasjonal.id: "utvidbarNasjonalId"
 role.regional.id: "regionalId"
 role.utvidbar.regional.id: "utvidvarRegionalId"
+role.papirsykmelding.id: "papirsykmeldingId"
 
 AZURE_APP_PRE_AUTHORIZED_APPS: "[]"
