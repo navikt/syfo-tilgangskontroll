@@ -25,7 +25,6 @@ import no.nav.syfo.testhelper.generateAdressebeskyttelse
 import no.nav.syfo.testhelper.generatePdlHentPerson
 import no.nav.syfo.tilgang.Tilgang
 import no.nav.syfo.tilgang.TilgangController
-import no.nav.syfo.tilgang.TilgangService.Companion.ENHET
 import no.nav.syfo.util.NAV_PERSONIDENT_HEADER
 import org.junit.jupiter.api.*
 import org.junit.jupiter.api.Assertions.*
@@ -126,7 +125,7 @@ class AccessToRessursViaAzure2ComponentTest {
     fun accessToSYFODenied() {
         mockAdRolle(graphApiConsumerMock, VEILEDER_ID, NEKT, adRoller.SYFO)
         val response = tilgangController.accessToSYFOViaAzure()
-        assertAccessDenied(response, adRoller.SYFO.name)
+        assertAccessDenied(response)
     }
 
     @Test
@@ -145,7 +144,7 @@ class AccessToRessursViaAzure2ComponentTest {
         val headers: MultiValueMap<String, String> = LinkedMultiValueMap()
         headers.add(NAV_PERSONIDENT_HEADER, BENGT_KODE6_BRUKER)
         val response = tilgangController.accessToPersonIdentViaAzure(headers)
-        assertAccessDenied(response, adRoller.KODE6.name)
+        assertAccessDenied(response)
     }
 
     @Test
@@ -155,7 +154,7 @@ class AccessToRessursViaAzure2ComponentTest {
         val headers: MultiValueMap<String, String> = LinkedMultiValueMap()
         headers.add(NAV_PERSONIDENT_HEADER, BENGT_KODE6_BRUKER)
         val response = tilgangController.accessToPersonIdentViaAzure(headers)
-        assertAccessDenied(response, adRoller.KODE6.name)
+        assertAccessDenied(response)
     }
 
     @Test
@@ -178,7 +177,7 @@ class AccessToRessursViaAzure2ComponentTest {
         val headers: MultiValueMap<String, String> = LinkedMultiValueMap()
         headers.add(NAV_PERSONIDENT_HEADER, BIRTE_KODE7_BRUKER)
         val response = tilgangController.accessToPersonIdentViaAzure(headers)
-        assertAccessDenied(response, adRoller.KODE7.name)
+        assertAccessDenied(response)
     }
 
     @Test
@@ -196,7 +195,7 @@ class AccessToRessursViaAzure2ComponentTest {
         val headers: MultiValueMap<String, String> = LinkedMultiValueMap()
         headers.add(NAV_PERSONIDENT_HEADER, ERIK_EGENANSATT_BRUKER)
         val response = tilgangController.accessToPersonIdentViaAzure(headers)
-        assertAccessDenied(response, adRoller.EGEN_ANSATT.name)
+        assertAccessDenied(response)
     }
 
     @Test
@@ -219,7 +218,7 @@ class AccessToRessursViaAzure2ComponentTest {
     fun `access to enhet denied`() {
         mockAdRolle(graphApiConsumerMock, VEILEDER_ID, INNVILG, adRoller.SYFO)
         val response = tilgangController.accessToEnhet(NAV_ENHETID_3)
-        assertAccessDenied(response, ENHET)
+        assertAccessDenied(response)
     }
 
     @Test
@@ -266,11 +265,10 @@ class AccessToRessursViaAzure2ComponentTest {
         assertTrue(tilgang.harTilgang)
     }
 
-    private fun assertAccessDenied(response: ResponseEntity<*>, begrunnelse: String) {
+    private fun assertAccessDenied(response: ResponseEntity<*>) {
         assertEquals(HTTP_STATUS_FORBIDDEN.toLong(), response.statusCodeValue.toLong())
         val tilgang = response.body as Tilgang
         assertFalse(tilgang.harTilgang)
-        assertEquals(begrunnelse, tilgang.begrunnelse)
     }
 
     companion object {

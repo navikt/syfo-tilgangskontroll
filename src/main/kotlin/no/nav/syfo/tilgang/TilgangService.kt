@@ -45,13 +45,11 @@ class TilgangService @Autowired constructor(
         if (!harTilgangTilTjenesten(veilederId)) {
             return Tilgang(
                 harTilgang = false,
-                begrunnelse = adRoller.SYFO.name
             )
         }
         if (!geografiskTilgangService.harGeografiskTilgang(veilederId, brukerFnr)) {
             return Tilgang(
                 harTilgang = false,
-                begrunnelse = GEOGRAFISK
             )
         }
         val personIdentNumber = PersonIdentNumber(brukerFnr)
@@ -65,18 +63,15 @@ class TilgangService @Autowired constructor(
         ) {
             return Tilgang(
                 harTilgang = false,
-                begrunnelse = adRoller.KODE6.name
             )
         } else if (pdlConsumer.isKode7(pdlPerson) && !harTilgangTilKode7(veilederId)) {
             return Tilgang(
                 harTilgang = false,
-                begrunnelse = adRoller.KODE7.name
             )
         }
         return if (skjermedePersonerPipConsumer.erSkjermet(brukerFnr) && !harTilgangTilEgenAnsatt(veilederId)) {
             return Tilgang(
                 harTilgang = false,
-                begrunnelse = adRoller.EGEN_ANSATT.name
             )
         } else Tilgang(harTilgang = true)
     }
@@ -99,7 +94,6 @@ class TilgangService @Autowired constructor(
             )
         } else Tilgang(
             harTilgang = false,
-            begrunnelse = adRoller.PAPIRSYKMELDING.name
         )
     }
 
@@ -109,7 +103,6 @@ class TilgangService @Autowired constructor(
             harTilgang = true
         ) else Tilgang(
             harTilgang = false,
-            begrunnelse = adRoller.SYFO.name
         )
     }
 
@@ -117,11 +110,9 @@ class TilgangService @Autowired constructor(
     fun sjekkTilgangTilEnhet(veilederId: String, enhet: String): Tilgang {
         if (!harTilgangTilSykefravaersoppfoelging(veilederId)) return Tilgang(
             harTilgang = false,
-            begrunnelse = adRoller.SYFO.name
         )
         return if (!harTilgangTilEnhet(veilederId, enhet)) Tilgang(
             harTilgang = false,
-            begrunnelse = ENHET
         ) else Tilgang(
             harTilgang = true
         )

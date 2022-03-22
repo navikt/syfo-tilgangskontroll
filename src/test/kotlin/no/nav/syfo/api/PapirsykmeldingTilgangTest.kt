@@ -143,7 +143,7 @@ class PapirsykmeldingTilgangTest {
         headers.add(NAV_PERSONIDENT_HEADER, BJARNE_BRUKER)
 
         val response = tilgangController.accessToPersonIdentWithPapirsykmelding(headers)
-        assertAccessDenied(response, adRoller.PAPIRSYKMELDING.name)
+        assertAccessDenied(response)
     }
 
     @Test
@@ -159,7 +159,7 @@ class PapirsykmeldingTilgangTest {
         headers.add(NAV_PERSONIDENT_HEADER, BJARNE_BRUKER)
 
         val response = tilgangController.accessToPersonIdentWithPapirsykmelding(headers)
-        assertAccessDenied(response, adRoller.PAPIRSYKMELDING.name)
+        assertAccessDenied(response)
     }
 
     @Test
@@ -176,7 +176,7 @@ class PapirsykmeldingTilgangTest {
         headers.add(NAV_PERSONIDENT_HEADER, BENGT_KODE6_BRUKER)
 
         val response = tilgangController.accessToPersonIdentWithPapirsykmelding(headers)
-        assertAccessDenied(response, adRoller.KODE6.name)
+        assertAccessDenied(response)
     }
 
     @Test
@@ -213,7 +213,7 @@ class PapirsykmeldingTilgangTest {
         headers.add(NAV_PERSONIDENT_HEADER, BIRTE_KODE7_BRUKER)
 
         val response = tilgangController.accessToPersonIdentWithPapirsykmelding(headers)
-        assertAccessDenied(response, adRoller.KODE7.name)
+        assertAccessDenied(response)
     }
 
     @Test
@@ -245,7 +245,7 @@ class PapirsykmeldingTilgangTest {
         headers.add(NAV_PERSONIDENT_HEADER, ERIK_EGENANSATT_BRUKER)
 
         val response = tilgangController.accessToPersonIdentWithPapirsykmelding(headers)
-        assertAccessDenied(response, adRoller.EGEN_ANSATT.name)
+        assertAccessDenied(response)
     }
 
     @Test
@@ -270,11 +270,10 @@ class PapirsykmeldingTilgangTest {
         assertTrue(tilgang.harTilgang)
     }
 
-    private fun assertAccessDenied(response: ResponseEntity<*>, begrunnelse: String) {
+    private fun assertAccessDenied(response: ResponseEntity<*>) {
         assertEquals(403, response.statusCodeValue)
         val tilgang = response.body as Tilgang
         assertFalse(tilgang.harTilgang)
-        assertEquals(begrunnelse, tilgang.begrunnelse)
     }
 
     companion object {
