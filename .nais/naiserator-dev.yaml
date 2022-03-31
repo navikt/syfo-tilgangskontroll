@@ -90,6 +90,9 @@ spec:
         - application: syfosoknad
           namespace: flex
           cluster: dev-fss
+        - application: sykepengesoknad-backend
+          namespace: flex
+          cluster: dev-gcp
         - application: smregistrering-backend
           namespace: teamsykmelding
           cluster: dev-fss
