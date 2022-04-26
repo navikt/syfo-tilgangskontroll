@@ -45,6 +45,9 @@ spec:
         - application: isdialogmote
           namespace: teamsykefravr
           cluster: dev-gcp
+        - application: isdialogmotekandidat
+          namespace: teamsykefravr
+          cluster: dev-gcp
         - application: isnarmesteleder
           namespace: teamsykefravr
           cluster: dev-gcp
