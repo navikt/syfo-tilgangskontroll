@@ -38,6 +38,7 @@ class CacheConfig {
 
         cacheConfigurations[TILGANGTILBRUKER] = defaultConfig
         cacheConfigurations[TILGANGTILBRUKER_PAPIRSYKMELDING] = defaultConfig
+        cacheConfigurations[TILGANGTILTJENESTEN] = defaultConfig
         cacheConfigurations[TILGANGTILENHET] = defaultConfig
         cacheConfigurations[CACHENAME_AXSYS_ENHETER] = defaultConfig
         cacheConfigurations[CACHENAME_BEHANDLENDEENHET_FNR] = defaultConfig
