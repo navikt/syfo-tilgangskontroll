@@ -90,9 +90,6 @@ spec:
         - application: spinnsyn-backend
           namespace: flex
           cluster: dev-gcp
-        - application: syfosoknad
-          namespace: flex
-          cluster: dev-fss
         - application: sykepengesoknad-backend
           namespace: flex
           cluster: dev-gcp
