@@ -72,9 +72,6 @@ spec:
         - application: syfomodiaperson
           namespace: teamsykefravr
           cluster: prod-fss
-        - application: syfomoteadmin
-          namespace: teamsykefravr
-          cluster: prod-fss
         - application: syfooversiktsrv
           namespace: teamsykefravr
           cluster: prod-gcp
