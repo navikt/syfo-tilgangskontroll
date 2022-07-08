@@ -99,6 +99,9 @@ spec:
         - application: syfosmregister
           namespace: teamsykmelding
           cluster: dev-fss
+        - application: syfosmregister
+          namespace: teamsykmelding
+          cluster: dev-gcp
   azure:
     application:
       enabled: true
