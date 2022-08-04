@@ -98,9 +98,6 @@ spec:
           cluster: prod-fss
         - application: syfosmregister
           namespace: teamsykmelding
-          cluster: prod-fss
-        - application: syfosmregister
-          namespace: teamsykmelding
           cluster: prod-gcp
   azure:
     application:
