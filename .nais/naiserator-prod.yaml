@@ -99,6 +99,9 @@ spec:
         - application: syfosmmanuell-backend
           namespace: teamsykmelding
           cluster: prod-fss
+        - application: syfosmmanuell-backend
+          namespace: teamsykmelding
+          cluster: prod-gcp
         - application: syfosmregister
           namespace: teamsykmelding
           cluster: prod-gcp
