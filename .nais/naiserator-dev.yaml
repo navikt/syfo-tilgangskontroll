@@ -92,17 +92,14 @@ spec:
           cluster: dev-gcp
         - application: smregistrering-backend
           namespace: teamsykmelding
-          cluster: dev-fss
-        - application: smregistrering-backend
-          namespace: teamsykmelding
           cluster: dev-gcp
-        - application: syfosmmanuell-backend
-          namespace: teamsykmelding
-          cluster: dev-fss
         - application: syfosmmanuell-backend
           namespace: teamsykmelding
           cluster: dev-gcp
         - application: syfosmregister
+          namespace: teamsykmelding
+          cluster: dev-gcp
+        - application: syk-dig-backend
           namespace: teamsykmelding
           cluster: dev-gcp
   azure:
