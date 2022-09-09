@@ -1,9 +1,6 @@
 name: main
 
-on:
-  push:
-    branches:
-      - master
+on: [push]
 
 env:
   IMAGE: ghcr.io/${{ github.repository }}/syfo-tilgangskontroll:${{ github.sha }}
@@ -49,6 +46,7 @@ jobs:
         run: |
           ./gradlew shadowJar -x test
       - name: Build and publish Docker image
+        if: github.ref == 'refs/heads/master'
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
@@ -58,6 +56,7 @@ jobs:
           echo ${IMAGE}
 
   deploy-dev:
+    if: github.ref == 'refs/heads/master'
     name: Deploy to NAIS Dev-fss
     needs: build
     runs-on: ubuntu-latest
@@ -70,6 +69,7 @@ jobs:
           RESOURCE: .nais/naiserator-dev.yaml
 
   deploy-prod:
+    if: github.ref == 'refs/heads/master'
     name: Deploy to NAIS Prod-fss
     needs: deploy-dev
     runs-on: ubuntu-latest
