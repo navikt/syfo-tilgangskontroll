@@ -1,9 +1,10 @@
-name: main
+name: other
 
 on:
   push:
     branches:
-      - master
+      - '**'
+      - '!master'
 
 env:
   IMAGE: ghcr.io/${{ github.repository }}/syfo-tilgangskontroll:${{ github.sha }}
@@ -68,15 +69,3 @@ jobs:
           APIKEY: ${{ secrets.NAIS_DEPLOY_APIKEY }}
           CLUSTER: dev-fss
           RESOURCE: .nais/naiserator-dev.yaml
-
-  deploy-prod:
-    name: Deploy to NAIS Prod-fss
-    needs: deploy-dev
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v1
-      - uses: nais/deploy/actions/deploy@v1
-        env:
-          APIKEY: ${{ secrets.NAIS_DEPLOY_APIKEY }}
-          CLUSTER: prod-fss
-          RESOURCE: .nais/naiserator-prod.yaml
