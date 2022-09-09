@@ -1,9 +1,9 @@
 name: main
 
-on: push
+on: [push, pull_request]
 
 env:
-  IMAGE: docker.pkg.github.com/${{ github.repository }}/syfo-tilgangskontroll:${{ github.sha }}
+  IMAGE: ghcr.io/${{ github.repository }}/syfo-tilgangskontroll:${{ github.sha }}
 
 jobs:
   build:
@@ -46,11 +46,12 @@ jobs:
         run: |
           ./gradlew shadowJar -x test
       - name: Build and publish Docker image
+        if: github.ref == 'refs/heads/master'
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           docker build --tag ${IMAGE} .
-          docker login docker.pkg.github.com -u ${GITHUB_REPOSITORY} -p ${GITHUB_TOKEN}
+          docker login ghcr.io -u ${GITHUB_REPOSITORY} -p ${GITHUB_TOKEN}
           docker push ${IMAGE}
           echo ${IMAGE}
 
