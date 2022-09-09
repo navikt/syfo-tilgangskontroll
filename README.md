@@ -25,3 +25,9 @@ Kjør `./gradlew --continue ktlintCheck`
 
 Syfo-tilgangskontroll bruker redis for cache.
 Redis pod har en egen pipeline som kjøres ved endringer knyttet til Redis. Redis pod kan også startes manuelt ved å kjøre følgdende kommando: `kubectl apply -f .nais/redis-config.yaml`.
+
+**Henvendelser**
+Spørsmål knyttet til koden eller prosjektet kan stilles som issues her på GitHub
+
+**For NAV-ansatte**
+Interne henvendelser kan sendes via Slack i kanalen #isyfo
