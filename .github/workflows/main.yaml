@@ -1,6 +1,6 @@
 name: main
 
-on: [push]
+on: [push, pull_request]
 
 env:
   IMAGE: ghcr.io/${{ github.repository }}/syfo-tilgangskontroll:${{ github.sha }}
