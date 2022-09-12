@@ -10,6 +10,7 @@ server:
     context-path: /syfo-tilgangskontroll
 
 smregistrering.client.id: "smregistrering-backend-client-id"
+isdialogmote.client.id: "isdialogmote-client-id"
 
 preauthorized:
   smregistrering: "{\"name\":\"dev-fss:teamsykmelding:smregistrering-backend\",\"clientId\":\"${smregistrering.client.id}\"}"
