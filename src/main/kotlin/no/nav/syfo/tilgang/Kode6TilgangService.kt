@@ -10,9 +10,10 @@ import org.springframework.stereotype.Service
 class Kode6TilgangService(
     private val adRoller: AdRoller,
     @Value("\${smregistrering.client.id}") private val smregisteringClientId: String,
+    @Value("\${isdialogmote.client.id}") private val isdialogmoteClientId: String,
     private val graphApiConsumer: GraphApiConsumer,
 ) {
-    private var kode6TjenesteList = listOf(smregisteringClientId)
+    private var kode6TjenesteList = listOf(smregisteringClientId, isdialogmoteClientId)
 
     @Timed("syfotilgangskontroll_kode6TilgangSevice_harTilgang", histogram = true)
     fun harTilgang(
