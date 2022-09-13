@@ -23,6 +23,8 @@ class Kode6TilgangService(
     @Value("\${syfomodiaperson.client.id}") private val syfomodiapersonClientId: String,
     @Value("\${syfooversiktsrv.client.id}") private val syfooversiktsrvClientId: String,
     @Value("\${syfoperson.client.id}") private val syfopersonClientId: String,
+    @Value("\${syfomotebehov.client.id}") private val syfomotebehovClientId: String,
+    @Value("\${syfooppfolgingsplanservice.client.id}") private val syfooppfolgingsplanserviceClientId: String,
     private val graphApiConsumer: GraphApiConsumer,
 ) {
     private var kode6TjenesteList = listOf(
@@ -40,6 +42,8 @@ class Kode6TilgangService(
         syfomodiapersonClientId,
         syfooversiktsrvClientId,
         syfopersonClientId,
+        syfomotebehovClientId,
+        syfooppfolgingsplanserviceClientId,
     )
 
     @Timed("syfotilgangskontroll_kode6TilgangSevice_harTilgang", histogram = true)

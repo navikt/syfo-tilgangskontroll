@@ -22,6 +22,8 @@ smregistrering.client.id: "smregistrering-backend-client-id"
 syfomodiaperson.client.id: "syfomodiaperson-client-id"
 syfooversiktsrv.client.id: "syfooversiktsrv-client-id"
 syfoperson.client.id: "syfoperson-client-id"
+syfomotebehov.client.id: "syfomotebehov-client-id"
+syfooppfolgingsplanservice.client.id: "syfooppfolgingsplanservice-client-id"
 
 preauthorized:
   smregistrering: "{\"name\":\"dev-fss:teamsykmelding:smregistrering-backend\",\"clientId\":\"${smregistrering.client.id}\"}"

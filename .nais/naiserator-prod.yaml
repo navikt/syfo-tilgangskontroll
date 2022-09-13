@@ -143,6 +143,10 @@ spec:
       value: "0ff9c36d-d1a0-4e03-8ab6-913d1ba8fcbd"
     - name: SYFOPERSON_CLIENT_ID
       value: "036e5cf4-7381-454e-8f73-33a0a47d9902"
+    - name: SYFOMOTEBEHOV_CLIENT_ID
+      value: "54f7befe-1d6b-45de-a718-a47de79c4239"
+    - name: SYFOOPPFOLGINGSPLANSERVICE_CLIENT_ID
+      value: "9eae3413-a2e3-4b5b-bb56-f5fa1e737110"
     - name: AXSYS_URL
       value: "https://axsys.nais.adeo.no"
     - name: GRAPHAPI_URL
