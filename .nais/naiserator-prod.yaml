@@ -119,6 +119,10 @@ spec:
       value: "7dbaa882-8730-4ed2-97fb-42ca08b7ea29"
     - name: ISDIALOGMOTE_CLIENT_ID
       value: "4898e614-e73d-4067-aafd-5afc2254c6b6"
+    - name: SYFOMODIAPERSON_CLIENT_ID
+      value: "a04bb3b5-8051-40bb-a5f0-f9f4a409b07a"
+    - name: SYFOOVERSIKTSRV_CLIENT_ID
+      value: "0ff9c36d-d1a0-4e03-8ab6-913d1ba8fcbd"
     - name: AXSYS_URL
       value: "https://axsys.nais.adeo.no"
     - name: GRAPHAPI_URL

@@ -11,9 +11,16 @@ class Kode6TilgangService(
     private val adRoller: AdRoller,
     @Value("\${smregistrering.client.id}") private val smregisteringClientId: String,
     @Value("\${isdialogmote.client.id}") private val isdialogmoteClientId: String,
+    @Value("\${syfomodiaperson.client.id}") private val syfomodiapersonClientId: String,
+    @Value("\${syfooversiktsrv.client.id}") private val syfooversiktsrvClientId: String,
     private val graphApiConsumer: GraphApiConsumer,
 ) {
-    private var kode6TjenesteList = listOf(smregisteringClientId, isdialogmoteClientId)
+    private var kode6TjenesteList = listOf(
+        smregisteringClientId,
+        isdialogmoteClientId,
+        syfomodiapersonClientId,
+        syfooversiktsrvClientId,
+    )
 
     @Timed("syfotilgangskontroll_kode6TilgangSevice_harTilgang", histogram = true)
     fun harTilgang(

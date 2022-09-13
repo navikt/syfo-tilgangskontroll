@@ -11,6 +11,8 @@ server:
 
 smregistrering.client.id: "smregistrering-backend-client-id"
 isdialogmote.client.id: "isdialogmote-client-id"
+syfomodiaperson.client.id: "syfomodiaperson-client-id"
+syfooversiktsrv.client.id: "syfooversiktsrv-client-id"
 
 preauthorized:
   smregistrering: "{\"name\":\"dev-fss:teamsykmelding:smregistrering-backend\",\"clientId\":\"${smregistrering.client.id}\"}"
