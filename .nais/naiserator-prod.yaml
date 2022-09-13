@@ -115,14 +115,34 @@ spec:
       - kvPath: /kv/prod/fss/syfo-tilgangskontroll/default
         mountPath: /var/run/secrets/nais.io/vault
   env:
-    - name: SMREGISTRERING_CLIENT_ID
-      value: "7dbaa882-8730-4ed2-97fb-42ca08b7ea29"
+    - name: FASTLEGEREST_CLIENT_ID
+      value: "b1df05b6-427f-4a95-897d-a491cf34f4e0"
+    - name: FINNFASTLEGE_CLIENT_ID
+      value: "916a8191-f241-4227-be1a-4b820657254f"
     - name: ISDIALOGMOTE_CLIENT_ID
       value: "4898e614-e73d-4067-aafd-5afc2254c6b6"
+    - name: ISDIALOGMELDING_CLIENT_ID
+      value: "be3df271-2897-4b64-9ed9-41eee3d85d7c"
+    - name: ISDIALOGMOTEKANDIDAT_CLIENT_ID
+      value: "11a9b0b1-9eaf-41ea-9e3b-b29452699d7f"
+    - name: ISNARMESTELEDER_CLIENT_ID
+      value: "919349b5-e9e5-4fe0-a2f0-af90f013d8e5"
+    - name: ISOPPFOLGINGSTILFELLE_CLIENT_ID
+      value: "8af04bfe-8ebc-4fd1-818e-bf18967bc114"
+    - name: ISPENGESTOPP_CLIENT_ID
+      value: "99984ce1-1b1a-465e-834b-61d85151c7fb"
+    - name: ISPERSONOPPGAVE_CLIENT_ID
+      value: "d15032c0-c943-4a4b-bc44-110329265f5e"
+    - name: SMREGISTRERING_CLIENT_ID
+      value: "7dbaa882-8730-4ed2-97fb-42ca08b7ea29"
+    - name: SYFOBEHANDLENDEENHET_CLIENT_ID
+      value: "43b7c701-08ea-4f8d-91e0-1ad630d7248b"
     - name: SYFOMODIAPERSON_CLIENT_ID
       value: "a04bb3b5-8051-40bb-a5f0-f9f4a409b07a"
     - name: SYFOOVERSIKTSRV_CLIENT_ID
       value: "0ff9c36d-d1a0-4e03-8ab6-913d1ba8fcbd"
+    - name: SYFOPERSON_CLIENT_ID
+      value: "036e5cf4-7381-454e-8f73-33a0a47d9902"
     - name: AXSYS_URL
       value: "https://axsys.nais.adeo.no"
     - name: GRAPHAPI_URL

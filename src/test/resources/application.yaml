@@ -9,10 +9,19 @@ server:
   servlet:
     context-path: /syfo-tilgangskontroll
 
-smregistrering.client.id: "smregistrering-backend-client-id"
+fastlegerest.client.id: "fastlegerest-client-id"
+finnfastlege.client.id: "finnfastlege-client-id"
+isdialogmelding.client.id: "isdialogmelding-client-id"
 isdialogmote.client.id: "isdialogmote-client-id"
+isdialogmotekandidat.client.id: "isdialogmotekandidat-client-id"
+isnarmesteleder.client.id: "isnarmesteleder-client-id"
+isoppfolgingstilfelle.client.id: "isoppfolgingstilfelle-client-id"
+ispengestopp.client.id: "ispengestopp-client-id"
+ispersonoppgave.client.id: "ispersonoppgave-client-id"
+smregistrering.client.id: "smregistrering-backend-client-id"
 syfomodiaperson.client.id: "syfomodiaperson-client-id"
 syfooversiktsrv.client.id: "syfooversiktsrv-client-id"
+syfoperson.client.id: "syfoperson-client-id"
 
 preauthorized:
   smregistrering: "{\"name\":\"dev-fss:teamsykmelding:smregistrering-backend\",\"clientId\":\"${smregistrering.client.id}\"}"
