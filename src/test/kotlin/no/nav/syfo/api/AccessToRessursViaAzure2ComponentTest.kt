@@ -148,13 +148,13 @@ class AccessToRessursViaAzure2ComponentTest {
     }
 
     @Test
-    fun `access to Kode6-personident always denied by default`() {
+    fun `access to Kode6-personident granted to veileder with Kode6 access`() {
         mockAdRolle(graphApiConsumerMock, VEILEDER_ID, INNVILG, adRoller.SYFO, adRoller.KODE6)
         Mockito.`when`(pdlConsumer.isKode6(ArgumentMatchers.any())).thenReturn(true)
         val headers: MultiValueMap<String, String> = LinkedMultiValueMap()
         headers.add(NAV_PERSONIDENT_HEADER, BENGT_KODE6_BRUKER)
         val response = tilgangController.accessToPersonIdentViaAzure(headers)
-        assertAccessDenied(response)
+        assertAccessOk(response)
     }
 
     @Test

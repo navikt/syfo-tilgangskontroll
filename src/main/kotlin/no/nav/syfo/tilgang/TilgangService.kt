@@ -57,7 +57,6 @@ class TilgangService @Autowired constructor(
         if (
             pdlConsumer.isKode6(pdlPerson) &&
             !kode6TilgangService.harTilgang(
-                consumerClientId = consumerClientId,
                 veilederId = veilederId
             )
         ) {

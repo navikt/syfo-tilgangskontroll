@@ -115,10 +115,6 @@ spec:
       - kvPath: /kv/prod/fss/syfo-tilgangskontroll/default
         mountPath: /var/run/secrets/nais.io/vault
   env:
-    - name: SMREGISTRERING_CLIENT_ID
-      value: "7dbaa882-8730-4ed2-97fb-42ca08b7ea29"
-    - name: ISDIALOGMOTE_CLIENT_ID
-      value: "4898e614-e73d-4067-aafd-5afc2254c6b6"
     - name: AXSYS_URL
       value: "https://axsys.nais.adeo.no"
     - name: GRAPHAPI_URL
