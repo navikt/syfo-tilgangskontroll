@@ -39,6 +39,9 @@ spec:
   accessPolicy:
     inbound:
       rules:
+        - application: isaktivitetskrav
+          namespace: teamsykefravr
+          cluster: dev-gcp
         - application: isdialogmelding
           namespace: teamsykefravr
           cluster: dev-gcp
