@@ -9,6 +9,7 @@ import no.nav.syfo.consumer.skjermedepersoner.SkjermedePersonerPipConsumer
 import no.nav.syfo.domain.AdRoller
 import no.nav.syfo.domain.PersonIdentNumber
 import no.nav.syfo.geografisktilknytning.GeografiskTilgangService
+import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.cache.annotation.Cacheable
 import org.springframework.stereotype.Service
@@ -137,13 +138,22 @@ class TilgangService @Autowired constructor(
     }
 
     private fun harTilgangTilEnhet(veilederId: String, navEnhetId: String): Boolean {
-        return axsysConsumer.enheter(veilederId)
+        val veiledersEnheter = axsysConsumer.enheter(veilederId)
+        val veilederHasAccessToEnhet = veiledersEnheter
             .stream()
             .anyMatch { (enhetId) -> enhetId == navEnhetId }
+
+        if (!veilederHasAccessToEnhet) {
+            val veiledersEnheterAsString = veiledersEnheter.joinToString(", ")
+            log.info("Veileder har ikke tilgang til ønsket enhet! Ønsket enhet: $navEnhetId, veileders enheter: $veiledersEnheterAsString")
+            return false
+        }
+        return true
     }
 
     companion object {
         const val GEOGRAFISK = "GEOGRAFISK"
         const val ENHET = "ENHET"
+        private val log = LoggerFactory.getLogger(TilgangService::class.java)
     }
 }
