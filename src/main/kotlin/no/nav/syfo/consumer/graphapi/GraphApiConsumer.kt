@@ -3,6 +3,7 @@ package no.nav.syfo.consumer.graphapi
 import no.nav.syfo.cache.CacheConfig
 import no.nav.syfo.consumer.azuread.AzureAdTokenConsumer
 import no.nav.syfo.domain.AdRolle
+import no.nav.syfo.domain.AdRoller
 import no.nav.syfo.metric.Metric
 import no.nav.syfo.util.configuredJacksonMapper
 import org.slf4j.Logger
@@ -17,6 +18,7 @@ import org.springframework.web.client.RestTemplate
 
 @Service
 class GraphApiConsumer(
+    private val adRoller: AdRoller,
     private val azureAdTokenConsumer: AzureAdTokenConsumer,
     @Value("\${graphapi.url}") val baseUrl: String,
     private val cacheManager: CacheManager,
@@ -63,10 +65,14 @@ class GraphApiConsumer(
             val headers = HttpHeaders()
             headers.contentType = MediaType.APPLICATION_JSON
             headers.setBearerAuth(oboToken)
+            headers.set("ConsistencyLevel", "eventual")
 
-            val url = "$baseUrl/v1.0/$GRAPHAPI_USER_GROUPS_PATH"
+            val url = "$baseUrl/v1.0/$GRAPHAPI_USER_GROUPS_PATH?\$count=true&$FILTER_QUERY"
+            val filter = adRoller.getIdList().joinToString(separator = " or ") { "id eq '$it'" }
+            val urlWithFilter = "$url$filter"
+
             val response = restTemplate.exchange(
-                url,
+                urlWithFilter,
                 HttpMethod.GET,
                 HttpEntity<String>(headers),
                 GraphApiUserGroupListResponse::class.java,
@@ -92,6 +98,7 @@ class GraphApiConsumer(
 
     companion object {
         const val GRAPHAPI_USER_GROUPS_PATH = "/me/memberOf"
+        const val FILTER_QUERY = "\$filter="
 
         val objectMapper = configuredJacksonMapper()
 

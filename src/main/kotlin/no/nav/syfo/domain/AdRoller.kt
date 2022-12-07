@@ -66,4 +66,18 @@ class AdRoller(
         id = papirsykmeldingId,
         rolle = "0000-GA-papirsykmelding",
     )
+
+    fun getIdList(): List<String> {
+        return listOf(
+            KODE6.id,
+            KODE7.id,
+            SYFO.id,
+            EGEN_ANSATT.id,
+            NASJONAL.id,
+            UTVIDBAR_TIL_NASJONAL.id,
+            REGIONAL.id,
+            UTVIDBAR_TIL_REGIONAL.id,
+            PAPIRSYKMELDING.id,
+        )
+    }
 }
