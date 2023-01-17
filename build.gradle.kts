@@ -12,11 +12,12 @@ val prometheusVersion = "1.8.5"
 val slf4jVersion = "1.7.36"
 val tokenValidationSpringSupportVersion = "1.3.9"
 val logbackSyslog4jVersion = "1.0.0"
+val snakeYamlVersion = "1.33"
 
 plugins {
     kotlin("jvm") version "1.6.20"
     id("org.jetbrains.kotlin.plugin.allopen") version "1.6.20"
-    id("org.springframework.boot") version "2.6.13"
+    id("org.springframework.boot") version "2.6.14"
     id("io.spring.dependency-management") version "1.0.11.RELEASE"
     id("com.github.johnrengelman.shadow") version "7.1.1"
     id("org.jlleitschuh.gradle.ktlint") version "10.2.1"
@@ -43,6 +44,7 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-jersey")
     implementation("org.springframework.boot:spring-boot-starter-logging")
     implementation("org.springframework.boot:spring-boot-starter-web")
+    implementation("org.yaml:snakeyaml:$snakeYamlVersion")
 
     implementation("no.nav.security:token-validation-spring:$tokenValidationSpringSupportVersion")
 
