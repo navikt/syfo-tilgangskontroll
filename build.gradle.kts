@@ -16,7 +16,7 @@ val logbackSyslog4jVersion = "1.0.0"
 plugins {
     kotlin("jvm") version "1.6.20"
     id("org.jetbrains.kotlin.plugin.allopen") version "1.6.20"
-    id("org.springframework.boot") version "2.6.13"
+    id("org.springframework.boot") version "2.6.14"
     id("io.spring.dependency-management") version "1.0.11.RELEASE"
     id("com.github.johnrengelman.shadow") version "7.1.1"
     id("org.jlleitschuh.gradle.ktlint") version "10.2.1"
@@ -38,6 +38,14 @@ dependencies {
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin:$kotlinJacksonVersion")
 
     implementation("org.springframework.boot:spring-boot-starter-actuator")
+    constraints {
+        implementation("org.yaml:snakeyaml") {
+            because("spring-boot-starter-actuator -> https://advisory.checkmarx.net/advisory/vulnerability/CVE-2022-25857/")
+            version {
+                require("1.33")
+            }
+        }
+    }
     implementation("org.springframework.boot:spring-boot-starter-aop")
     implementation("org.springframework.boot:spring-boot-starter-data-redis")
     implementation("org.springframework.boot:spring-boot-starter-jersey")
