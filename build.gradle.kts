@@ -12,6 +12,7 @@ val prometheusVersion = "1.8.5"
 val slf4jVersion = "1.7.36"
 val tokenValidationSpringSupportVersion = "1.3.9"
 val logbackSyslog4jVersion = "1.0.0"
+val snakeYamlVersion = "1.33"
 
 plugins {
     kotlin("jvm") version "1.6.20"
@@ -38,19 +39,12 @@ dependencies {
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin:$kotlinJacksonVersion")
 
     implementation("org.springframework.boot:spring-boot-starter-actuator")
-    constraints {
-        implementation("org.yaml:snakeyaml") {
-            because("spring-boot-starter-actuator -> https://advisory.checkmarx.net/advisory/vulnerability/CVE-2022-25857/")
-            version {
-                require("1.33")
-            }
-        }
-    }
     implementation("org.springframework.boot:spring-boot-starter-aop")
     implementation("org.springframework.boot:spring-boot-starter-data-redis")
     implementation("org.springframework.boot:spring-boot-starter-jersey")
     implementation("org.springframework.boot:spring-boot-starter-logging")
     implementation("org.springframework.boot:spring-boot-starter-web")
+    implementation("org.yaml:snakeyaml:$snakeYamlVersion")
 
     implementation("no.nav.security:token-validation-spring:$tokenValidationSpringSupportVersion")
 
