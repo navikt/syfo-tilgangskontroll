@@ -42,6 +42,9 @@ spec:
         - application: isaktivitetskrav
           namespace: teamsykefravr
           cluster: prod-gcp
+        - application: isbehandlerdialog
+          namespace: teamsykefravr
+          cluster: prod-gcp
         - application: isdialogmelding
           namespace: teamsykefravr
           cluster: prod-gcp
