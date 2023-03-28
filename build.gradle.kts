@@ -8,19 +8,20 @@ version = "1.0.0"
 val apacheHttpClientVersion = "4.5.13"
 val kotlinJacksonVersion = "2.13.2"
 val logbackVersion = "7.1.1"
-val prometheusVersion = "1.8.5"
+val micrometerVersion = "1.10.5"
 val slf4jVersion = "1.7.36"
-val tokenValidationSpringSupportVersion = "1.3.9"
+val tokenValidationSpringSupportVersion = "2.1.3"
+val tokenValidationSpringTestSupportVersion = "2.0.0"
 val logbackSyslog4jVersion = "1.0.0"
 val snakeYamlVersion = "1.33"
 
 plugins {
-    kotlin("jvm") version "1.6.20"
-    id("org.jetbrains.kotlin.plugin.allopen") version "1.6.20"
-    id("org.springframework.boot") version "2.6.14"
-    id("io.spring.dependency-management") version "1.0.11.RELEASE"
-    id("com.github.johnrengelman.shadow") version "7.1.1"
-    id("org.jlleitschuh.gradle.ktlint") version "10.2.1"
+    kotlin("jvm") version "1.7.20"
+    id("org.jetbrains.kotlin.plugin.allopen") version "1.7.20"
+    id("org.springframework.boot") version "2.7.10"
+    id("io.spring.dependency-management") version "1.0.15.RELEASE"
+    id("com.github.johnrengelman.shadow") version "7.1.2"
+    id("org.jlleitschuh.gradle.ktlint") version "10.3.0"
 }
 
 allOpen {
@@ -50,14 +51,14 @@ dependencies {
 
     implementation("org.slf4j:slf4j-api:$slf4jVersion")
     implementation("net.logstash.logback:logstash-logback-encoder:$logbackVersion")
-    implementation("io.micrometer:micrometer-registry-prometheus:$prometheusVersion")
+    implementation("io.micrometer:micrometer-registry-prometheus:$micrometerVersion")
 
     implementation("org.apache.httpcomponents:httpclient:$apacheHttpClientVersion")
 
     implementation("com.papertrailapp:logback-syslog4j:$logbackSyslog4jVersion")
 
     testImplementation("org.springframework.boot:spring-boot-starter-test")
-    testImplementation("no.nav.security:token-validation-test-support:$tokenValidationSpringSupportVersion")
+    testImplementation("no.nav.security:token-validation-test-support:$tokenValidationSpringTestSupportVersion")
 }
 
 tasks {
@@ -76,6 +77,10 @@ tasks {
     }
 
     withType<ShadowJar> {
+        configureEach {
+            append("META-INF/spring/org.springframework.boot.autoconfigure.AutoConfiguration.imports")
+            append("META-INF/spring/org.springframework.boot.actuate.autoconfigure.web.ManagementContextConfiguration.imports")
+        }
         archiveBaseName.set("app")
         archiveClassifier.set("")
         archiveVersion.set("")
