@@ -71,9 +71,6 @@ spec:
           cluster: prod-gcp
         - application: finnfastlege
           namespace: teamsykefravr
-          cluster: prod-fss
-        - application: finnfastlege
-          namespace: teamsykefravr
           cluster: prod-gcp
         - application: syfobehandlendeenhet
           namespace: teamsykefravr
@@ -81,6 +78,9 @@ spec:
         - application: syfomodiaperson
           namespace: teamsykefravr
           cluster: prod-fss
+        - application: syfomodiaperson
+          namespace: teamsykefravr
+          cluster: prod-gcp
         - application: syfooversiktsrv
           namespace: teamsykefravr
           cluster: prod-gcp
