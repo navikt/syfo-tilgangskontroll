@@ -148,7 +148,17 @@ class AccessToRessursViaAzure2ComponentTest {
     }
 
     @Test
-    fun `access to Kode6-personident granted to veileder with Kode6 access`() {
+    fun `access to Kode6-personident granted to veileder with old Kode6 group access`() {
+        mockAdRolle(graphApiConsumerMock, VEILEDER_ID, INNVILG, adRoller.SYFO, adRoller.OLD_KODE6)
+        Mockito.`when`(pdlConsumer.isKode6(ArgumentMatchers.any())).thenReturn(true)
+        val headers: MultiValueMap<String, String> = LinkedMultiValueMap()
+        headers.add(NAV_PERSONIDENT_HEADER, BENGT_KODE6_BRUKER)
+        val response = tilgangController.accessToPersonIdentViaAzure(headers)
+        assertAccessOk(response)
+    }
+
+    @Test
+    fun `access to Kode6-personident granted to veileder with new Kode6 group access`() {
         mockAdRolle(graphApiConsumerMock, VEILEDER_ID, INNVILG, adRoller.SYFO, adRoller.KODE6)
         Mockito.`when`(pdlConsumer.isKode6(ArgumentMatchers.any())).thenReturn(true)
         val headers: MultiValueMap<String, String> = LinkedMultiValueMap()
@@ -158,11 +168,11 @@ class AccessToRessursViaAzure2ComponentTest {
     }
 
     @Test
-    fun `access to Kode6-personident granted for smregistrering and NAVIdent with Kode6 access`() {
+    fun `access to Kode6-personident granted for smregistrering and NAVIdent with old Kode6 group access`() {
         loggUtAlle(oidcRequestContextHolder)
         logInVeilederWithAzure2(oidcRequestContextHolder, smregistreringClientId, VEILEDER_ID)
 
-        mockAdRolle(graphApiConsumerMock, VEILEDER_ID, INNVILG, adRoller.SYFO, adRoller.KODE6)
+        mockAdRolle(graphApiConsumerMock, VEILEDER_ID, INNVILG, adRoller.SYFO, adRoller.OLD_KODE6)
         Mockito.`when`(pdlConsumer.isKode6(ArgumentMatchers.any())).thenReturn(true)
         val headers: MultiValueMap<String, String> = LinkedMultiValueMap()
         headers.add(NAV_PERSONIDENT_HEADER, BENGT_KODE6_BRUKER)
@@ -181,7 +191,16 @@ class AccessToRessursViaAzure2ComponentTest {
     }
 
     @Test
-    fun `access to Kode7-personident granted`() {
+    fun `access to Kode7-personident granted with old KODE7 group`() {
+        mockAdRolle(graphApiConsumerMock, VEILEDER_ID, INNVILG, adRoller.SYFO, adRoller.OLD_KODE7)
+        val headers: MultiValueMap<String, String> = LinkedMultiValueMap()
+        headers.add(NAV_PERSONIDENT_HEADER, BIRTE_KODE7_BRUKER)
+        val response = tilgangController.accessToPersonIdentViaAzure(headers)
+        assertAccessOk(response)
+    }
+
+    @Test
+    fun `access to Kode7-personident granted with new KODE7 group`() {
         mockAdRolle(graphApiConsumerMock, VEILEDER_ID, INNVILG, adRoller.SYFO, adRoller.KODE7)
         val headers: MultiValueMap<String, String> = LinkedMultiValueMap()
         headers.add(NAV_PERSONIDENT_HEADER, BIRTE_KODE7_BRUKER)
@@ -199,7 +218,16 @@ class AccessToRessursViaAzure2ComponentTest {
     }
 
     @Test
-    fun `access to EgenAnsatt-personident granted`() {
+    fun `access to EgenAnsatt-personident granted with old egenansatt group`() {
+        mockAdRolle(graphApiConsumerMock, VEILEDER_ID, INNVILG, adRoller.SYFO, adRoller.OLD_EGEN_ANSATT)
+        val headers: MultiValueMap<String, String> = LinkedMultiValueMap()
+        headers.add(NAV_PERSONIDENT_HEADER, ERIK_EGENANSATT_BRUKER)
+        val response = tilgangController.accessToPersonIdentViaAzure(headers)
+        assertAccessOk(response)
+    }
+
+    @Test
+    fun `access to EgenAnsatt-personident granted with new egenansatt group`() {
         mockAdRolle(graphApiConsumerMock, VEILEDER_ID, INNVILG, adRoller.SYFO, adRoller.EGEN_ANSATT)
         val headers: MultiValueMap<String, String> = LinkedMultiValueMap()
         headers.add(NAV_PERSONIDENT_HEADER, ERIK_EGENANSATT_BRUKER)
