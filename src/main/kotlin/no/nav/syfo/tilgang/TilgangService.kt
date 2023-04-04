@@ -18,7 +18,6 @@ import org.springframework.stereotype.Service
 class TilgangService @Autowired constructor(
     private val adRoller: AdRoller,
     private val axsysConsumer: AxsysConsumer,
-    private val kode6TilgangService: Kode6TilgangService,
     private val papirsykmeldingTilgangService: PapirsykmeldingTilgangService,
     private val graphApiConsumer: GraphApiConsumer,
     private val skjermedePersonerPipConsumer: SkjermedePersonerPipConsumer,
@@ -55,12 +54,7 @@ class TilgangService @Autowired constructor(
         }
         val personIdentNumber = PersonIdentNumber(brukerFnr)
         val pdlPerson = pdlConsumer.person(personIdentNumber.value)
-        if (
-            pdlConsumer.isKode6(pdlPerson) &&
-            !kode6TilgangService.harTilgang(
-                veilederId = veilederId
-            )
-        ) {
+        if (pdlConsumer.isKode6(pdlPerson) && !harTilgangTilKode6(veilederId)) {
             return Tilgang(
                 harTilgang = false,
             )
@@ -125,6 +119,11 @@ class TilgangService @Autowired constructor(
 
     private fun harTilgangTilSykefravaersoppfoelging(veilederId: String): Boolean {
         return graphApiConsumer.hasAccess(veilederId, adRoller.SYFO)
+    }
+
+    @Timed("syfotilgangskontroll_kode6TilgangSevice_harTilgang", histogram = true)
+    fun harTilgangTilKode6(veilederId: String): Boolean {
+        return graphApiConsumer.hasAccess(veilederId, adRoller.OLD_KODE6) || graphApiConsumer.hasAccess(veilederId, adRoller.KODE6)
     }
 
     @Timed("syfotilgangskontroll_harTilgangTilKode7", histogram = true)
