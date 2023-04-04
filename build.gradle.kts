@@ -5,7 +5,7 @@ group = "no.nav.syfo"
 version = "1.0.0"
 
 val apacheHttpClientVersion = "4.5.13"
-val kotlinJacksonVersion = "2.13.2"
+val kotlinJacksonVersion = "2.14.2"
 val logbackVersion = "7.1.1"
 val micrometerVersion = "1.10.5"
 val slf4jVersion = "1.7.36"
