@@ -1,6 +1,5 @@
 import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
 import com.github.jengelman.gradle.plugins.shadow.transformers.PropertiesFileTransformer
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 group = "no.nav.syfo"
 version = "1.0.0"
@@ -16,7 +15,7 @@ val logbackSyslog4jVersion = "1.0.0"
 val snakeYamlVersion = "1.33"
 
 plugins {
-    kotlin("jvm") version "1.7.20"
+    kotlin("jvm") version "1.8.20"
     id("org.jetbrains.kotlin.plugin.allopen") version "1.7.20"
     id("org.springframework.boot") version "2.7.10"
     id("io.spring.dependency-management") version "1.0.15.RELEASE"
@@ -61,6 +60,10 @@ dependencies {
     testImplementation("no.nav.security:token-validation-test-support:$tokenValidationSpringTestSupportVersion")
 }
 
+kotlin {
+    jvmToolchain(17)
+}
+
 tasks {
     withType<Jar> {
         manifest.attributes["Main-Class"] = "no.nav.syfo.ApplicationKt"
@@ -89,9 +92,5 @@ tasks {
             mergeStrategy = "append"
         }
         mergeServiceFiles()
-    }
-
-    withType<KotlinCompile> {
-        kotlinOptions.jvmTarget = "17"
     }
 }
