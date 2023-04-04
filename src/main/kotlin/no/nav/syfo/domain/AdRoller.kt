@@ -11,9 +11,12 @@ class AdRolle(
 
 @Component
 class AdRoller(
+    @Value("\${old.role.kode6.id}") val oldKode6Id: String,
     @Value("\${role.kode6.id}") val kode6Id: String,
+    @Value("\${old.role.kode7.id}") val oldKode7Id: String,
     @Value("\${role.kode7.id}") val kode7Id: String,
     @Value("\${role.syfo.id}") val syfoId: String,
+    @Value("\${old.role.skjerming.id}") val oldSkjermingId: String,
     @Value("\${role.skjerming.id}") val skjermingId: String,
     @Value("\${role.nasjonal.id}") val nasjonalId: String,
     @Value("\${role.utvidbar.nasjonal.id}") val utvidbarNasjonalId: String,
@@ -21,25 +24,40 @@ class AdRoller(
     @Value("\${role.utvidbar.regional.id}") val utvidvarRegionalId: String,
     @Value("\${role.papirsykmelding.id}") val papirsykmeldingId: String,
 ) {
+    val OLD_KODE6 = AdRolle(
+        name = "KODE6",
+        id = oldKode6Id,
+        rolle = "0000-GA-GOSYS_KODE6",
+    )
     val KODE6 = AdRolle(
         name = "KODE6",
         id = kode6Id,
-        rolle = "0000-GA-GOSYS_KODE6",
+        rolle = "0000-GA-Strengt_Fortrolig_Adresse",
+    )
+    val OLD_KODE7 = AdRolle(
+        name = "KODE7",
+        id = oldKode7Id,
+        rolle = "0000-GA-GOSYS_KODE7"
     )
     val KODE7 = AdRolle(
         name = "KODE7",
         id = kode7Id,
-        rolle = "0000-GA-GOSYS_KODE7"
+        rolle = "0000-GA-Fortrolig_Adresse"
     )
     val SYFO = AdRolle(
         name = "SYFO",
         id = syfoId,
         rolle = "0000-GA-SYFO-SENSITIV",
     )
+    val OLD_EGEN_ANSATT = AdRolle(
+        name = "EGEN_ANSATT",
+        id = oldSkjermingId,
+        rolle = "0000-GA-GOSYS_UTVIDET",
+    )
     val EGEN_ANSATT = AdRolle(
         name = "EGEN_ANSATT",
         id = skjermingId,
-        rolle = "0000-GA-GOSYS_UTVIDET",
+        rolle = "0000-GA-Egne_ansatte",
     )
     val NASJONAL = AdRolle(
         name = "NASJONAL",
@@ -69,9 +87,12 @@ class AdRoller(
 
     fun getIdList(): List<String> {
         return listOf(
+            OLD_KODE6.id,
             KODE6.id,
+            OLD_KODE7.id,
             KODE7.id,
             SYFO.id,
+            OLD_EGEN_ANSATT.id,
             EGEN_ANSATT.id,
             NASJONAL.id,
             UTVIDBAR_TIL_NASJONAL.id,

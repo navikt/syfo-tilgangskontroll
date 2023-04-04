@@ -180,7 +180,27 @@ class PapirsykmeldingTilgangTest {
     }
 
     @Test
-    fun `access to Kode6-personident with Papirsykmelding granted for Smregistrering and NAVIdent with rolle SYFO, PAPIRSYKMELDING and KODE7`() {
+    fun `access to Kode6-personident with Papirsykmelding granted for Smregistrering and NAVIdent with rolle SYFO, PAPIRSYKMELDING and old KODE6`() {
+        loggUtAlle(oidcRequestContextHolder)
+        logInVeilederWithAzure2(oidcRequestContextHolder, smregistreringClientId, VEILEDER_ID)
+
+        mockAdRolle(
+            graphApiConsumer = graphApiConsumerMock,
+            veilederIdent = VEILEDER_ID,
+            innvilget = INNVILG,
+            adRolleList = arrayOf(adRoller.SYFO, adRoller.PAPIRSYKMELDING, adRoller.OLD_KODE6),
+        )
+        Mockito.`when`(pdlConsumer.isKode6(ArgumentMatchers.any())).thenReturn(true)
+
+        val headers: MultiValueMap<String, String> = LinkedMultiValueMap()
+        headers.add(NAV_PERSONIDENT_HEADER, BENGT_KODE6_BRUKER)
+
+        val response = tilgangController.accessToPersonIdentWithPapirsykmelding(headers)
+        assertAccessOk(response)
+    }
+
+    @Test
+    fun `access to Kode6-personident with Papirsykmelding granted for Smregistrering and NAVIdent with rolle SYFO, PAPIRSYKMELDING and new KODE6`() {
         loggUtAlle(oidcRequestContextHolder)
         logInVeilederWithAzure2(oidcRequestContextHolder, smregistreringClientId, VEILEDER_ID)
 
@@ -200,7 +220,7 @@ class PapirsykmeldingTilgangTest {
     }
 
     @Test
-    fun `access to Kode7-personident with Papirsykmelding denied for Smregistrering and NAVIdent without rolle KODE7`() {
+    fun `access to Kode7-personident with Papirsykmelding denied for Smregistrering and NAVIdent without either old or new rolle KODE7`() {
         mockAdRolle(
             graphApiConsumer = graphApiConsumerMock,
             veilederIdent = VEILEDER_ID,
@@ -217,7 +237,23 @@ class PapirsykmeldingTilgangTest {
     }
 
     @Test
-    fun `access to Kode7-personident with Papirsykmelding granted for Smregistrering and NAVIdent with rolle SYFO, PAPIRSYKMELDING and KODE7`() {
+    fun `access to Kode7-personident with Papirsykmelding granted for Smregistrering and NAVIdent with rolle SYFO, PAPIRSYKMELDING and old KODE7`() {
+        mockAdRolle(
+            graphApiConsumer = graphApiConsumerMock,
+            veilederIdent = VEILEDER_ID,
+            innvilget = INNVILG,
+            adRolleList = arrayOf(adRoller.SYFO, adRoller.PAPIRSYKMELDING, adRoller.OLD_KODE7),
+        )
+
+        val headers: MultiValueMap<String, String> = LinkedMultiValueMap()
+        headers.add(NAV_PERSONIDENT_HEADER, BIRTE_KODE7_BRUKER)
+
+        val response = tilgangController.accessToPersonIdentWithPapirsykmelding(headers)
+        assertAccessOk(response)
+    }
+
+    @Test
+    fun `access to Kode7-personident with Papirsykmelding granted for Smregistrering and NAVIdent with rolle SYFO, PAPIRSYKMELDING and new KODE7`() {
         mockAdRolle(
             graphApiConsumer = graphApiConsumerMock,
             veilederIdent = VEILEDER_ID,
@@ -233,7 +269,7 @@ class PapirsykmeldingTilgangTest {
     }
 
     @Test
-    fun `access to EgenAnsatt-personident with Papirsykmelding denied for Smregistrering and NAVIdent without rolle EGEN_ANSATT`() {
+    fun `access to EgenAnsatt-personident with Papirsykmelding denied for Smregistrering and NAVIdent without either old or new rolle EGEN_ANSATT`() {
         mockAdRolle(
             graphApiConsumer = graphApiConsumerMock,
             veilederIdent = VEILEDER_ID,
@@ -249,7 +285,23 @@ class PapirsykmeldingTilgangTest {
     }
 
     @Test
-    fun `access to EgenAnsatt-personident with Papirsykmelding granted for Smregistrering and NAVIdent with rolle SYFO, PAPIRSYKMELDING and EGEN_ANSATT`() {
+    fun `access to EgenAnsatt-personident with Papirsykmelding granted for Smregistrering and NAVIdent with rolle SYFO, PAPIRSYKMELDING and old EGEN_ANSATT`() {
+        mockAdRolle(
+            graphApiConsumer = graphApiConsumerMock,
+            veilederIdent = VEILEDER_ID,
+            innvilget = INNVILG,
+            adRolleList = arrayOf(adRoller.SYFO, adRoller.PAPIRSYKMELDING, adRoller.OLD_EGEN_ANSATT),
+        )
+
+        val headers: MultiValueMap<String, String> = LinkedMultiValueMap()
+        headers.add(NAV_PERSONIDENT_HEADER, ERIK_EGENANSATT_BRUKER)
+
+        val response = tilgangController.accessToPersonIdentWithPapirsykmelding(headers)
+        assertAccessOk(response)
+    }
+
+    @Test
+    fun `access to EgenAnsatt-personident with Papirsykmelding granted for Smregistrering and NAVIdent with rolle SYFO, PAPIRSYKMELDING and new EGEN_ANSATT`() {
         mockAdRolle(
             graphApiConsumer = graphApiConsumerMock,
             veilederIdent = VEILEDER_ID,

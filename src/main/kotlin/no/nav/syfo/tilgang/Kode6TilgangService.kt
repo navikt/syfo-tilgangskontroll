@@ -15,6 +15,6 @@ class Kode6TilgangService(
     fun harTilgang(
         veilederId: String
     ): Boolean {
-        return graphApiConsumer.hasAccess(veilederId, adRoller.KODE6)
+        return graphApiConsumer.hasAccess(veilederId, adRoller.OLD_KODE6) || graphApiConsumer.hasAccess(veilederId, adRoller.KODE6)
     }
 }
