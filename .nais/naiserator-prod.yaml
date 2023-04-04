@@ -147,7 +147,7 @@ spec:
     - name: OLD_ROLE_KODE7_ID
       value: "cd001e5e-ce26-44aa-b79e-fca780a2414b" # 0000-GA-GOSYS_KODE7
     - name: ROLE_KODE7_ID
-      value: "9ec6487d-f37a-4aad-a027-cd221c1ac32b	" # 0000-GA-Fortrolig_Adresse
+      value: "9ec6487d-f37a-4aad-a027-cd221c1ac32b" # 0000-GA-Fortrolig_Adresse
     - name: ROLE_SYFO_ID
       value: "100e88eb-79af-4136-8bfe-f79b32021f43" # 0000-GA-SYFO-SENSITIV
     - name: OLD_ROLE_SKJERMING_ID
