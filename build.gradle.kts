@@ -4,22 +4,22 @@ import com.github.jengelman.gradle.plugins.shadow.transformers.PropertiesFileTra
 group = "no.nav.syfo"
 version = "1.0.0"
 
-val apacheHttpClientVersion = "4.5.13"
-val kotlinJacksonVersion = "2.13.2"
-val logbackVersion = "7.1.1"
+val apacheHttpClientVersion = "4.5.14"
+val kotlinJacksonVersion = "2.14.2"
+val logbackVersion = "7.3"
 val micrometerVersion = "1.10.5"
 val slf4jVersion = "1.7.36"
 val tokenValidationSpringSupportVersion = "2.1.3"
-val tokenValidationSpringTestSupportVersion = "2.0.0"
+val tokenValidationSpringTestSupportVersion = "2.0.5"
 val logbackSyslog4jVersion = "1.0.0"
 val snakeYamlVersion = "1.33"
 
 plugins {
     kotlin("jvm") version "1.8.20"
-    id("org.jetbrains.kotlin.plugin.allopen") version "1.7.20"
+    id("org.jetbrains.kotlin.plugin.allopen") version "1.8.20"
     id("org.springframework.boot") version "2.7.10"
-    id("io.spring.dependency-management") version "1.0.15.RELEASE"
-    id("com.github.johnrengelman.shadow") version "7.1.2"
+    id("io.spring.dependency-management") version "1.1.0"
+    id("com.github.johnrengelman.shadow") version "8.1.1"
     id("org.jlleitschuh.gradle.ktlint") version "10.3.0"
 }
 
