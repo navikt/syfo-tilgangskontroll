@@ -20,7 +20,7 @@ plugins {
     id("org.springframework.boot") version "2.7.10"
     id("io.spring.dependency-management") version "1.1.0"
     id("com.github.johnrengelman.shadow") version "8.1.1"
-    id("org.jlleitschuh.gradle.ktlint") version "10.3.0"
+    id("org.jlleitschuh.gradle.ktlint") version "11.3.1"
 }
 
 allOpen {
