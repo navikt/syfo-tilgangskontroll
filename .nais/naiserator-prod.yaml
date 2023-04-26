@@ -84,6 +84,9 @@ spec:
         - application: syfoperson
           namespace: teamsykefravr
           cluster: prod-gcp
+        - application: esyfovarsel
+          namespace: team-esyfo
+          cluster: prod-gcp
         - application: syfomotebehov
           namespace: team-esyfo
           cluster: prod-fss
