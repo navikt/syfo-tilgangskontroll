@@ -12,7 +12,7 @@ val slf4jVersion = "1.7.36"
 val tokenValidationSpringSupportVersion = "2.1.3"
 val tokenValidationSpringTestSupportVersion = "2.0.5"
 val logbackSyslog4jVersion = "1.0.0"
-val snakeYamlVersion = "1.33"
+val snakeYamlVersion = "2.0"
 
 plugins {
     kotlin("jvm") version "1.8.21"
