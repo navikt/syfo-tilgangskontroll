@@ -20,8 +20,10 @@ class Metric @Inject constructor(
         registry.counter(
             addPrefix("httpstatus"),
             Tags.of(
-                "type", "info",
-                "kode", kode.toString()
+                "type",
+                "info",
+                "kode",
+                kode.toString()
             )
         ).increment()
     }

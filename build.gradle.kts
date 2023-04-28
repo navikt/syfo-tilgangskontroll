@@ -5,9 +5,9 @@ group = "no.nav.syfo"
 version = "1.0.0"
 
 val apacheHttpClientVersion = "4.5.14"
-val kotlinJacksonVersion = "2.14.2"
+val kotlinJacksonVersion = "2.15.0"
 val logbackVersion = "7.3"
-val micrometerVersion = "1.10.5"
+val micrometerVersion = "1.10.6"
 val slf4jVersion = "1.7.36"
 val tokenValidationSpringSupportVersion = "2.1.3"
 val tokenValidationSpringTestSupportVersion = "2.0.5"
@@ -15,12 +15,12 @@ val logbackSyslog4jVersion = "1.0.0"
 val snakeYamlVersion = "1.33"
 
 plugins {
-    kotlin("jvm") version "1.8.20"
-    id("org.jetbrains.kotlin.plugin.allopen") version "1.8.20"
+    kotlin("jvm") version "1.8.21"
+    id("org.jetbrains.kotlin.plugin.allopen") version "1.8.21"
     id("org.springframework.boot") version "2.7.10"
     id("io.spring.dependency-management") version "1.1.0"
     id("com.github.johnrengelman.shadow") version "8.1.1"
-    id("org.jlleitschuh.gradle.ktlint") version "10.3.0"
+    id("org.jlleitschuh.gradle.ktlint") version "11.3.2"
 }
 
 allOpen {

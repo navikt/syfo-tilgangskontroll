@@ -115,7 +115,6 @@ class TilgangController @Autowired constructor(
     }
 
     private fun trySjekkTilgangTilBruker(veilederId: String, fnr: String): Boolean {
-
         return try {
             val harTilgang = tilgangService.sjekkTilgangTilBruker(veilederId, fnr).harTilgang
             val appName = apiConsumerAccessService.getAuthorizedAppNameFromClientId(getConsumerClientId(contextHolder))
