@@ -26,12 +26,7 @@ class CacheConfig {
             .defaultCacheConfig()
             .entryTtl(Duration.ofHours(1L))
 
-        val shortPDLConfig = RedisCacheConfiguration
-            .defaultCacheConfig()
-            .disableCachingNullValues()
-            .entryTtl(Duration.ofHours(1L))
-
-        val longPDLConfig = RedisCacheConfiguration
+        val pdlConfig = RedisCacheConfiguration
             .defaultCacheConfig()
             .disableCachingNullValues()
             .entryTtl(Duration.ofHours(12L))
@@ -47,8 +42,8 @@ class CacheConfig {
         cacheConfigurations[CACHENAME_GEOGRAFISK_TILHORIGHET_ENHET] = defaultConfig
         cacheConfigurations[CACHENAME_VEILEDER_ENHETER] = defaultConfig
         cacheConfigurations[CACHENAME_VEILEDER_GRAPHAPI_ROLE] = defaultConfig
-        cacheConfigurations[CACHENAME_PDL_PERSON] = shortPDLConfig
-        cacheConfigurations[CACHENAME_PDL_GEOGRAFISK_TILKNYTNING] = longPDLConfig
+        cacheConfigurations[CACHENAME_PDL_PERSON] = pdlConfig
+        cacheConfigurations[CACHENAME_PDL_GEOGRAFISK_TILKNYTNING] = pdlConfig
 
         cacheConfigurations[CACHENAME_TOKENS] = shortConfig
 
