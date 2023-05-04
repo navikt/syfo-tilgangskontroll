@@ -143,6 +143,10 @@ spec:
       value: "prod-gcp.teamsykefravr.syfobehandlendeenhet"
     - name: SYFOBEHANDLENDEENHET_URL
       value: "http://syfobehandlendeenhet"
+    - name: SKJERMEDE_PERSONER_CLIENT_ID
+      value: "prod-gcp.nom.skjermede-personer-pip"
+    - name: SKJERMEDE_PERSONER_URL
+      value: "http://skjermede-personer-pip.nom"
 
     - name: OLD_ROLE_KODE6_ID
       value: "c3c01903-38b8-4cf5-b551-65cd3479dea4" # 0000-GA-GOSYS_KODE6
