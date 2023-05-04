@@ -23,7 +23,11 @@ spec:
       memory: 256Mi
   service:
     port: 6379
-
+  accessPolicy:
+    inbound:
+      rules:
+        - application: syfo-tilgangskontroll
+        - application: syfo-tilgangskontroll-redisexporter
 ---
 apiVersion: "nais.io/v1alpha1"
 kind: "Application"
@@ -54,3 +58,7 @@ spec:
       value: syfo-tilgangskontroll-redis:6379
     - name: REDIS_EXPORTER_LOG_FORMAT
       value: json
+  accessPolicy:
+    inbound:
+      rules:
+        - application: syfo-tilgangskontroll-redis

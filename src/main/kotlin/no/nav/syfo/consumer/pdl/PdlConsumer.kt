@@ -18,7 +18,7 @@ import org.springframework.web.client.*
 class PdlConsumer(
     private val metric: Metric,
     private val azureAdTokenConsumer: AzureAdTokenConsumer,
-    @Qualifier("restTemplateProxy") private val restTemplateProxy: RestTemplate,
+    @Qualifier("default") private val restTemplate: RestTemplate,
     @Value("\${pdl.url}") private val pdlUrl: String,
     @Value("\${pdl.client.id}") private val pdlClientId: String,
 ) {
@@ -44,7 +44,7 @@ class PdlConsumer(
             createRequestHeaders()
         )
         try {
-            val pdlPerson = restTemplateProxy.exchange(
+            val pdlPerson = restTemplate.exchange(
                 pdlUrl,
                 HttpMethod.POST,
                 entity,
@@ -94,7 +94,7 @@ class PdlConsumer(
             createRequestHeaders()
         )
         try {
-            val pdlPerson = restTemplateProxy.exchange(
+            val pdlPerson = restTemplate.exchange(
                 pdlUrl,
                 HttpMethod.POST,
                 entity,

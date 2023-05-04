@@ -19,7 +19,7 @@ class BehandlendeEnhetConsumer(
     @Value("\${syfobehandlendeenhet.url}") private val baseUrl: String,
     @Value("\${syfobehandlendeenhet.client.id}") private val syfotilgangskontrollClientId: String,
     private val metric: Metric,
-    @Qualifier("restTemplateProxy") private val template: RestTemplate
+    @Qualifier("default") private val template: RestTemplate
 ) {
     private val behandlendeEnhetPersonIdentUrl = "$baseUrl$SYSTEM_V2_PERSONIDENT_PATH"
 

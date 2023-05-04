@@ -6,7 +6,7 @@ metadata:
   labels:
     team: teamsykefravr
 spec:
-  image: {{ image }}
+  image: europe-north1-docker.pkg.dev/nais-management-233d/teamsykefravr/syfo-tilgangskontroll:2023.05.04-08.53-6ee5ff8
   port: 8080
   liveness:
     path: /syfo-tilgangskontroll/internal/isAlive
@@ -20,7 +20,7 @@ spec:
     timeout: 1
   resources:
     limits:
-      cpu: 3000m
+      cpu: 2000m
       memory: 2048Mi
     requests:
       cpu: 1000m
@@ -33,9 +33,7 @@ spec:
     enabled: true
     path: /syfo-tilgangskontroll/internal/prometheus
   ingresses:
-    - "https://syfo-tilgangskontroll.nais.preprod.local"
-    - "https://syfo-tilgangskontroll.dev-fss-pub.nais.io"
-    - "https://syfo-tilgangskontroll.dev.intern.nav.no"
+    - "https://syfo-tilgangskontroll.intern.dev.nav.no"
   accessPolicy:
     inbound:
       rules:
@@ -111,6 +109,16 @@ spec:
         - application: syk-dig-backend
           namespace: teamsykmelding
           cluster: dev-gcp
+    outbound:
+      external:
+        - host: "https://axsys.dev-fss-pub.nais.io"
+        - host: "https://norg2.dev-fss-pub.nais.io"
+        - host: "https://graph.microsoft.com"
+        - host: "pdl-api.dev-fss-pub.nais.io"
+      rules:
+        - application: syfobehandlendeenhet
+        - application: syfo-tilgangskontroll-redis
+
   azure:
     application:
       allowAllUsers: true
@@ -119,26 +127,21 @@ spec:
       claims:
         extra:
           - "NAVident"
-  vault:
-    enabled: true
-    paths:
-      - kvPath: /kv/preprod/fss/syfo-tilgangskontroll/default
-        mountPath: /var/run/secrets/nais.io/vault
   env:
     - name: AXSYS_URL
-      value: "https://axsys.nais.preprod.local"
+      value: "https://axsys.dev-fss-pub.nais.io"
     - name: GRAPHAPI_URL
       value: "https://graph.microsoft.com"
     - name: NORG2_URL
-      value: https://app-q1.adeo.no/norg2
+      value: "https://norg2.dev-fss-pub.nais.io"
     - name: PDL_CLIENT_ID
       value: "dev-fss.pdl.pdl-api"
     - name: PDL_URL
-      value: "https://pdl-api.dev.intern.nav.no/graphql"
+      value: "https://pdl-api.dev-fss-pub.nais.io/graphql"
     - name: SYFOBEHANDLENDEENHET_CLIENT_ID
       value: "dev-gcp.teamsykefravr.syfobehandlendeenhet"
     - name: SYFOBEHANDLENDEENHET_URL
-      value: "https://syfobehandlendeenhet.dev.intern.nav.no"
+      value: "http://syfobehandlendeenhet"
 
     - name: OLD_ROLE_KODE6_ID
       value: "87ea7c87-08a2-43bc-83d6-0bfeee92185d" # 0000-GA-GOSYS_KODE6
