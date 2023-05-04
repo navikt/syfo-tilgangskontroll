@@ -19,7 +19,7 @@ import java.util.concurrent.ConcurrentHashMap
 
 @Component
 class AzureAdTokenConsumer @Autowired constructor(
-    @Qualifier("restTemplateProxy") private val restTemplateProxy: RestTemplate,
+    private val restTemplate: RestTemplate,
     @Value("\${azure.app.client.id}") private val azureAppClientId: String,
     @Value("\${azure.app.client.secret}") private val azureAppClientSecret: String,
     @Value("\${azure.openid.config.token.endpoint}") private val azureTokenEndpoint: String,
@@ -85,7 +85,7 @@ class AzureAdTokenConsumer @Autowired constructor(
     fun getToken(
         requestEntity: HttpEntity<MultiValueMap<String, String>>,
     ): AzureAdToken {
-        val response = restTemplateProxy.exchange(
+        val response = restTemplate.exchange(
             azureTokenEndpoint,
             HttpMethod.POST,
             requestEntity,

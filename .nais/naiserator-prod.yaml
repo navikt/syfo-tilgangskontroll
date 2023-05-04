@@ -20,7 +20,7 @@ spec:
     timeout: 1
   resources:
     limits:
-      cpu: 3000m
+      cpu: 2000m
       memory: 2048Mi
     requests:
       cpu: 1000m
@@ -33,8 +33,6 @@ spec:
     enabled: true
     path: /syfo-tilgangskontroll/internal/prometheus
   ingresses:
-    - "https://syfo-tilgangskontroll.nais.adeo.no"
-    - "https://syfo-tilgangskontroll.prod-fss-pub.nais.io"
     - "https://syfo-tilgangskontroll.intern.nav.no"
   accessPolicy:
     inbound:
@@ -111,6 +109,17 @@ spec:
         - application: syk-dig-backend
           namespace: teamsykmelding
           cluster: prod-gcp
+    outbound:
+      external:
+        - host: "axsys.prod-fss-pub.nais.io"
+        - host: "norg2.prod-fss-pub.nais.io"
+        - host: "graph.microsoft.com"
+        - host: "pdl-api.prod-fss-pub.nais.io"
+      rules:
+        - application: syfobehandlendeenhet
+        - application: syfo-tilgangskontroll-redis
+        - application: skjermede-personer-pip
+          namespace: nom
   azure:
     application:
       allowAllUsers: true
@@ -119,26 +128,25 @@ spec:
       claims:
         extra:
           - "NAVident"
-  vault:
-    enabled: true
-    paths:
-      - kvPath: /kv/prod/fss/syfo-tilgangskontroll/default
-        mountPath: /var/run/secrets/nais.io/vault
   env:
     - name: AXSYS_URL
-      value: "https://axsys.nais.adeo.no"
+      value: "https://axsys.prod-fss-pub.nais.io"
     - name: GRAPHAPI_URL
       value: "https://graph.microsoft.com"
     - name: NORG2_URL
-      value: https://app.adeo.no/norg2
+      value: "https://norg2.prod-fss-pub.nais.io"
     - name: PDL_CLIENT_ID
       value: "prod-fss.pdl.pdl-api"
     - name: PDL_URL
-      value: "https://pdl-api.intern.nav.no/graphql"
+      value: "https://pdl-api.prod-fss-pub.nais.io/graphql"
     - name: SYFOBEHANDLENDEENHET_CLIENT_ID
       value: "prod-gcp.teamsykefravr.syfobehandlendeenhet"
     - name: SYFOBEHANDLENDEENHET_URL
-      value: "https://syfobehandlendeenhet.intern.nav.no"
+      value: "http://syfobehandlendeenhet"
+    - name: SKJERMEDE_PERSONER_CLIENT_ID
+      value: "prod-gcp.nom.skjermede-personer-pip"
+    - name: SKJERMEDE_PERSONER_URL
+      value: "http://skjermede-personer-pip.nom"
 
     - name: OLD_ROLE_KODE6_ID
       value: "c3c01903-38b8-4cf5-b551-65cd3479dea4" # 0000-GA-GOSYS_KODE6

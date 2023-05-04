@@ -1,9 +1,11 @@
 package no.nav.syfo.consumer.skjermedepersoner
 
 import no.nav.syfo.cache.CacheConfig
+import no.nav.syfo.consumer.azuread.AzureAdTokenConsumer
 import no.nav.syfo.metric.Metric
 import no.nav.syfo.util.*
 import org.slf4j.LoggerFactory
+import org.springframework.beans.factory.annotation.Value
 import org.springframework.cache.annotation.Cacheable
 import org.springframework.http.*
 import org.springframework.stereotype.Service
@@ -15,6 +17,9 @@ import javax.inject.Inject
 class SkjermedePersonerPipConsumer @Inject constructor(
     private val metric: Metric,
     private val restTemplate: RestTemplate,
+    private val azureAdTokenConsumer: AzureAdTokenConsumer,
+    @Value("\${skjermede-personer.url}") private val skjermedePersonerUrl: String,
+    @Value("\${skjermede-personer.client.id}") private val skjermedePersonerClientId: String,
 ) {
     @Cacheable(
         cacheNames = [CacheConfig.CACHENAME_EGENANSATT],
@@ -23,10 +28,14 @@ class SkjermedePersonerPipConsumer @Inject constructor(
     )
     fun erSkjermet(personIdent: String): Boolean {
         try {
+            val oboToken = azureAdTokenConsumer.getOboToken(
+                scopeClientId = skjermedePersonerClientId,
+            )
+
             val response = restTemplate.exchange(
                 getSkjermedePersonerPipUrl(personIdent),
                 HttpMethod.GET,
-                entity(),
+                entity(oboToken),
                 Boolean::class.java
             )
             val skjermedePersonerResponse = response.body!!
@@ -42,11 +51,12 @@ class SkjermedePersonerPipConsumer @Inject constructor(
     }
 
     private fun getSkjermedePersonerPipUrl(personIdent: String): String {
-        return "http://skjermede-personer-pip.nom.svc.nais.local/skjermet?personident=$personIdent"
+        return "$skjermedePersonerUrl/skjermet?personident=$personIdent"
     }
 
-    private fun entity(): HttpEntity<String> {
+    private fun entity(oboToken: String): HttpEntity<String> {
         val headers = HttpHeaders()
+        headers.setBearerAuth(oboToken)
         headers.contentType = MediaType.APPLICATION_JSON
         headers[NAV_CONSUMER_ID_HEADER] = APP_CONSUMER_ID
         headers[NAV_CALL_ID_HEADER] = createCallId()

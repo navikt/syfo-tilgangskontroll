@@ -6,7 +6,7 @@ jobs:
   build-and-deploy:
     uses: navikt/isworkflows/.github/workflows/kotlin-build-deploy.yml@master
     with:
-      dev-cluster: dev-fss
-      prod-cluster: prod-fss
+      dev-cluster: dev-gcp
+      prod-cluster: prod-gcp
       distroless: false
     secrets: inherit

@@ -5,7 +5,6 @@ import no.nav.syfo.consumer.azuread.AzureAdTokenConsumer
 import no.nav.syfo.metric.Metric
 import no.nav.syfo.util.*
 import org.slf4j.LoggerFactory
-import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.cache.annotation.Cacheable
 import org.springframework.http.*
@@ -19,7 +18,7 @@ class BehandlendeEnhetConsumer(
     @Value("\${syfobehandlendeenhet.url}") private val baseUrl: String,
     @Value("\${syfobehandlendeenhet.client.id}") private val syfotilgangskontrollClientId: String,
     private val metric: Metric,
-    @Qualifier("restTemplateProxy") private val template: RestTemplate
+    private val template: RestTemplate
 ) {
     private val behandlendeEnhetPersonIdentUrl = "$baseUrl$SYSTEM_V2_PERSONIDENT_PATH"
 

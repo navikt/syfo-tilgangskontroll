@@ -7,7 +7,6 @@ import no.nav.syfo.metric.Metric
 import no.nav.syfo.util.ALLE_TEMA_HEADERVERDI
 import no.nav.syfo.util.TEMA_HEADER
 import org.slf4j.LoggerFactory
-import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.cache.annotation.Cacheable
 import org.springframework.http.*
@@ -18,7 +17,7 @@ import org.springframework.web.client.*
 class PdlConsumer(
     private val metric: Metric,
     private val azureAdTokenConsumer: AzureAdTokenConsumer,
-    @Qualifier("restTemplateProxy") private val restTemplateProxy: RestTemplate,
+    private val restTemplate: RestTemplate,
     @Value("\${pdl.url}") private val pdlUrl: String,
     @Value("\${pdl.client.id}") private val pdlClientId: String,
 ) {
@@ -44,7 +43,7 @@ class PdlConsumer(
             createRequestHeaders()
         )
         try {
-            val pdlPerson = restTemplateProxy.exchange(
+            val pdlPerson = restTemplate.exchange(
                 pdlUrl,
                 HttpMethod.POST,
                 entity,
@@ -94,7 +93,7 @@ class PdlConsumer(
             createRequestHeaders()
         )
         try {
-            val pdlPerson = restTemplateProxy.exchange(
+            val pdlPerson = restTemplate.exchange(
                 pdlUrl,
                 HttpMethod.POST,
                 entity,
