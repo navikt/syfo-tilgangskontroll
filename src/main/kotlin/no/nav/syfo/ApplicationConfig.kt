@@ -5,7 +5,7 @@ import org.springframework.web.client.RestTemplate
 
 @Configuration
 class ApplicationConfig {
-    @Bean(name = ["default"])
+    @Bean
     @Primary
     fun restTemplate(): RestTemplate {
         return RestTemplate()

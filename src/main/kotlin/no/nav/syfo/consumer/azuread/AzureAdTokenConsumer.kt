@@ -19,7 +19,7 @@ import java.util.concurrent.ConcurrentHashMap
 
 @Component
 class AzureAdTokenConsumer @Autowired constructor(
-    @Qualifier("default") private val restTemplate: RestTemplate,
+    private val restTemplate: RestTemplate,
     @Value("\${azure.app.client.id}") private val azureAppClientId: String,
     @Value("\${azure.app.client.secret}") private val azureAppClientSecret: String,
     @Value("\${azure.openid.config.token.endpoint}") private val azureTokenEndpoint: String,

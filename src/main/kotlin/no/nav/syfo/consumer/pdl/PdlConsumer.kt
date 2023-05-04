@@ -18,7 +18,7 @@ import org.springframework.web.client.*
 class PdlConsumer(
     private val metric: Metric,
     private val azureAdTokenConsumer: AzureAdTokenConsumer,
-    @Qualifier("default") private val restTemplate: RestTemplate,
+    private val restTemplate: RestTemplate,
     @Value("\${pdl.url}") private val pdlUrl: String,
     @Value("\${pdl.client.id}") private val pdlClientId: String,
 ) {
