@@ -6,7 +6,7 @@ metadata:
   labels:
     team: teamsykefravr
 spec:
-  image: europe-north1-docker.pkg.dev/nais-management-233d/teamsykefravr/syfo-tilgangskontroll:2023.05.04-08.53-6ee5ff8
+  image: {{ image }}
   port: 8080
   liveness:
     path: /syfo-tilgangskontroll/internal/isAlive

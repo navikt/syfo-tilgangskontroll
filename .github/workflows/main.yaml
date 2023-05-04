@@ -8,4 +8,5 @@ jobs:
     with:
       dev-cluster: dev-gcp
       prod-cluster: prod-gcp
+      distroless: false
     secrets: inherit
