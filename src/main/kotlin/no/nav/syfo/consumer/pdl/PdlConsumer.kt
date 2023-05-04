@@ -7,7 +7,6 @@ import no.nav.syfo.metric.Metric
 import no.nav.syfo.util.ALLE_TEMA_HEADERVERDI
 import no.nav.syfo.util.TEMA_HEADER
 import org.slf4j.LoggerFactory
-import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.cache.annotation.Cacheable
 import org.springframework.http.*

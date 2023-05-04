@@ -5,7 +5,6 @@ import no.nav.syfo.consumer.azuread.AzureAdTokenConsumer
 import no.nav.syfo.metric.Metric
 import no.nav.syfo.util.*
 import org.slf4j.LoggerFactory
-import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.cache.annotation.Cacheable
 import org.springframework.http.*
