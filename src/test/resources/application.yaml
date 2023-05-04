@@ -32,8 +32,10 @@ graphapi.url: "https://graph.microsoft.com"
 norg2.url: http://norg2/norg2
 pdl.client.id: "dev-fss.pdl.pdl-api"
 pdl.url: "http://pdl"
-syfobehandlendeenhet.client.id: "dev-fss.teamsykefravr.syfobehandlendeenhet"
+syfobehandlendeenhet.client.id: "dev-gcp.teamsykefravr.syfobehandlendeenhet"
 syfobehandlendeenhet.url: "http://syfobehandlendeenhet"
+skjermedepersoner.client.id: "dev-gcp.nom.skjermede-personer-pip"
+skjermedepersoner.url: "http://skjermede-personer-pip"
 
 old.role.kode6.id: "oldKode6Id"
 old.role.kode7.id: "oldKode7Id"

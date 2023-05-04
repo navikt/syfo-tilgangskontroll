@@ -19,7 +19,7 @@ class SkjermedePersonerPipConsumer @Inject constructor(
     private val restTemplate: RestTemplate,
     private val azureAdTokenConsumer: AzureAdTokenConsumer,
     @Value("\${skjermede-personer.url}") private val skjermedePersonerUrl: String,
-    @Value("\${skjermede-personer.id}") private val skjermedePersonerClientId: String,
+    @Value("\${skjermede-personer.client.id}") private val skjermedePersonerClientId: String,
 ) {
     @Cacheable(
         cacheNames = [CacheConfig.CACHENAME_EGENANSATT],
