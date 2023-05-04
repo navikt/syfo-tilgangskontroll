@@ -42,7 +42,7 @@ class SkjermedePersonerPipConsumer @Inject constructor(
     }
 
     private fun getSkjermedePersonerPipUrl(personIdent: String): String {
-        return "http://skjermede-personer-pip.nom.svc.nais.local/skjermet?personident=$personIdent"
+        return "http://skjermede-personer-pip.nom/skjermet?personident=$personIdent"
     }
 
     private fun entity(): HttpEntity<String> {

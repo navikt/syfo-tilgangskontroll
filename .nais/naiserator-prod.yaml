@@ -118,6 +118,8 @@ spec:
       rules:
         - application: syfobehandlendeenhet
         - application: syfo-tilgangskontroll-redis
+        - application: skjermede-personer-pip
+          namespace: nom
   azure:
     application:
       allowAllUsers: true
