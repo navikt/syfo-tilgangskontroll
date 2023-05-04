@@ -111,9 +111,9 @@ spec:
           cluster: prod-gcp
     outbound:
       external:
-        - host: "https://axsys.prod-fss-pub.nais.io"
-        - host: "https://norg2.prod-fss-pub.nais.io"
-        - host: "https://graph.microsoft.com"
+        - host: "axsys.prod-fss-pub.nais.io"
+        - host: "norg2.prod-fss-pub.nais.io"
+        - host: "graph.microsoft.com"
         - host: "pdl-api.prod-fss-pub.nais.io"
       rules:
         - application: syfobehandlendeenhet

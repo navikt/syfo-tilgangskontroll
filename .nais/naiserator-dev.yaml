@@ -6,7 +6,7 @@ metadata:
   labels:
     team: teamsykefravr
 spec:
-  image: {{ image }}
+  image: europe-north1-docker.pkg.dev/nais-management-233d/teamsykefravr/syfo-tilgangskontroll:2023.05.04-11.05-71f0e82
   port: 8080
   liveness:
     path: /syfo-tilgangskontroll/internal/isAlive
@@ -111,9 +111,9 @@ spec:
           cluster: dev-gcp
     outbound:
       external:
-        - host: "https://axsys.dev-fss-pub.nais.io"
-        - host: "https://norg2.dev-fss-pub.nais.io"
-        - host: "https://graph.microsoft.com"
+        - host: "axsys.dev-fss-pub.nais.io"
+        - host: "norg2.dev-fss-pub.nais.io"
+        - host: "graph.microsoft.com"
         - host: "pdl-api.dev-fss-pub.nais.io"
       rules:
         - application: syfobehandlendeenhet
