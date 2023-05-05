@@ -42,7 +42,7 @@ constructor(
     }
 
     private fun getNAVKontorForGTUrl(geografiskTilknytning: GeografiskTilknytning): String {
-        return "$norg2BaseUrl/api/v1/enhet/navkontor/${geografiskTilknytning.value}"
+        return "$norg2BaseUrl/norg2/api/v1/enhet/navkontor/${geografiskTilknytning.value}"
     }
 
     @Cacheable(cacheNames = [CacheConfig.CACHENAME_ENHET_OVERORDNET_ENHETER], key = "#enhetNr", condition = "#enhetNr != null")
@@ -74,7 +74,7 @@ constructor(
     }
 
     private fun getOverordnetEnhetForNAVKontorUrl(enhetNr: String): String {
-        return "$norg2BaseUrl/api/v1/enhet/$enhetNr/overordnet?organiseringsType=$organiseringsType"
+        return "$norg2BaseUrl/norg2/api/v1/enhet/$enhetNr/overordnet?organiseringsType=$organiseringsType"
     }
 
     private fun entity(): HttpEntity<String>? {
