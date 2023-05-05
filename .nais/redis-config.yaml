@@ -59,6 +59,6 @@ spec:
     - name: REDIS_EXPORTER_LOG_FORMAT
       value: json
   accessPolicy:
-    inbound:
+    outbound:
       rules:
         - application: syfo-tilgangskontroll-redis
