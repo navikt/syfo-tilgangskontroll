@@ -115,6 +115,11 @@ spec:
         - host: "norg2.dev-fss-pub.nais.io"
         - host: "graph.microsoft.com"
         - host: "pdl-api.dev-fss-pub.nais.io"
+        - host: "audit.nais"
+          ports:
+            - name: audit
+              port: 6514
+              protocol: TCP
       rules:
         - application: syfobehandlendeenhet
         - application: syfo-tilgangskontroll-redis
