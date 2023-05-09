@@ -8,7 +8,8 @@ import no.nav.syfo.util.ALLE_TEMA_HEADERVERDI
 import no.nav.syfo.util.TEMA_HEADER
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Value
-import org.springframework.cache.annotation.Cacheable
+import org.springframework.cache.Cache
+import org.springframework.cache.CacheManager
 import org.springframework.http.*
 import org.springframework.stereotype.Service
 import org.springframework.web.client.*
@@ -20,50 +21,51 @@ class PdlConsumer(
     private val restTemplate: RestTemplate,
     @Value("\${pdl.url}") private val pdlUrl: String,
     @Value("\${pdl.client.id}") private val pdlClientId: String,
+    private val cacheManager: CacheManager,
 ) {
     fun geografiskTilknytning(ident: String): GeografiskTilknytning {
         return geografiskTilknytningResponse(ident)?.geografiskTilknytning()
             ?: throw PdlRequestFailedException("No Geografisk Tilknytning was found in response from PDL")
     }
 
-    @Cacheable(
-        cacheNames = [CacheConfig.CACHENAME_PDL_GEOGRAFISK_TILKNYTNING],
-        key = "#ident",
-        condition = "#ident != null",
-        unless = "#result == null"
-    )
     fun geografiskTilknytningResponse(ident: String): PdlHentGeografiskTilknytning? {
-        val query = getPdlQuery("/pdl/hentGeografiskTilknytning.graphql")
-        val request = PdlGeografiskTilknytningRequest(
-            query = query,
-            variables = PdlGeografiskTilknytningRequestVariables(ident)
-        )
-        val entity = HttpEntity(
-            request,
-            createRequestHeaders()
-        )
-        try {
-            val pdlPerson = restTemplate.exchange(
-                pdlUrl,
-                HttpMethod.POST,
-                entity,
-                PdlGeografiskTilknytningResponse::class.java
+        val cachedObject = getPDLGeografiskCache().get(ident)?.get() as PdlHentGeografiskTilknytning?
+        return if (cachedObject != null) {
+            cachedObject
+        } else {
+            val query = getPdlQuery("/pdl/hentGeografiskTilknytning.graphql")
+            val request = PdlGeografiskTilknytningRequest(
+                query = query,
+                variables = PdlGeografiskTilknytningRequestVariables(ident)
             )
-            val pdlPersonReponse = pdlPerson.body!!
-            return if (pdlPersonReponse.errors != null && pdlPersonReponse.errors.isNotEmpty()) {
-                metric.countEvent(CALL_PDL_GT_FAIL)
-                pdlPersonReponse.errors.forEach {
-                    LOG.error("Error while requesting person from PersonDataLosningen: ${it.errorMessage()}")
+            val entity = HttpEntity(
+                request,
+                createRequestHeaders()
+            )
+            try {
+                val pdlPerson = restTemplate.exchange(
+                    pdlUrl,
+                    HttpMethod.POST,
+                    entity,
+                    PdlGeografiskTilknytningResponse::class.java
+                )
+                val pdlPersonReponse = pdlPerson.body!!
+                if (pdlPersonReponse.errors != null && pdlPersonReponse.errors.isNotEmpty()) {
+                    metric.countEvent(CALL_PDL_GT_FAIL)
+                    pdlPersonReponse.errors.forEach {
+                        LOG.error("Error while requesting person from PersonDataLosningen: ${it.errorMessage()}")
+                    }
+                    null
+                } else {
+                    metric.countEvent(CALL_PDL_GT_SUCCESS)
+                    getPDLGeografiskCache().put(ident, pdlPersonReponse.data)
+                    pdlPersonReponse.data
                 }
-                null
-            } else {
-                metric.countEvent(CALL_PDL_GT_SUCCESS)
-                pdlPersonReponse.data
+            } catch (exception: RestClientResponseException) {
+                metric.countEvent(CALL_PDL_GT_FAIL)
+                LOG.error("Error from PDL with request-url: $pdlUrl", exception)
+                throw exception
             }
-        } catch (exception: RestClientResponseException) {
-            metric.countEvent(CALL_PDL_GT_FAIL)
-            LOG.error("Error from PDL with request-url: $pdlUrl", exception)
-            throw exception
         }
     }
 
@@ -75,46 +77,46 @@ class PdlConsumer(
         return pdlHentPerson?.isKode7() ?: throw PdlRequestFailedException()
     }
 
-    @Cacheable(
-        cacheNames = [CacheConfig.CACHENAME_PDL_PERSON],
-        key = "#personIdentNumber",
-        condition = "#personIdentNumber != null",
-        unless = "#result == null"
-    )
     @Timed("syfotilgangskontroll_pdlConsumer_person", histogram = true)
     fun person(personIdentNumber: String): PdlHentPerson? {
-        val query = getPdlQuery("/pdl/hentPerson.graphql")
-        val request = PdlPersonRequest(
-            query = query,
-            variables = PdlPersonRequestVariables(personIdentNumber)
-        )
-        val entity = HttpEntity(
-            request,
-            createRequestHeaders()
-        )
-        try {
-            val pdlPerson = restTemplate.exchange(
-                pdlUrl,
-                HttpMethod.POST,
-                entity,
-                PdlPersonResponse::class.java
+        val cachedObject = getPDLPersonCache().get(personIdentNumber)?.get() as PdlHentPerson?
+        return if (cachedObject != null) {
+            cachedObject
+        } else {
+            val query = getPdlQuery("/pdl/hentPerson.graphql")
+            val request = PdlPersonRequest(
+                query = query,
+                variables = PdlPersonRequestVariables(personIdentNumber)
             )
+            val entity = HttpEntity(
+                request,
+                createRequestHeaders()
+            )
+            try {
+                val pdlPerson = restTemplate.exchange(
+                    pdlUrl,
+                    HttpMethod.POST,
+                    entity,
+                    PdlPersonResponse::class.java
+                )
 
-            val pdlPersonReponse = pdlPerson.body!!
-            return if (pdlPersonReponse.errors != null && pdlPersonReponse.errors.isNotEmpty()) {
-                metric.countEvent(CALL_PDL_PERSON_FAIL)
-                pdlPersonReponse.errors.forEach {
-                    LOG.error("Error while requesting person from PersonDataLosningen: ${it.errorMessage()}")
+                val pdlPersonReponse = pdlPerson.body!!
+                if (pdlPersonReponse.errors != null && pdlPersonReponse.errors.isNotEmpty()) {
+                    metric.countEvent(CALL_PDL_PERSON_FAIL)
+                    pdlPersonReponse.errors.forEach {
+                        LOG.error("Error while requesting person from PersonDataLosningen: ${it.errorMessage()}")
+                    }
+                    null
+                } else {
+                    metric.countEvent(CALL_PDL_PERSON_SUCCESS)
+                    getPDLPersonCache().put(personIdentNumber, pdlPersonReponse.data)
+                    pdlPersonReponse.data
                 }
-                null
-            } else {
-                metric.countEvent(CALL_PDL_PERSON_SUCCESS)
-                pdlPersonReponse.data
+            } catch (exception: RestClientException) {
+                metric.countEvent(CALL_PDL_PERSON_FAIL)
+                LOG.error("Error from PDL with request-url: $pdlUrl", exception)
+                throw exception
             }
-        } catch (exception: RestClientException) {
-            metric.countEvent(CALL_PDL_PERSON_FAIL)
-            LOG.error("Error from PDL with request-url: $pdlUrl", exception)
-            throw exception
         }
     }
 
@@ -134,6 +136,12 @@ class PdlConsumer(
         headers.setBearerAuth(azureADSystemToken)
         return headers
     }
+
+    private fun getPDLGeografiskCache(): Cache =
+        cacheManager.getCache(CacheConfig.CACHENAME_PDL_GEOGRAFISK_TILKNYTNING)!!
+
+    private fun getPDLPersonCache(): Cache =
+        cacheManager.getCache(CacheConfig.CACHENAME_PDL_PERSON)!!
 
     companion object {
         private val LOG = LoggerFactory.getLogger(PdlConsumer::class.java)
