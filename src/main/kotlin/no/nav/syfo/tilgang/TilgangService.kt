@@ -112,6 +112,18 @@ class TilgangService @Autowired constructor(
         )
     }
 
+    fun preloadCacheForBrukere(personIdentList: List<String>) {
+        personIdentList.forEach { personIdent ->
+            try {
+                pdlConsumer.person(personIdent)
+                pdlConsumer.geografiskTilknytningResponse(personIdent)
+                skjermedePersonerPipConsumer.erSkjermet(personIdent, systemToken = true)
+            } catch (exc: Exception) {
+                log.warn("Failed to preload cache", exc)
+            }
+        }
+    }
+
     @Timed("syfotilgangskontroll_harTilgangTilTjenesten", histogram = true)
     private fun harTilgangTilTjenesten(veilederId: String): Boolean {
         return harTilgangTilSykefravaersoppfoelging(veilederId)

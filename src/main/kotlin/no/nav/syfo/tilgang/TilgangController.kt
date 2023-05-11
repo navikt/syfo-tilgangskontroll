@@ -20,7 +20,7 @@ class TilgangController @Autowired constructor(
     private val contextHolder: TokenValidationContextHolder,
     private val metric: Metric,
     private val tilgangService: TilgangService,
-    private val apiConsumerAccessService: APIConsumerAccessService
+    private val apiConsumerAccessService: APIConsumerAccessService,
 ) {
     @GetMapping(path = ["/navident/syfo"])
     @ProtectedWithClaims(issuer = VEILEDERAZURE)
@@ -69,6 +69,23 @@ class TilgangController @Autowired constructor(
     ): ResponseEntity<*> {
         val veilederId = getNAVIdentFromOBOToken(contextHolder)!!
         return sjekkTilgangTilBrukere(veilederId, personIdentList)
+    }
+
+    @PostMapping(path = ["/system/preloadbrukere"])
+    @ProtectedWithClaims(issuer = VEILEDERAZURE)
+    fun preloadBrukereViaAzure(
+        @RequestBody personIdentList: List<String>,
+    ): ResponseEntity<*> {
+        return if (
+            apiConsumerAccessService.isConsumerApplicationAZPAuthorized(
+                cachePreloadAuthorizedConsumerApplicationNameList
+            ) && personIdentList.size < MAX_PRELOAD_CACHE_LIST_SIZE
+        ) {
+            tilgangService.preloadCacheForBrukere(personIdentList)
+            ResponseEntity.ok(null)
+        } else {
+            ResponseEntity.status(HttpStatus.FORBIDDEN).body(null)
+        }
     }
 
     @GetMapping(path = ["/navident/enhet/{enhetNr}"])
@@ -147,5 +164,10 @@ class TilgangController @Autowired constructor(
 
     companion object {
         private val log = LoggerFactory.getLogger(TilgangController::class.java)
+        private const val SYFOOVERSIKTSRV_NAME = "syfooversiktsrv"
+        val cachePreloadAuthorizedConsumerApplicationNameList = listOf(
+            SYFOOVERSIKTSRV_NAME,
+        )
+        private const val MAX_PRELOAD_CACHE_LIST_SIZE = 60
     }
 }
