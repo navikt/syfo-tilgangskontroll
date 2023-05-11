@@ -26,16 +26,25 @@ class SkjermedePersonerPipConsumer @Inject constructor(
         key = "#personIdent",
         condition = "#personIdent != null"
     )
-    fun erSkjermet(personIdent: String): Boolean {
+    fun erSkjermet(
+        personIdent: String,
+        systemToken: Boolean = false,
+    ): Boolean {
         try {
-            val oboToken = azureAdTokenConsumer.getOboToken(
-                scopeClientId = skjermedePersonerClientId,
-            )
+            val token = if (systemToken) {
+                azureAdTokenConsumer.getSystemToken(
+                    scopeClientId = skjermedePersonerClientId,
+                )
+            } else {
+                azureAdTokenConsumer.getOboToken(
+                    scopeClientId = skjermedePersonerClientId,
+                )
+            }
 
             val response = restTemplate.exchange(
                 getSkjermedePersonerPipUrl(personIdent),
                 HttpMethod.GET,
-                entity(oboToken),
+                entity(token),
                 Boolean::class.java
             )
             val skjermedePersonerResponse = response.body!!
