@@ -42,9 +42,9 @@ class SkjermedePersonerPipConsumer @Inject constructor(
             }
 
             val response = restTemplate.exchange(
-                getSkjermedePersonerPipUrl(personIdent),
-                HttpMethod.GET,
-                entity(token),
+                getSkjermedePersonerPipUrl(),
+                HttpMethod.POST,
+                entity(personIdent, token),
                 Boolean::class.java
             )
             val skjermedePersonerResponse = response.body!!
@@ -59,17 +59,18 @@ class SkjermedePersonerPipConsumer @Inject constructor(
         }
     }
 
-    private fun getSkjermedePersonerPipUrl(personIdent: String): String {
-        return "$skjermedePersonerUrl/skjermet?personident=$personIdent"
+    private fun getSkjermedePersonerPipUrl(): String {
+        return "$skjermedePersonerUrl/skjermet"
     }
 
-    private fun entity(oboToken: String): HttpEntity<String> {
+    private fun entity(personIdent: String, oboToken: String): HttpEntity<SkjermedePersonerRequestDTO> {
+        val body = SkjermedePersonerRequestDTO(personIdent)
         val headers = HttpHeaders()
         headers.setBearerAuth(oboToken)
         headers.contentType = MediaType.APPLICATION_JSON
         headers[NAV_CONSUMER_ID_HEADER] = APP_CONSUMER_ID
         headers[NAV_CALL_ID_HEADER] = createCallId()
-        return HttpEntity(headers)
+        return HttpEntity(body, headers)
     }
 
     companion object {
