@@ -42,7 +42,7 @@ class SkjermedePersonerPipConsumer @Inject constructor(
             }
 
             val response = restTemplate.exchange(
-                getSkjermedePersonerPipUrl(),
+                "$skjermedePersonerUrl/skjermet",
                 HttpMethod.POST,
                 entity(personIdent, token),
                 Boolean::class.java
@@ -57,10 +57,6 @@ class SkjermedePersonerPipConsumer @Inject constructor(
             LOG.error(message)
             throw e
         }
-    }
-
-    private fun getSkjermedePersonerPipUrl(): String {
-        return "$skjermedePersonerUrl/skjermet"
     }
 
     private fun entity(personIdent: String, oboToken: String): HttpEntity<SkjermedePersonerRequestDTO> {
