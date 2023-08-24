@@ -11,33 +11,18 @@ class AdRolle(
 
 @Component
 class AdRoller(
-    @Value("\${old.role.kode6.id}") val oldKode6Id: String,
     @Value("\${role.kode6.id}") val kode6Id: String,
-    @Value("\${old.role.kode7.id}") val oldKode7Id: String,
     @Value("\${role.kode7.id}") val kode7Id: String,
     @Value("\${role.syfo.id}") val syfoId: String,
-    @Value("\${old.role.skjerming.id}") val oldSkjermingId: String,
     @Value("\${role.skjerming.id}") val skjermingId: String,
     @Value("\${role.nasjonal.id}") val nasjonalId: String,
-    @Value("\${role.utvidbar.nasjonal.id}") val utvidbarNasjonalId: String,
     @Value("\${role.regional.id}") val regionalId: String,
-    @Value("\${role.utvidbar.regional.id}") val utvidvarRegionalId: String,
     @Value("\${role.papirsykmelding.id}") val papirsykmeldingId: String,
 ) {
-    val OLD_KODE6 = AdRolle(
-        name = "KODE6",
-        id = oldKode6Id,
-        rolle = "0000-GA-GOSYS_KODE6",
-    )
     val KODE6 = AdRolle(
         name = "KODE6",
         id = kode6Id,
         rolle = "0000-GA-Strengt_Fortrolig_Adresse",
-    )
-    val OLD_KODE7 = AdRolle(
-        name = "KODE7",
-        id = oldKode7Id,
-        rolle = "0000-GA-GOSYS_KODE7"
     )
     val KODE7 = AdRolle(
         name = "KODE7",
@@ -49,11 +34,6 @@ class AdRoller(
         id = syfoId,
         rolle = "0000-GA-SYFO-SENSITIV",
     )
-    val OLD_EGEN_ANSATT = AdRolle(
-        name = "EGEN_ANSATT",
-        id = oldSkjermingId,
-        rolle = "0000-GA-GOSYS_UTVIDET",
-    )
     val EGEN_ANSATT = AdRolle(
         name = "EGEN_ANSATT",
         id = skjermingId,
@@ -64,20 +44,10 @@ class AdRoller(
         id = nasjonalId,
         rolle = "0000-GA-GOSYS_NASJONAL",
     )
-    val UTVIDBAR_TIL_NASJONAL = AdRolle(
-        name = "UTVIDBAR_TIL_NASJONAL",
-        id = utvidbarNasjonalId,
-        rolle = "0000-GA-GOSYS_UTVIDBAR_TIL_NASJONAL",
-    )
     val REGIONAL = AdRolle(
         name = "REGIONAL",
         id = regionalId,
         rolle = "0000-GA-GOSYS_REGIONAL",
-    )
-    val UTVIDBAR_TIL_REGIONAL = AdRolle(
-        name = "UTVIDBAR_TIL_REGIONAL",
-        id = utvidvarRegionalId,
-        rolle = "0000-GA-GOSYS_UTVIDBAR_TIL_REGIONAL",
     )
     val PAPIRSYKMELDING = AdRolle(
         name = "PAPIRSYKMELDING",
@@ -87,17 +57,12 @@ class AdRoller(
 
     fun getIdList(): List<String> {
         return listOf(
-            OLD_KODE6.id,
             KODE6.id,
-            OLD_KODE7.id,
             KODE7.id,
             SYFO.id,
-            OLD_EGEN_ANSATT.id,
             EGEN_ANSATT.id,
             NASJONAL.id,
-            UTVIDBAR_TIL_NASJONAL.id,
             REGIONAL.id,
-            UTVIDBAR_TIL_REGIONAL.id,
             PAPIRSYKMELDING.id,
         )
     }

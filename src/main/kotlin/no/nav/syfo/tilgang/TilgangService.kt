@@ -135,17 +135,17 @@ class TilgangService @Autowired constructor(
 
     @Timed("syfotilgangskontroll_kode6TilgangSevice_harTilgang", histogram = true)
     fun harTilgangTilKode6(veilederId: String): Boolean {
-        return graphApiConsumer.hasAccess(veilederId, adRoller.OLD_KODE6) || graphApiConsumer.hasAccess(veilederId, adRoller.KODE6)
+        return graphApiConsumer.hasAccess(veilederId, adRoller.KODE6)
     }
 
     @Timed("syfotilgangskontroll_harTilgangTilKode7", histogram = true)
     private fun harTilgangTilKode7(veilederId: String): Boolean {
-        return graphApiConsumer.hasAccess(veilederId, adRoller.OLD_KODE7) || graphApiConsumer.hasAccess(veilederId, adRoller.KODE7)
+        return graphApiConsumer.hasAccess(veilederId, adRoller.KODE7)
     }
 
     @Timed("syfotilgangskontroll_harTilgangTilEgenAnsatt", histogram = true)
     private fun harTilgangTilEgenAnsatt(veilederId: String): Boolean {
-        return graphApiConsumer.hasAccess(veilederId, adRoller.OLD_EGEN_ANSATT) || graphApiConsumer.hasAccess(veilederId, adRoller.EGEN_ANSATT)
+        return graphApiConsumer.hasAccess(veilederId, adRoller.EGEN_ANSATT)
     }
 
     private fun harTilgangTilEnhet(veilederId: String, navEnhetId: String): Boolean {

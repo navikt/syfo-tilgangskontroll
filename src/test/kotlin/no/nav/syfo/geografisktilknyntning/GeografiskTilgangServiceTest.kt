@@ -61,12 +61,6 @@ class GeografiskTilgangServiceTest {
     }
 
     @Test
-    fun utvidetTilNasjonalTilgangGirTilgang() {
-        Mockito.`when`(graphApiConsumer.hasAccess(VEILEDER_UID, adRoller.UTVIDBAR_TIL_NASJONAL)).thenReturn(true)
-        Assertions.assertThat(geografiskTilgangService.harGeografiskTilgang(VEILEDER_UID, PERSON_FNR)).isTrue
-    }
-
-    @Test
     fun harTilgangHvisVeilederHarTilgangTilSammeEnhetSomBruker() {
         Mockito.`when`(axsysConsumer.enheter(VEILEDER_UID)).thenReturn(
             listOf(
