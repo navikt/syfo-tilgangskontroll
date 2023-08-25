@@ -39,10 +39,7 @@ class GeografiskTilgangService @Autowired constructor(
     }
 
     private fun harNasjonalTilgang(veilederId: String): Boolean {
-        return (
-            graphApiConsumer.hasAccess(veilederId, adRoller.NASJONAL) ||
-                graphApiConsumer.hasAccess(veilederId, adRoller.UTVIDBAR_TIL_NASJONAL)
-            )
+        return graphApiConsumer.hasAccess(veilederId, adRoller.NASJONAL)
     }
 
     private fun harLokalTilgangTilBrukersEnhet(navKontorForGT: String, veiledersEnheter: List<String>): Boolean {
@@ -50,10 +47,7 @@ class GeografiskTilgangService @Autowired constructor(
     }
 
     private fun harRegionalTilgang(veilederId: String): Boolean {
-        return (
-            graphApiConsumer.hasAccess(veilederId, adRoller.REGIONAL) ||
-                graphApiConsumer.hasAccess(veilederId, adRoller.UTVIDBAR_TIL_REGIONAL)
-            )
+        return graphApiConsumer.hasAccess(veilederId, adRoller.REGIONAL)
     }
 
     private fun harRegionalTilgangTilBrukersEnhet(navKontorForGT: String, veiledersEnheter: List<String>, veilederId: String): Boolean {
