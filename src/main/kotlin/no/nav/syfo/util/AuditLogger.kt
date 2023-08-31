@@ -27,7 +27,7 @@ data class CEF(
     val appName: String,
 ) {
     override fun toString() =
-        "CEF:0|syfo-tilgangskontroll|auditLog|1.0|$event|syfo-tilgangskontroll audit log|INFO|end=${
+        "CEF:0|sykefraværsoppfølging|auditLog|1.0|$event|syfo-tilgangskontroll audit log|INFO|end=${
         Instant.now().toEpochMilli()
         } suid=$suid duid=$duid flexString1Label=Decision flexString1=${if (permit) "Permit" else "Deny"} flexString2Label=App flexString2=$appName"
 }
