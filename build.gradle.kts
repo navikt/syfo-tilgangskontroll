@@ -15,7 +15,7 @@ val logbackSyslog4jVersion = "1.0.0"
 val snakeYamlVersion = "1.33"
 
 plugins {
-    kotlin("jvm") version "1.8.21"
+    kotlin("jvm") version "1.8.22"
     id("org.jetbrains.kotlin.plugin.allopen") version "1.8.21"
     id("org.springframework.boot") version "2.7.10"
     id("io.spring.dependency-management") version "1.1.0"
